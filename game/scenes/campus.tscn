@@ -266,7 +266,196 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/BoundaryGateRight"]
 shape = SubResource("BoxShape3D_boundary_gate")
 
+[node name="GroundPartitionWest" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.32, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/GroundPartitionWest"]
+shape = SubResource("BoxShape3D_part_west")
+
+[node name="GroundPartitionEast" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 2.32, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/GroundPartitionEast"]
+shape = SubResource("BoxShape3D_part_east")
+
+[node name="ClassroomWestWall_Front" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.32, -6.7)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/ClassroomWestWall_Front"]
+shape = SubResource("BoxShape3D_class_wall_f")
+
+[node name="ClassroomWestWall_Rear" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.32, -1.75)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/ClassroomWestWall_Rear"]
+shape = SubResource("BoxShape3D_class_wall_r")
+
+[node name="ComputerLabEastWall_Front" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.32, -6.7)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/ComputerLabEastWall_Front"]
+shape = SubResource("BoxShape3D_class_wall_f")
+
+[node name="ComputerLabEastWall_Rear" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.32, -1.75)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/ComputerLabEastWall_Rear"]
+shape = SubResource("BoxShape3D_class_wall_r")
+
+[node name="Floor1PartitionWest" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 6.3, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1PartitionWest"]
+shape = SubResource("BoxShape3D_part_west")
+
+[node name="Floor1PartitionEast" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 6.3, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1PartitionEast"]
+shape = SubResource("BoxShape3D_part_east")
+
+[node name="Floor1WestWall_Front" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6.3, -6.7)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1WestWall_Front"]
+shape = SubResource("BoxShape3D_class_wall_f")
+
+[node name="Floor1WestWall_Rear" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6.3, -1.75)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1WestWall_Rear"]
+shape = SubResource("BoxShape3D_class_wall_r")
+
+[node name="Floor1EastWall_Front" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6.3, -6.7)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1EastWall_Front"]
+shape = SubResource("BoxShape3D_class_wall_f")
+
+[node name="Floor1EastWall_Rear" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6.3, -1.75)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1EastWall_Rear"]
+shape = SubResource("BoxShape3D_class_wall_r")
+
+[node name="SecurityCabin" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 1.6, -73.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/SecurityCabin"]
+shape = SubResource("BoxShape3D_security_cabin")
+
+[node name="PorticoPillar1" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 2.22, -8.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/PorticoPillar1"]
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="PorticoPillar2" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 2.22, -8.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/PorticoPillar2"]
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="PorticoPillar3" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 2.22, -8.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/PorticoPillar3"]
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="PorticoPillar4" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 2.22, -8.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/PorticoPillar4"]
+shape = SubResource("BoxShape3D_pillar")
+
+[node name="Vehicles" type="Node3D" parent="Collisions"]
+
+[node name="Car0" type="StaticBody3D" parent="Collisions/Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0.75, -36)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Vehicles/Car0"]
+shape = SubResource("BoxShape3D_car")
+
+[node name="Car1" type="StaticBody3D" parent="Collisions/Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.4, 0.75, -36)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Vehicles/Car1"]
+shape = SubResource("BoxShape3D_car")
+
+[node name="Car2" type="StaticBody3D" parent="Collisions/Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8, 0.75, -36)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Vehicles/Car2"]
+shape = SubResource("BoxShape3D_car")
+
+[node name="Car3" type="StaticBody3D" parent="Collisions/Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.2, 0.75, -36)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Vehicles/Car3"]
+shape = SubResource("BoxShape3D_car")
+
+[node name="Car4" type="StaticBody3D" parent="Collisions/Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.6, 0.75, -36)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Vehicles/Car4"]
+shape = SubResource("BoxShape3D_car")
+
+[node name="Car5" type="StaticBody3D" parent="Collisions/Vehicles"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49, 0.75, -36)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Vehicles/Car5"]
+shape = SubResource("BoxShape3D_car")
+
 [node name="Doors" type="Node3D" parent="."]
+
+[node name="MainEntrancePortal" parent="Doors" instance=ExtResource("16_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, -8.5)
 
 [node name="Classroom101Door" parent="Doors" instance=ExtResource("10_cdoor")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8.0, 0.34, -4.2)
