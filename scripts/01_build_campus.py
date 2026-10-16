@@ -228,26 +228,24 @@ class Builder:
     def organic_canopy(self, col, name, center, radius, mat=None, seed=0):
         """Lush, multi-lobed organic canopy using clustered icospheres with smooth shading."""
         bm = bmesh.new()
-        cx, cy, cz = center
-        # Main central mass
+        # Main central mass (local space, centered at 0, 0, 0)
         res_main = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=radius * 0.95)
         bmesh.ops.scale(bm, vec=Vector((1.0, 1.0, 0.88)), verts=res_main["verts"])
-        bmesh.ops.translate(bm, vec=Vector((cx, cy, cz)), verts=res_main["verts"])
-        # 4 azimuthal side lobes
+        # 4 azimuthal side lobes in local space
         angles = [0.2 + seed * 0.4, 1.8 + seed * 0.4, 3.4 + seed * 0.4, 5.0 + seed * 0.4]
         for i, ang in enumerate(angles):
             r_lobe = radius * (0.62 + 0.10 * ((seed + i) % 3))
             d_xy = radius * 0.52
-            lx = cx + d_xy * math.cos(ang)
-            ly = cy + d_xy * math.sin(ang)
-            lz = cz + radius * (-0.10 + 0.15 * (i % 2))
+            lx = d_xy * math.cos(ang)
+            ly = d_xy * math.sin(ang)
+            lz = radius * (-0.10 + 0.15 * (i % 2))
             res_lobe = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=r_lobe)
             bmesh.ops.scale(bm, vec=Vector((1.05, 0.95, 0.85)), verts=res_lobe["verts"])
             bmesh.ops.translate(bm, vec=Vector((lx, ly, lz)), verts=res_lobe["verts"])
-        # Top crown lobe
+        # Top crown lobe in local space
         r_top = radius * 0.60
         res_top = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=r_top)
-        bmesh.ops.translate(bm, vec=Vector((cx + 0.08 * radius, cy - 0.06 * radius, cz + radius * 0.60)), verts=res_top["verts"])
+        bmesh.ops.translate(bm, vec=Vector((0.08 * radius, -0.06 * radius, radius * 0.60)), verts=res_top["verts"])
         for f in bm.faces:
             f.smooth = True
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
@@ -256,13 +254,11 @@ class Builder:
     def shrub(self, col, name, center, radius, height, mat=None, seed=0):
         """Low rounded ornamental bush/hedge cluster with smooth organic shading."""
         bm = bmesh.new()
-        cx, cy, cz = center
         res1 = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=radius)
         bmesh.ops.scale(bm, vec=Vector((1.0, 1.0, height / (2.0 * max(0.01, radius)))), verts=res1["verts"])
-        bmesh.ops.translate(bm, vec=Vector((cx, cy, cz + height / 2.0)), verts=res1["verts"])
         res2 = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=radius * 0.78)
         bmesh.ops.scale(bm, vec=Vector((0.95, 1.05, height / (2.0 * max(0.01, radius)))), verts=res2["verts"])
-        bmesh.ops.translate(bm, vec=Vector((cx + radius * 0.32, cy - radius * 0.22, cz + height * 0.45)), verts=res2["verts"])
+        bmesh.ops.translate(bm, vec=Vector((radius * 0.32, -radius * 0.22, height * -0.05)), verts=res2["verts"])
         for f in bm.faces:
             f.smooth = True
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
@@ -669,16 +665,51 @@ def build_gate(b):
 
 def build_vegetation(b):
     col, m = b.cols["vegetation"], b.mats
+    curb_mat = m.get("curb", m["wall_trim"])
+    soil_mat = m.get("soil", m["trunk"])
+    leaves_mat = m["leaves"]
+    trunk_mat = m["trunk"]
+    flower_shrub_mat = m.get("flower_shrub", leaves_mat)
+
     pos = [(-8.5, 24), (-8.5, 38), (-8.5, 52), (-8.5, 66), (8.5, 24), (8.5, 52), (8.5, 66),
            (-32, 38), (-48, 38), (-32, 58), (-48, 58), (-40, 62), (-54, 48), (-28, 48),
            (-15, -12), (0, -12), (15, -12), (60, 36), (60, 48), (60, 60)]
+
     for idx, (tx, ty) in enumerate(pos):
-        h = 5.0 + (idx % 3) * 0.8
-        th, cr = h * 0.45, h * 0.45
+        h = 5.2 + (idx % 3) * 0.9
+        th = h * 0.44
+        cr = h * 0.42
         n = f"Tree_{idx}"
-        b.cyl(col, f"{n}_Trunk", (tx, ty, th / 2), 0.25, th, m["trunk"], segments=12)
-        b.cyl(col, f"{n}_Crown1", (tx, ty, th + cr * 0.6), cr, cr * 1.2, m["leaves"], segments=16)
-        b.cyl(col, f"{n}_Crown2", (tx, ty, th + cr * 1.3), cr * 0.75, cr, m["leaves"], segments=16)
+
+        # 1. Base concrete tree guard ring and loamy soil disk
+        b.cyl(col, f"{n}_BaseRing", (tx, ty, 0.05), 1.05, 0.10, curb_mat, segments=16)
+        b.cyl(col, f"{n}_Soil", (tx, ty, 0.07), 0.95, 0.08, soil_mat, segments=16)
+
+        # 2. Tapered natural trunk with bark PBR shader
+        b.cone(col, f"{n}_Trunk", (tx, ty, th / 2.0), r_bottom=0.28, r_top=0.18, depth=th, mat=trunk_mat, segments=12)
+
+        # 3. Multi-lobed lush organic canopy with smooth shading
+        canopy_cz = th + cr * 0.65
+        b.organic_canopy(col, f"{n}_Crown", (tx, ty, canopy_cz), cr, mat=leaves_mat, seed=idx)
+
+    # 4. Clustered flowering bougainvillea shrubs inside Garden_Flowerbed
+    garden_cx, garden_cy = -40.0, 48.5
+    for i in range(5):
+        ang = i * (2.0 * math.pi / 5.0)
+        sx = garden_cx + 1.35 * math.cos(ang)
+        sy = garden_cy + 1.35 * math.sin(ang)
+        b.shrub(col, f"Garden_Flower_Shrub_{i}", (sx, sy, 0.35), radius=0.65, height=0.75, mat=flower_shrub_mat, seed=i)
+
+    # 5. Flowering shrubs along front entrance plinth planter beds
+    for k in range(5):
+        lx = -16.5 + k * 1.5
+        b.shrub(col, f"Plinth_Shrub_L_{k}", (lx, 9.8, 0.55), radius=0.55, height=0.65, mat=flower_shrub_mat, seed=k)
+        rx = 10.5 + k * 1.5
+        b.shrub(col, f"Plinth_Shrub_R_{k}", (rx, 9.8, 0.55), radius=0.55, height=0.65, mat=flower_shrub_mat, seed=k + 10)
+
+    # 6. Manicured ornamental hedge shrubs along garden walkway
+    for w_idx, wy in enumerate(range(22, 48, 4)):
+        b.shrub(col, f"Walkway_Shrub_{w_idx}", (-24.5, wy, 0.30), radius=0.48, height=0.60, mat=leaves_mat, seed=w_idx)
 
 
 # ----------------------------------------------------------------------
@@ -695,14 +726,15 @@ def setup_world_sky(scene):
 
     sky = nt.nodes.new("ShaderNodeTexSky")
     sky.location = (-300, 0)
-    sky.sun_elevation = math.radians(38.0)  # ~38 degrees above horizon
-    sky.sun_rotation = math.radians(135.0)  # coming from SE
-    sky.turbidity = 2.4                     # clear atmosphere
-    sky.ground_albedo = 0.25
+    # Warm golden hour / late afternoon angle (28° elevation) raking across the +Y facade
+    sky.sun_elevation = math.radians(28.0)
+    sky.sun_rotation = math.radians(115.0)
+    sky.turbidity = 2.8                     # natural warm atmosphere
+    sky.ground_albedo = 0.20
 
     bg = nt.nodes.new("ShaderNodeBackground")
     bg.location = (0, 0)
-    bg.inputs["Strength"].default_value = 1.0
+    bg.inputs["Strength"].default_value = 0.35  # calibrated to prevent washing out ground shadows
 
     out = nt.nodes.new("ShaderNodeOutputWorld")
     out.location = (200, 0)
@@ -725,49 +757,52 @@ def setup_world_sky(scene):
     # AgX Color Management
     scene.view_settings.view_transform = "AgX"
     scene.view_settings.look = "None"
-    scene.view_settings.exposure = 0.0
+    scene.view_settings.exposure = -0.30
 
 
 def build_lighting_and_cameras(b):
     setup_world_sky(b.scene)
     col = b.cols["lighting"]
 
-    # Primary sun matching Nishita sky elevation (38°) & rotation (135°)
+    # Primary sun matching Nishita sky elevation (28°) & rotation (115°)
     sun_data = bpy.data.lights.get("Sun_Daylight") or bpy.data.lights.new(name="Sun_Daylight", type='SUN')
-    sun_data.energy = 4.0
-    sun_data.color = (1.0, 0.98, 0.93)
+    sun_data.energy = 3.6
+    sun_data.color = (1.0, 0.96, 0.88)
     if hasattr(sun_data, "angle"):
         sun_data.angle = math.radians(0.54)   # realistic solar angular diameter for soft shadows
     sun_obj = bpy.data.objects.new("Sun_Daylight", sun_data)
-    sun_obj.location = (20, -20, 40)
-    sun_obj.rotation_euler = Euler((math.radians(52), math.radians(15), math.radians(135)), 'XYZ')
+    sun_obj.location = (25, -25, 40)
+    sun_obj.rotation_euler = Euler((math.radians(62), math.radians(12), math.radians(115)), 'XYZ')
     sun_obj[OWNER_KEY] = OWNER_VALUE
     col.objects.link(sun_obj)
 
     # Soft ambient fill
     fill_data = bpy.data.lights.get("Sky_Fill") or bpy.data.lights.new(name="Sky_Fill", type='SUN')
-    fill_data.energy = 1.2
-    fill_data.color = (0.75, 0.88, 1.0)
+    fill_data.energy = 0.45
+    fill_data.color = (0.70, 0.85, 1.0)
     fill_obj = bpy.data.objects.new("Sky_Fill", fill_data)
     fill_obj.location = (-20, 20, 35)
     fill_obj.rotation_euler = Euler((math.radians(-50), math.radians(-30), math.radians(-120)), 'XYZ')
     fill_obj[OWNER_KEY] = OWNER_VALUE
     col.objects.link(fill_obj)
 
+    # Camera placements and target locations for mathematical orientation
     cams = [
-        (cfg.CAMERA_OVERVIEW, 35, 400, (65, 105, 55), (64, 0, 145)),
-        (cfg.CAMERA_ENTRANCE, 28, 300, (0, 72, 2.2), (85, 0, 180)),
-        ("Cam_Facade", 26, 300, (-18.0, 25.0, 2.2), (82, 0, -145)),
-        ("Cam_Classroom", 22, 100, (-10.5, 6.8, 1.8), (75, 0, 30)),
-        ("Cam_Staircase", 24, 100, (1.8, 6.2, 1.6), (72, 0, -25)),
-        ("Cam_Courtyard", 28, 200, (-32.0, 40.0, 1.8), (82, 0, -140)),
+        (cfg.CAMERA_OVERVIEW, 35, 400, (65.0, 105.0, 55.0), (0.0, 20.0, 2.0)),
+        (cfg.CAMERA_ENTRANCE, 28, 300, (0.0, 72.0, 2.2), (0.0, 10.0, 3.2)),
+        ("Cam_Facade", 26, 300, (-17.0, 26.0, 2.2), (0.0, 10.0, 3.0)),
+        ("Cam_Classroom", 22, 100, (-8.8, 7.2, 1.7), (-14.5, 3.8, 1.1)),
+        ("Cam_Staircase", 24, 100, (2.0, 7.8, 1.5), (5.0, 4.0, 2.4)),
+        ("Cam_Courtyard", 28, 200, (-26.0, 34.0, 2.0), (-40.0, 48.5, 1.2)),
     ]
-    for name, lens, clip, loc, rot in cams:
+    for name, lens, clip, loc, target in cams:
         cd = bpy.data.cameras.get(name) or bpy.data.cameras.new(name)
         cd.lens, cd.clip_end = lens, clip
         obj = bpy.data.objects.new(name, cd)
-        obj.location = loc
-        obj.rotation_euler = Euler([math.radians(a) for a in rot], 'XYZ')
+        obj.location = Vector(loc)
+        # Calculate exact view orientation toward target
+        d = Vector(target) - obj.location
+        obj.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
         obj[OWNER_KEY] = OWNER_VALUE
         col.objects.link(obj)
 
