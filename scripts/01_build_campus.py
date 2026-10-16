@@ -641,7 +641,7 @@ def build_props(b):
         cx, cy = 32.0 + idx * 3.4, 36.0
         cm = materials_pbr.create_car_paint_material(f"Mat_Car_{idx}", colors[idx])
         b.box(col, f"Car_{idx}_Body", (cx, cy, 0.6), (1.8, 4.0, 0.65), cm)
-        b.box(col, f"Car_{idx}_Cabin", (cx, cy - 0.2, 1.2), (1.6, 2.2, 0.55), m["glass"])
+        b.box(col, f"Car_{idx}_Cabin", (cx, cy - 0.2, 1.2), (1.6, 2.2, 0.55), m.get("car_glass", m["glass"]))
         k = 0
         for wx in (-0.95, 0.95):
             for wy in (cy - 1.2, cy + 1.2):
