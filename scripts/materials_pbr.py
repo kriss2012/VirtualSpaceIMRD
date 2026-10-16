@@ -724,10 +724,12 @@ def build_full_pbr_palette():
     """Builds and returns the complete dictionary of PBR materials for IMRD campus."""
     palette = {}
     palette["grass"] = create_grass_material("Mat_Grass")
-    palette["asphalt"] = create_asphalt_material("Mat_Asphalt", base_color=(0.04, 0.045, 0.05))
-    palette["road_lines"] = create_concrete_material("Mat_RoadLines", base_color=(0.80, 0.65, 0.08), roughness=0.45, bump_strength=0.04)
-    palette["paving"] = create_concrete_material("Mat_Paving", base_color=(0.32, 0.31, 0.29), roughness=0.68, bump_strength=0.08)
-    palette["parking"] = create_asphalt_material("Mat_Parking", base_color=(0.06, 0.065, 0.07), roughness=0.74, bump_strength=0.12)
+    palette["asphalt"] = create_asphalt_material("Mat_Asphalt", base_color=(0.032, 0.035, 0.038), roughness=0.74, bump_strength=0.14)
+    palette["road_lines"] = create_concrete_material("Mat_RoadLines", base_color=(0.82, 0.68, 0.08), roughness=0.45, bump_strength=0.04)
+    palette["paving"] = create_paver_tiles_material("Mat_Paving", scale=4.0, roughness=0.70)
+    palette["curb"] = create_concrete_material("Mat_Curb", base_color=(0.28, 0.27, 0.25), roughness=0.62, bump_strength=0.06)
+    palette["soil"] = create_soil_material("Mat_Soil", base_color=(0.040, 0.028, 0.018), roughness=0.94)
+    palette["parking"] = create_asphalt_material("Mat_Parking", base_color=(0.045, 0.050, 0.055), roughness=0.75, bump_strength=0.12)
     palette["park_lines"] = create_concrete_material("Mat_ParkLines", base_color=(0.75, 0.75, 0.75), roughness=0.40, bump_strength=0.04)
 
     # Architecture
@@ -746,7 +748,8 @@ def build_full_pbr_palette():
     palette["lamp_glow"] = create_lamp_glow_material("Mat_LampGlow", color=(1.0, 0.94, 0.75), strength=8.0)
 
     # Vegetation
-    palette["leaves"] = create_foliage_material("Mat_Leaves")
+    palette["leaves"] = create_foliage_material("Mat_Leaves", base_color=(0.042, 0.125, 0.026), roughness=0.62)
+    palette["flower_shrub"] = create_flowering_shrub_material("Mat_FlowerShrub", roughness=0.68)
     palette["trunk"] = create_wood_material("Mat_Trunk", base_color=(0.12, 0.08, 0.04), roughness=0.85, bump_strength=0.20)
 
     return palette

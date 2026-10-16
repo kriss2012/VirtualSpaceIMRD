@@ -216,6 +216,58 @@ class Builder:
             box_into(bm, center, size, origin=origin)
         return self._finish(name, bm, col, mat, origin=origin)
 
+    def cone(self, col, name, center, r_bottom, r_top, depth, mat=None, segments=12):
+        """Tapered cone or truncated cylinder for natural tree trunks."""
+        bm = bmesh.new()
+        bmesh.ops.create_cone(bm, cap_ends=True, cap_tris=False, segments=segments,
+                              radius1=r_bottom, radius2=r_top, depth=depth)
+        bmesh.ops.translate(bm, vec=Vector(center))
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        return self._finish(name, bm, col, mat, origin=center)
+
+    def organic_canopy(self, col, name, center, radius, mat=None, seed=0):
+        """Lush, multi-lobed organic canopy using clustered icospheres with smooth shading."""
+        bm = bmesh.new()
+        cx, cy, cz = center
+        # Main central mass
+        res_main = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=radius * 0.95)
+        bmesh.ops.scale(bm, vec=Vector((1.0, 1.0, 0.88)), verts=res_main["verts"])
+        bmesh.ops.translate(bm, vec=Vector((cx, cy, cz)), verts=res_main["verts"])
+        # 4 azimuthal side lobes
+        angles = [0.2 + seed * 0.4, 1.8 + seed * 0.4, 3.4 + seed * 0.4, 5.0 + seed * 0.4]
+        for i, ang in enumerate(angles):
+            r_lobe = radius * (0.62 + 0.10 * ((seed + i) % 3))
+            d_xy = radius * 0.52
+            lx = cx + d_xy * math.cos(ang)
+            ly = cy + d_xy * math.sin(ang)
+            lz = cz + radius * (-0.10 + 0.15 * (i % 2))
+            res_lobe = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=r_lobe)
+            bmesh.ops.scale(bm, vec=Vector((1.05, 0.95, 0.85)), verts=res_lobe["verts"])
+            bmesh.ops.translate(bm, vec=Vector((lx, ly, lz)), verts=res_lobe["verts"])
+        # Top crown lobe
+        r_top = radius * 0.60
+        res_top = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=r_top)
+        bmesh.ops.translate(bm, vec=Vector((cx + 0.08 * radius, cy - 0.06 * radius, cz + radius * 0.60)), verts=res_top["verts"])
+        for f in bm.faces:
+            f.smooth = True
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        return self._finish(name, bm, col, mat, origin=center)
+
+    def shrub(self, col, name, center, radius, height, mat=None, seed=0):
+        """Low rounded ornamental bush/hedge cluster with smooth organic shading."""
+        bm = bmesh.new()
+        cx, cy, cz = center
+        res1 = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=radius)
+        bmesh.ops.scale(bm, vec=Vector((1.0, 1.0, height / (2.0 * max(0.01, radius)))), verts=res1["verts"])
+        bmesh.ops.translate(bm, vec=Vector((cx, cy, cz + height / 2.0)), verts=res1["verts"])
+        res2 = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=radius * 0.78)
+        bmesh.ops.scale(bm, vec=Vector((0.95, 1.05, height / (2.0 * max(0.01, radius)))), verts=res2["verts"])
+        bmesh.ops.translate(bm, vec=Vector((cx + radius * 0.32, cy - radius * 0.22, cz + height * 0.45)), verts=res2["verts"])
+        for f in bm.faces:
+            f.smooth = True
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        return self._finish(name, bm, col, mat, origin=center)
+
 
 # ----------------------------------------------------------------------
 # Wall-axis helpers
@@ -294,22 +346,54 @@ def cut_openings(b, wall_obj, wall, openings):
 # ----------------------------------------------------------------------
 def build_terrain(b):
     col, m = b.cols["terrain"], b.mats
+    curb_mat = m.get("curb", m["wall_trim"])
+    soil_mat = m.get("soil", m["trunk"])
+    paver_mat = m.get("paving")
+
+    # 1. Macro natural lawn
     b.box(col, "Ground_Grass", (0, 30, -0.1), (220, 180, 0.2), m["grass"])
+
+    # 2. Main road with curbs and realistic markings
     b.box(col, "Road_Main", (0, 48, 0.02), (9.0, 56.0, 0.04), m["asphalt"])
+    # Concrete curbs along main road
+    b.box(col, "Curb_Road_Main_L", (-4.65, 48, 0.05), (0.35, 56.0, 0.08), curb_mat)
+    b.box(col, "Curb_Road_Main_R", (4.65, 48, 0.05), (0.35, 56.0, 0.08), curb_mat)
+    # Solid white boundary edge stripes
+    b.box(col, "Road_Solid_Line_L", (-4.2, 48, 0.045), (0.15, 55.5, 0.02), m["park_lines"])
+    b.box(col, "Road_Solid_Line_R", (4.2, 48, 0.045), (0.15, 55.5, 0.02), m["park_lines"])
+    # Dashed center yellow line
     for z in range(22, 74, 5):
         b.box(col, f"Road_Dash_{z}", (0, z, 0.045), (0.25, 2.5, 0.02), m["road_lines"])
+    # Pedestrian zebra crossing at plaza arrival (Y = 20.5)
+    for zi in range(7):
+        zx = -3.6 + zi * 1.2
+        b.box(col, f"Road_Zebra_{zi}", (zx, 20.5, 0.045), (0.50, 2.4, 0.02), m["park_lines"])
+
+    # 3. Parking branch and parking lot
     b.box(col, "Road_Branch_Parking", (18, 37, 0.02), (26.0, 7.0, 0.04), m["asphalt"])
+    b.box(col, "Curb_Parking_Branch_N", (18, 40.65, 0.05), (26.0, 0.35, 0.08), curb_mat)
+    b.box(col, "Curb_Parking_Branch_S", (18, 33.35, 0.05), (26.0, 0.35, 0.08), curb_mat)
     b.box(col, "Parking_Area", (44, 43, 0.025), (34.0, 24.0, 0.04), m["parking"])
     for k in range(9):
         x = 30 + k * 3.4
         b.box(col, f"Parking_Line_A_{k}", (x, 36, 0.05), (0.15, 6.0, 0.02), m["park_lines"])
         b.box(col, f"Parking_Line_B_{k}", (x, 50, 0.05), (0.15, 6.0, 0.02), m["park_lines"])
-    b.box(col, "Plaza_Front", (0, 15, 0.03), (48.0, 10.0, 0.05), m["paving"])
-    b.box(col, "Walkway_Garden_A", (-22.5, 34, 0.03), (3.0, 30.0, 0.05), m["paving"])
-    b.box(col, "Walkway_Garden_B", (-31, 48.5, 0.03), (16.0, 3.0, 0.05), m["paving"])
-    b.cyl(col, "Garden_Circle_Plaza", (-40, 48.5, 0.035), 6.0, 0.04, m["paving"], segments=48)
-    b.cyl(col, "Garden_Flowerbed", (-40, 48.5, 0.08), 2.5, 0.08, m["leaves"], segments=32)
-    b.box(col, "Walkway_Parking", (22.5, 27, 0.03), (3.0, 16.0, 0.05), m["paving"])
+
+    # 4. Plaza & Walkways with interlocking paver textures
+    b.box(col, "Plaza_Front", (0, 15, 0.03), (48.0, 10.0, 0.05), paver_mat)
+    b.box(col, "Walkway_Garden_A", (-22.5, 34, 0.03), (3.0, 30.0, 0.05), paver_mat)
+    b.box(col, "Walkway_Garden_B", (-31, 48.5, 0.03), (16.0, 3.0, 0.05), paver_mat)
+    b.cyl(col, "Garden_Circle_Plaza", (-40, 48.5, 0.035), 6.0, 0.04, paver_mat, segments=48)
+    # Garden flowerbed with raised curb border and rich dark soil
+    b.cyl(col, "Garden_Flowerbed_Curb", (-40, 48.5, 0.07), 2.8, 0.12, curb_mat, segments=36)
+    b.cyl(col, "Garden_Flowerbed", (-40, 48.5, 0.09), 2.5, 0.10, soil_mat, segments=32)
+    b.box(col, "Walkway_Parking", (22.5, 27, 0.03), (3.0, 16.0, 0.05), paver_mat)
+
+    # 5. Entrance Plinth Planter Beds (framing the main building steps)
+    b.box(col, "Planter_Bed_L", (-13.5, 9.8, 0.18), (9.0, 1.4, 0.36), curb_mat)
+    b.box(col, "Planter_Soil_L", (-13.5, 9.8, 0.28), (8.6, 1.0, 0.18), soil_mat)
+    b.box(col, "Planter_Bed_R", (13.5, 9.8, 0.18), (9.0, 1.4, 0.36), curb_mat)
+    b.box(col, "Planter_Soil_R", (13.5, 9.8, 0.28), (8.6, 1.0, 0.18), soil_mat)
 
 
 # ----------------------------------------------------------------------
