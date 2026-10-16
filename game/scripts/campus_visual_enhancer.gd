@@ -11,9 +11,7 @@ func _ready() -> void:
 
 
 func enhance_campus_environment() -> void:
-	var root = get_tree().current_scene
-	if not root:
-		return
+	var root = self
 		
 	# 1. Calibrate Directional Sunlight
 	var sun: DirectionalLight3D = root.find_child("DirectionalLight3D", true, false) as DirectionalLight3D
@@ -65,9 +63,7 @@ func enhance_campus_environment() -> void:
 
 
 func apply_all_campus_materials() -> void:
-	var root = get_tree().current_scene
-	if not root:
-		return
+	var root = self
 		
 	# Build rich PBR materials library
 	var mats = build_material_library()

@@ -81,4 +81,11 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, speed * delta * 10.0)
 		velocity.z = move_toward(velocity.z, 0, speed * delta * 10.0)
 
+	# Step-up assist for curbs, thresholds, and stairs
+	if is_on_wall() and direction.length_squared() > 0.01:
+		var step_test = global_transform
+		step_test.origin += direction * 0.18 + Vector3(0, 0.32, 0)
+		if not test_move(step_test, Vector3.DOWN * 0.30):
+			velocity.y = 2.8
+
 	move_and_slide()
