@@ -91,7 +91,7 @@ func build_material_library() -> Dictionary:
 	lib["Mat_WallTrim"] = create_mat(Color(0.65, 0.26, 0.16), 0.48, 0.0) # Warm terracotta architectural trim
 	lib["Mat_FloorTile"] = create_mat(Color(0.84, 0.82, 0.78), 0.18, 0.0) # Polished marble lobby tiles
 	lib["Mat_Wood"] = create_mat(Color(0.38, 0.20, 0.10), 0.38, 0.0) # Polished teak doors & window frames
-	lib["Mat_Ceiling"] = create_mat(Color(0.42, 0.42, 0.44), 0.75, 0.0) # Roof & ceiling slab
+	lib["Mat_Ceiling"] = create_mat(Color(0.92, 0.91, 0.88), 0.85, 0.0) # Clean off-white ceiling plaster
 	lib["Mat_MetalDark"] = create_mat(Color(0.10, 0.10, 0.12), 0.30, 0.85) # Black iron railings & gate
 	
 	# Architectural Glass (reflective, translucent)
@@ -189,7 +189,7 @@ func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 		return lib["Mat_Curb"]
 	elif "soil" in name_lower or "flowerbed" in name_lower:
 		return lib["Mat_Soil"]
-	elif "paving" in name_lower or "plaza" in name_lower or "walkway" in name_lower or "step" in name_lower or "plinth" in name_lower:
+	elif "paving" in name_lower or "plaza" in name_lower or "walkway" in name_lower or "step" in name_lower or "plinth" in name_lower or "stair" in name_lower:
 		return lib["Mat_Paving"]
 	elif "flower" in name_lower or "shrub" in name_lower:
 		return lib["Mat_FlowerShrub"]
@@ -209,6 +209,8 @@ func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 		return lib["Mat_WallExt"]
 	elif "floor" in name_lower or "slab" in name_lower:
 		return lib["Mat_FloorTile"]
+	elif "roof" in name_lower or "ceiling" in name_lower:
+		return lib["Mat_Ceiling"]
 	elif "glass" in name_lower:
 		return lib["Mat_Glass"]
 	elif "rail" in name_lower or "gate" in name_lower or "lamp" in name_lower or "pole" in name_lower or "boundary" in name_lower:

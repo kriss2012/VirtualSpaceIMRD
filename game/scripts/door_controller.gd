@@ -17,6 +17,7 @@ func _ready() -> void:
 	current_rotation_y = target_rotation_y
 	if hinge_pivot:
 		hinge_pivot.rotation.y = current_rotation_y
+	update_collision()
 
 
 func _process(delta: float) -> void:
@@ -32,9 +33,15 @@ func get_interaction_text() -> String:
 func interact() -> void:
 	is_open = !is_open
 	target_rotation_y = deg_to_rad(open_angle_degrees) if is_open else 0.0
+	update_collision()
 	var state_text = "Opened" if is_open else "Closed"
 	GameManager.post_notification("Door " + state_text + ".")
 	GameManager.set_active_interactable(self, get_interaction_text())
+
+
+func update_collision() -> void:
+	if collision_shape:
+		collision_shape.disabled = is_open
 
 
 func _on_interaction_area_body_entered(body: Node3D) -> void:

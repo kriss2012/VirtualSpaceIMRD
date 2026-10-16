@@ -7,8 +7,8 @@
 radius = 0.38
 height = 1.8
 
-[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_1"]
-length = 0.4
+[sub_resource type="SphereShape3D" id="SphereShape3D_springarm"]
+radius = 0.22
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
@@ -28,9 +28,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
 transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0)
-shape = SubResource("SeparationRayShape3D_1")
+shape = SubResource("SphereShape3D_springarm")
 spring_length = 3.2
-margin = 0.12
+margin = 0.20
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
 current = true

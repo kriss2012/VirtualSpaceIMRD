@@ -1,0 +1,105 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/classroom_door.gd" id="1_cdoor"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_Frame"]
+albedo_color = Color(0.24, 0.16, 0.10, 1)
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_Wood"]
+albedo_color = Color(0.38, 0.22, 0.12, 1)
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="Mat_Brass"]
+albedo_color = Color(0.85, 0.72, 0.25, 1)
+metallic = 0.85
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="Mat_Sign"]
+albedo_color = Color(0.12, 0.18, 0.32, 1)
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="Mesh_FrameTop"]
+material = SubResource("Mat_Frame")
+size = Vector3(1.10, 0.08, 0.22)
+
+[sub_resource type="BoxMesh" id="Mesh_FrameSide"]
+material = SubResource("Mat_Frame")
+size = Vector3(0.08, 2.20, 0.22)
+
+[sub_resource type="BoxMesh" id="Mesh_Signboard"]
+material = SubResource("Mat_Sign")
+size = Vector3(0.90, 0.22, 0.04)
+
+[sub_resource type="BoxMesh" id="Mesh_DoorLeaf"]
+material = SubResource("Mat_Wood")
+size = Vector3(0.96, 2.10, 0.05)
+
+[sub_resource type="CylinderMesh" id="Mesh_Doorknob"]
+material = SubResource("Mat_Brass")
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.08
+
+[sub_resource type="BoxShape3D" id="Shape_DoorBody"]
+size = Vector3(0.96, 2.10, 0.08)
+
+[sub_resource type="BoxShape3D" id="Shape_InteractArea"]
+size = Vector3(1.10, 2.10, 1.20)
+
+[node name="ClassroomDoor" type="Node3D"]
+script = ExtResource("1_cdoor")
+
+[node name="Frame" type="Node3D" parent="."]
+
+[node name="FrameTop" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 2.16, 0)
+mesh = SubResource("Mesh_FrameTop")
+
+[node name="FrameLeft" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 1.10, 0)
+mesh = SubResource("Mesh_FrameSide")
+
+[node name="FrameRight" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02, 1.10, 0)
+mesh = SubResource("Mesh_FrameSide")
+
+[node name="Signboard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 2.34, 0.02)
+mesh = SubResource("Mesh_Signboard")
+
+[node name="Label3D" type="Label3D" parent="Signboard"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.03)
+pixel_size = 0.003
+text = "Classroom 101"
+font_size = 28
+outline_size = 6
+
+[node name="HingePivot" type="Node3D" parent="."]
+
+[node name="DoorMesh" type="MeshInstance3D" parent="HingePivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 1.07, 0)
+mesh = SubResource("Mesh_DoorLeaf")
+
+[node name="Doorknob" type="MeshInstance3D" parent="HingePivot"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.90, 1.05, 0.04)
+mesh = SubResource("Mesh_Doorknob")
+
+[node name="DoorBody" type="StaticBody3D" parent="HingePivot"]
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HingePivot/DoorBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 1.07, 0)
+shape = SubResource("Shape_DoorBody")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 1.10, 0.60)
+shape = SubResource("Shape_InteractArea")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

@@ -23,6 +23,9 @@ func _ready() -> void:
 	floor_snap_length = 0.50
 	floor_max_angle = deg_to_rad(52.0)
 	floor_constant_speed = true
+	# Ensure game state is active if not paused
+	if GameManager.current_state != GameManager.GameState.PAUSED:
+		GameManager.change_state(GameManager.GameState.PLAYING)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -85,7 +88,8 @@ func _physics_process(delta: float) -> void:
 	if is_on_wall() and direction.length_squared() > 0.01:
 		var step_test = global_transform
 		step_test.origin += direction * 0.18 + Vector3(0, 0.32, 0)
-		if not test_move(step_test, Vector3.DOWN * 0.30):
-			velocity.y = 2.8
+		if not test_move(step_test, Vector3.ZERO):
+			if test_move(step_test, Vector3.DOWN * 0.32):
+				velocity.y = 2.5
 
 	move_and_slide()

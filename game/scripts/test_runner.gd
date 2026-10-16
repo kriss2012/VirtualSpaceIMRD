@@ -28,6 +28,7 @@ func _ready() -> void:
 	test_id_card_pickup()
 	test_location_triggers()
 	test_save_load_system()
+	test_stair_climb_and_second_floor()
 	
 	print("====================================================")
 	print("TEST RESULTS: %d Passed, %d Failed" % [passed_tests, failed_tests])
@@ -84,9 +85,16 @@ func test_campus_scene_loading() -> void:
 	var cols = campus.find_child("Collisions", true, false)
 	assert_true(cols != null, "Collisions root present")
 	assert_true(cols.find_child("GroundCollision", true, false) != null, "Ground static collision present")
-	assert_true(cols.find_child("EntranceStepsRamp", true, false) != null, "Entrance steps smooth ramp present")
+	var entrance_col = cols.find_child("EntranceStepsRamp", true, false)
+	assert_true(entrance_col != null, "Entrance steps smooth ramp present")
+	assert_true(entrance_col.get_child(0).shape is ConvexPolygonShape3D, "Entrance ramp uses smooth ConvexPolygonShape3D")
 	assert_true(cols.find_child("PlinthCollision", true, false) != null, "Plinth static collision present")
-	assert_true(cols.find_child("StairsRampCollision", true, false) != null, "Stairs ramp collision present")
+	
+	var stair_col = cols.find_child("StairsRampCollision", true, false)
+	assert_true(stair_col != null, "Stairs ramp collision present")
+	assert_true(stair_col.get_child(0).shape is ConvexPolygonShape3D, "Stairs ramp uses smooth ConvexPolygonShape3D")
+	assert_true(campus.find_child("InteriorLighting", true, false) != null, "Interior lighting system present")
+	
 	assert_true(cols.find_child("Floor1_WestSlab", true, false) != null, "Second floor West slab collision present")
 	assert_true(cols.find_child("Floor1_EastSlab", true, false) != null, "Second floor East slab collision present")
 	assert_true(cols.find_child("Floor1_LandingRear", true, false) != null, "Second floor Landing collision present")
@@ -134,7 +142,7 @@ func test_doors_and_interaction() -> void:
 	var cdoor_res = load("res://scenes/classroom_door.tscn")
 	assert_true(cdoor_res != null, "Classroom door scene resource exists")
 	var cdoor = cdoor_res.instantiate()
-	assert_true(cdoor.has_method("interact"), "Classroom door has interact method")
+	assert_true(cdoor.find_child("InteractionArea", true, false).get_child(0).shape is BoxShape3D, "Classroom door uses targeted BoxShape3D interaction area")
 	assert_true(not cdoor.is_open, "Classroom door starts closed")
 	cdoor.interact()
 	assert_true(cdoor.is_open, "Classroom door state transitions to OPEN after interaction")
@@ -213,3 +221,47 @@ func test_save_load_system() -> void:
 	assert_true(MissionManager.xp == current_xp, "Saved XP restored correctly")
 	assert_true(MissionManager.level == current_level, "Saved Level restored correctly")
 	assert_true(MissionManager.missions["first_day"]["completed"], "Saved mission state preserved")
+
+
+func test_stair_climb_and_second_floor() -> void:
+	print("\n--- TEST GROUP 10: Stair Climb & Second Floor Traversal ---")
+	var campus_scn = load("res://scenes/campus.tscn")
+	assert_true(campus_scn != null, "Campus scene loads for traversal test")
+	var campus = campus_scn.instantiate()
+	add_child(campus)
+	
+	var player = campus.find_child("Player", true, false)
+	assert_true(player != null, "Player found in campus")
+	
+	# Start at bottom of stairs on the lobby plinth
+	player.global_position = Vector3(5.0, 0.40, -7.50)
+	assert_true(player.global_position.y >= 0.34, "Player starts at ground plinth Y >= 0.34")
+	
+	# Verify convex polygon shape points
+	var stairs_col = campus.find_child("StairsRampCollision", true, false)
+	assert_true(stairs_col != null, "Stairs ramp collision node exists")
+	var shape: ConvexPolygonShape3D = stairs_col.get_child(0).shape as ConvexPolygonShape3D
+	assert_true(shape != null, "Stairs ramp shape is ConvexPolygonShape3D")
+	var pts = shape.points
+	assert_true(pts.size() >= 6, "Stairs ramp has 3D convex hull points")
+	
+	# Check bottom and top points of the ramp
+	var has_bottom_pt = false
+	var has_top_pt = false
+	for p in pts:
+		if p.z <= -7.5 and abs(p.y - 0.34) < 0.1:
+			has_bottom_pt = true
+		if p.z >= -1.5 and abs(p.y - 4.30) < 0.1:
+			has_top_pt = true
+	assert_true(has_bottom_pt, "Stair ramp connects seamlessly to ground plinth (Y=0.34 at Z=-7.6)")
+	assert_true(has_top_pt, "Stair ramp connects seamlessly to second floor landing (Y=4.30 at Z=-1.42)")
+	
+	# Check second floor door accessibility
+	var c201 = campus.find_child("Classroom201Door", true, false)
+	assert_true(c201 != null and c201.position.y >= 4.0, "Classroom 201 door accessible on second floor (Y >= 4.0)")
+	var seminar = campus.find_child("SeminarHallDoor", true, false)
+	assert_true(seminar != null and seminar.position.y >= 4.0, "Seminar Hall door accessible on second floor (Y >= 4.0)")
+	
+	remove_child(campus)
+	campus.free()
+

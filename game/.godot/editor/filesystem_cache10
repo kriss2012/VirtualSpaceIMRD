@@ -16,8 +16,8 @@ character_student.glb::PackedScene::1499126693080022747::1792182595::1792183733:
 npc_guide.glb::PackedScene::74130290499048832::1792182595::1792183733::1::::<><><>0<>0<>84f0048f9f1490b49de7942769fab1e6<>res://.godot/imported/npc_guide.glb-f67803e198e35265e3cb5f44caba4e75.scn::
 ::res://assets/textures/::1792182735
 ::res://scenes/::1792185904
-campus.tscn::PackedScene::-1::1792185966::0::1::::<><><>0<>0<><>::res://scripts/campus_visual_enhancer.gd<>res://assets/models/campus_terrain.glb<>res://assets/models/campus_architecture.glb<>res://assets/models/campus_props.glb<>res://assets/models/campus_furniture.glb<>res://assets/models/campus_vegetation.glb<>res://scenes/imrd_entrance_portico.tscn<>res://scenes/library_section.tscn<>res://scenes/seminar_hall.tscn<>res://scenes/classroom_door.tscn<>res://scenes/player.tscn<>res://scenes/npc.tscn<>res://scenes/item_id_card.tscn<>res://scenes/ui.tscn<>res://scripts/location_trigger.gd
-classroom_door.tscn::PackedScene::-1::1792185441::0::1::::<><><>0<>0<><>::res://scripts/classroom_door.gd
+campus.tscn::PackedScene::-1::1792187679::0::1::::<><><>0<>0<><>::res://scripts/campus_visual_enhancer.gd<>res://assets/models/campus_terrain.glb<>res://assets/models/campus_architecture.glb<>res://assets/models/campus_props.glb<>res://assets/models/campus_furniture.glb<>res://assets/models/campus_vegetation.glb<>res://scenes/imrd_entrance_portico.tscn<>res://scenes/library_section.tscn<>res://scenes/seminar_hall.tscn<>res://scenes/classroom_door.tscn<>res://scenes/player.tscn<>res://scenes/npc.tscn<>res://scenes/item_id_card.tscn<>res://scenes/ui.tscn<>res://scripts/location_trigger.gd
+classroom_door.tscn::PackedScene::-1::1792187707::0::1::::<><><>0<>0<><>::res://scripts/classroom_door.gd
 door.tscn::PackedScene::-1::1792183245::0::1::::<><><>0<>0<><>::res://scripts/door_controller.gd
 entrance_portal.tscn::PackedScene::-1::1792185401::0::1::::<><><>0<>0<><>::res://scripts/entrance_portal.gd
 imrd_entrance_portico.tscn::PackedScene::-1::1792186142::0::1::::<><><>0<>0<><>::
@@ -29,8 +29,8 @@ player.tscn::PackedScene::-1::1792185464::0::1::::<><><>0<>0<><>::res://scripts/
 seminar_hall.tscn::PackedScene::-1::1792185904::0::1::::<><><>0<>0<><>::
 test_runner.tscn::PackedScene::-1::1792184093::0::1::::<><><>0<>0<><>::res://scripts/test_runner.gd
 ui.tscn::PackedScene::-1::1792183152::0::1::::<><><>0<>0<><>::res://scripts/ui_manager.gd
-::res://scripts/::1792185642
-campus_visual_enhancer.gd::GDScript::1508988769413197095::1792185342::0::1::::<>Node<><>0<>0<><>::
+::res://scripts/::1792188010
+campus_visual_enhancer.gd::GDScript::1508988769413197095::1792187778::0::1::::<>Node<><>0<>0<><>::
 classroom_door.gd::GDScript::187754170139021526::1792185419::0::1::::<>Node3D<><>0<>0<><>::
 door_controller.gd::GDScript::3702236898851184398::1792182998::0::1::::<>Node3D<><>0<>0<><>::
 entrance_portal.gd::GDScript::7012306443697298278::1792185363::0::1::::<>Node3D<><>0<>0<><>::
@@ -40,9 +40,9 @@ location_trigger.gd::GDScript::7087311453468788147::1792183072::0::1::::<>Area3D
 main_menu.gd::GDScript::8254187610467878336::1792183170::0::1::::<>Control<><>0<>0<><>::
 mission_manager.gd::GDScript::2573662398647391051::1792182842::0::1::::<>Node<><>0<>0<><>::
 npc_controller.gd::GDScript::1116287511249838227::1792183025::0::1::::<>CharacterBody3D<><>0<>0<><>::
-player_controller.gd::GDScript::5250231632850697578::1792185502::0::1::::<>CharacterBody3D<><>0<>0<><>::
+player_controller.gd::GDScript::5250231632850697578::1792187723::0::1::::<>CharacterBody3D<><>0<>0<><>::
 save_manager.gd::GDScript::5019719777404382982::1792184161::0::1::::<>Node<><>0<>0<><>::
-test_runner.gd::GDScript::6344881653678930978::1792186055::0::1::::<>Node<><>0<>0<><>::
+test_runner.gd::GDScript::6344881653678930978::1792187973::0::1::::<>Node<><>0<>0<><>::
 ui_manager.gd::GDScript::8364673138950909448::1792183103::0::1::::<>Control<><>0<>0<><>::
-::res://tests/::1792185282
+::res://tests/::1792186930
 test_game_engine.gd::GDScript::1874513684303814288::1792184048::0::1::::<>SceneTree<><>0<>0<><>::

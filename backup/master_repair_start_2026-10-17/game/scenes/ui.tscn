@@ -1,0 +1,225 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui_manager.gd" id="1_ui"]
+
+[node name="UI" type="CanvasLayer"]
+process_mode = 3
+
+[node name="UIManager" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_ui")
+
+[node name="HUD" type="Control" parent="UIManager"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="StatsPanel" type="PanelContainer" parent="UIManager/HUD"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 260.0
+offset_bottom = 96.0
+
+[node name="VBox" type="VBoxContainer" parent="UIManager/HUD/StatsPanel"]
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="UIManager/HUD/StatsPanel/VBox"]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="UIManager/HUD/StatsPanel/VBox/HBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Level 1"
+
+[node name="XPProgressBar" type="ProgressBar" parent="UIManager/HUD/StatsPanel/VBox"]
+layout_mode = 2
+max_value = 200.0
+step = 1.0
+
+[node name="XPTextLabel" type="Label" parent="UIManager/HUD/StatsPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "0 / 200 XP"
+
+[node name="ObjectivePanel" type="PanelContainer" parent="UIManager/HUD"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 24.0
+offset_right = 300.0
+offset_bottom = 70.0
+grow_horizontal = 2
+
+[node name="ObjectiveLabel" type="Label" parent="UIManager/HUD/ObjectivePanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Orientation: Meet Prof. Sharma at the entrance plaza"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InteractionPanel" type="PanelContainer" parent="UIManager/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -140.0
+offset_right = 220.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="InteractionLabel" type="Label" parent="UIManager/HUD/InteractionPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.4, 1)
+theme_override_font_sizes/font_size = 18
+text = "Press [E] to Interact"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ToastContainer" type="VBoxContainer" parent="UIManager/HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -420.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 260.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="ControlsPanel" type="PanelContainer" parent="UIManager/HUD"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -70.0
+offset_right = 440.0
+offset_bottom = -24.0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="ControlsLabel" type="Label" parent="UIManager/HUD/ControlsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "WASD: Move | Shift: Sprint | Space: Jump | E: Interact | Esc: Pause"
+vertical_alignment = 1
+
+[node name="DialoguePanel" type="PanelContainer" parent="UIManager"]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -240.0
+offset_right = 400.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="UIManager/DialoguePanel"]
+layout_mode = 2
+
+[node name="SpeakerLabel" type="Label" parent="UIManager/DialoguePanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.75, 0.3, 1)
+theme_override_font_sizes/font_size = 18
+text = "Prof. Sharma (Campus Guide)"
+
+[node name="DialogueLabel" type="Label" parent="UIManager/DialoguePanel/VBox"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Namaste! Welcome to RCPET's Institute of Management Research and Development (IMRD), Shirpur!"
+autowrap_mode = 3
+
+[node name="HBox" type="HBoxContainer" parent="UIManager/DialoguePanel/VBox"]
+layout_mode = 2
+alignment = 2
+
+[node name="NextButton" type="Button" parent="UIManager/DialoguePanel/VBox/HBox"]
+custom_minimum_size = Vector2(120, 36)
+layout_mode = 2
+text = "Next [E]"
+
+[node name="PauseMenu" type="Control" parent="UIManager"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UIManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.06, 0.08, 0.75)
+
+[node name="Center" type="CenterContainer" parent="UIManager/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="UIManager/PauseMenu/Center"]
+custom_minimum_size = Vector2(360, 320)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="UIManager/PauseMenu/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Title" type="Label" parent="UIManager/PauseMenu/Center/Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="UIManager/PauseMenu/Center/Panel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "▶ Resume Game"
+
+[node name="SaveButton" type="Button" parent="UIManager/PauseMenu/Center/Panel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "💾 Save Progress"
+
+[node name="LoadButton" type="Button" parent="UIManager/PauseMenu/Center/Panel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "🔄 Load Last Save"
+
+[node name="MenuButton" type="Button" parent="UIManager/PauseMenu/Center/Panel/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "⌂ Return to Main Menu"

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/player_controller.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://assets/models/character_student.glb" id="2_student_mesh"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.38
+height = 1.8
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_1"]
+length = 0.4
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="VisualMesh" type="Node3D" parent="."]
+
+[node name="character_student" parent="VisualMesh" instance=ExtResource("2_student_mesh")]
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0)
+shape = SubResource("SeparationRayShape3D_1")
+spring_length = 3.2
+margin = 0.12
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
+current = true
+fov = 74.0
+near = 0.05
+far = 500.0

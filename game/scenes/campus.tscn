@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3]
+[gd_scene load_steps=39 format=3]
 
 [ext_resource type="Script" path="res://scripts/campus_visual_enhancer.gd" id="1_enhancer"]
 [ext_resource type="PackedScene" path="res://assets/models/campus_terrain.glb" id="2_terrain"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/item_id_card.tscn" id="13_id_card"]
 [ext_resource type="PackedScene" path="res://scenes/ui.tscn" id="14_ui"]
 [ext_resource type="Script" path="res://scripts/location_trigger.gd" id="15_loc_trigger"]
+[ext_resource type="PackedScene" path="res://scenes/entrance_portal.tscn" id="16_portal"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.22, 0.46, 0.82, 1)
@@ -44,14 +45,14 @@ glow_intensity = 0.2
 [sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
 size = Vector3(360, 2, 320)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_entrance_ramp"]
-size = Vector3(16, 0.20, 4.02)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_entrance_ramp"]
+points = PackedVector3Array(-8, -0.2, -12.5, 8, -0.2, -12.5, -8, 0, -12.5, 8, 0, -12.5, -8, -0.2, -8.5, 8, -0.2, -8.5, -8, 0.34, -8.5, 8, 0.34, -8.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_plinth"]
 size = Vector3(43, 0.34, 17)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_stair_ramp"]
-size = Vector3(2.2, 0.25, 7.2)
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_stair_ramp"]
+points = PackedVector3Array(4.15, 0.15, -7.6, 5.85, 0.15, -7.6, 4.15, 0.34, -7.6, 5.85, 0.34, -7.6, 4.15, 0.15, -1.42, 5.85, 0.15, -1.42, 4.15, 4.3, -1.42, 5.85, 4.3, -1.42)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor1_west"]
 size = Vector3(24.3, 0.30, 17)
@@ -85,6 +86,27 @@ size = Vector3(14, 4, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_loc_courtyard"]
 size = Vector3(24, 4, 24)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_car"]
+size = Vector3(1.9, 1.5, 4.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_part_west"]
+size = Vector3(17, 3.96, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_part_east"]
+size = Vector3(13.5, 3.96, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_class_wall_f"]
+size = Vector3(0.3, 3.96, 3.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_class_wall_r"]
+size = Vector3(0.3, 3.96, 3.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_security_cabin"]
+size = Vector3(2.8, 3.2, 2.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pillar"]
+size = Vector3(0.85, 4.2, 0.55)
 
 [node name="Campus" type="Node3D"]
 script = ExtResource("1_enhancer")
@@ -131,12 +153,12 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_ground")
 
 [node name="EntranceStepsRamp" type="StaticBody3D" parent="Collisions"]
-transform = Transform3D(1, 0, 0, 0, 0.9964, -0.0845, 0, 0.0845, 0.9964, 0, 0.17, -10.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 1
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/EntranceStepsRamp"]
-shape = SubResource("BoxShape3D_entrance_ramp")
+shape = SubResource("ConvexPolygonShape3D_entrance_ramp")
 
 [node name="PlinthCollision" type="StaticBody3D" parent="Collisions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
@@ -147,12 +169,12 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_plinth")
 
 [node name="StairsRampCollision" type="StaticBody3D" parent="Collisions"]
-transform = Transform3D(1, 0, 0, 0, 0.829038, -0.559193, 0, 0.559193, 0.829038, 5, 2.32, -4.36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 collision_layer = 1
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/StairsRampCollision"]
-shape = SubResource("BoxShape3D_stair_ramp")
+shape = SubResource("ConvexPolygonShape3D_stair_ramp")
 
 [node name="Floor1_WestSlab" type="StaticBody3D" parent="Collisions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.35, 4.15, 0)
@@ -308,7 +330,46 @@ location_id = "courtyard"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/CourtyardTrigger"]
 shape = SubResource("BoxShape3D_loc_courtyard")
 
+[node name="InteriorLighting" type="Node3D" parent="."]
+
+[node name="LobbyLight" type="OmniLight3D" parent="InteriorLighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -4)
+light_color = Color(1, 0.98, 0.94, 1)
+light_energy = 1.8
+omni_range = 14.0
+
+[node name="StairBottomLight" type="OmniLight3D" parent="InteriorLighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.6, -6)
+light_color = Color(1, 0.98, 0.92, 1)
+light_energy = 1.6
+omni_range = 10.0
+
+[node name="StairTopLight" type="OmniLight3D" parent="InteriorLighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 6, -2.5)
+light_color = Color(1, 0.98, 0.92, 1)
+light_energy = 1.6
+omni_range = 10.0
+
+[node name="CorridorWestLight" type="OmniLight3D" parent="InteriorLighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.8, -4)
+light_color = Color(1, 0.98, 0.94, 1)
+light_energy = 1.5
+omni_range = 12.0
+
+[node name="CorridorEastLight" type="OmniLight3D" parent="InteriorLighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.8, -4)
+light_color = Color(1, 0.98, 0.94, 1)
+light_energy = 1.5
+omni_range = 12.0
+
+[node name="Floor1LobbyLight" type="OmniLight3D" parent="InteriorLighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.8, -4)
+light_color = Color(1, 0.98, 0.94, 1)
+light_energy = 1.6
+omni_range = 14.0
+
 [node name="Player" parent="." instance=ExtResource("11_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -68)
 
 [node name="UI" parent="." instance=ExtResource("14_ui")]
+
