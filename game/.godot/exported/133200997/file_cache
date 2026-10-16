@@ -1,4 +1,4 @@
-res://scenes/campus.tscn::564fd5f343b04cad0fb58397db02ad69::1792185548::res://.godot/exported/133200997/export-4efb0727c0a71e2b8de4b464baf9db72-campus.scn
+res://scenes/campus.tscn::bc4580da14b05fe279340e8963543538::1792185966::res://.godot/exported/133200997/export-4efb0727c0a71e2b8de4b464baf9db72-campus.scn
 res://scenes/door.tscn::76a01f32df9595d1b798f1b845e2ab0a::1792183245::res://.godot/exported/133200997/export-3370694a3d56567dea5c3bf0058a536d-door.scn
 res://scenes/item_id_card.tscn::4e2145acaca71874056f24a0b30b87c6::1792183270::res://.godot/exported/133200997/export-3f9f5cd02e09b6fde5613e067a39c843-item_id_card.scn
 res://scenes/main_menu.tscn::eaedd4f9d742154047f99a415af8012e::1792183194::res://.godot/exported/133200997/export-ea5c6ad4629af728dc514cefde332394-main_menu.scn
@@ -8,3 +8,6 @@ res://scenes/test_runner.tscn::79101db770f2d2a11169b1140dc34fa5::1792184093::res
 res://scenes/ui.tscn::28ffdf591372392ec2173373ef7a16c8::1792183152::res://.godot/exported/133200997/export-9211dc52ac9df169ba4fe77cbc1dc833-ui.scn
 res://scenes/classroom_door.tscn::ef79d9836bd5a2fcfd018fd75d9707be::1792185441::res://.godot/exported/133200997/export-c860b29465ef570c1190ed8440237050-classroom_door.scn
 res://scenes/entrance_portal.tscn::9b7a45249c4d4f4d01835863531b0016::1792185401::res://.godot/exported/133200997/export-0f0067046b71863f15b876e351876050-entrance_portal.scn
+res://scenes/imrd_entrance_portico.tscn::e62e3e3ec3b2346d814df48e10f974dc::1792186142::res://.godot/exported/133200997/export-5f3a24acc98a1f29897e23abcb9d8362-imrd_entrance_portico.scn
+res://scenes/library_section.tscn::55b4e96602b34383af31b9138656d3c7::1792186187::res://.godot/exported/133200997/export-51348d7a2f66d0f8db701bc3d4bbbe8b-library_section.scn
+res://scenes/seminar_hall.tscn::89a7ef37fb09346e59eecbd62ece21e2::1792185904::res://.godot/exported/133200997/export-a010100ab054e61eee646926ed0e2ec9-seminar_hall.scn
