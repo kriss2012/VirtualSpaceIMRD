@@ -1,18 +1,18 @@
 extends Control
 
-@onready var interaction_label: Label = $HUD/InteractionPanel/InteractionLabel
-@onready var interaction_panel: PanelContainer = $HUD/InteractionPanel
-@onready var objective_label: Label = $HUD/ObjectivePanel/ObjectiveLabel
-@onready var level_label: Label = $HUD/StatsPanel/VBox/HBox/LevelLabel
-@onready var xp_bar: ProgressBar = $HUD/StatsPanel/VBox/XPProgressBar
-@onready var xp_text: Label = $HUD/StatsPanel/VBox/XPTextLabel
-@onready var toast_container: VBoxContainer = $HUD/ToastContainer
+@onready var interaction_label: Label = find_child("InteractionLabel", true, false) as Label
+@onready var interaction_panel: PanelContainer = find_child("InteractionPanel", true, false) as PanelContainer
+@onready var objective_label: Label = find_child("ObjectiveLabel", true, false) as Label
+@onready var level_label: Label = find_child("LevelLabel", true, false) as Label
+@onready var xp_bar: ProgressBar = find_child("XPProgressBar", true, false) as ProgressBar
+@onready var xp_text: Label = find_child("XPTextLabel", true, false) as Label
+@onready var toast_container: VBoxContainer = find_child("ToastContainer", true, false) as VBoxContainer
 
 # Dialogue UI
-@onready var dialogue_panel: PanelContainer = $DialoguePanel
-@onready var speaker_label: Label = $DialoguePanel/VBox/SpeakerLabel
-@onready var dialogue_label: Label = $DialoguePanel/VBox/DialogueLabel
-@onready var next_button: Button = $DialoguePanel/VBox/HBox/NextButton
+@onready var dialogue_panel: PanelContainer = find_child("DialoguePanel", true, false) as PanelContainer
+@onready var speaker_label: Label = find_child("SpeakerLabel", true, false) as Label
+@onready var dialogue_label: Label = find_child("DialogueLabel", true, false) as Label
+@onready var next_button: Button = find_child("NextButton", true, false) as Button
 
 # Pause Menu
 @onready var pause_menu: Control = $PauseMenu
