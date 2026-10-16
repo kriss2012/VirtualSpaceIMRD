@@ -16,11 +16,12 @@ extends Control
 
 # Pause Menu
 @onready var pause_menu: Control = $PauseMenu
-@onready var resume_button: Button = $PauseMenu/Center/Panel/VBox/ResumeButton
-@onready var save_button: Button = $PauseMenu/Center/Panel/VBox/SaveButton
-@onready var load_button: Button = $PauseMenu/Center/Panel/VBox/LoadButton
-@onready var menu_button: Button = $PauseMenu/Center/Panel/VBox/MenuButton
-@onready var quit_button: Button = $PauseMenu/Center/Panel/VBox/QuitButton
+@onready var resume_button: Button = find_child("ResumeButton", true, false) as Button
+@onready var save_button: Button = find_child("SaveButton", true, false) as Button
+@onready var load_button: Button = find_child("LoadButton", true, false) as Button
+@onready var settings_button: Button = find_child("SettingsButton", true, false) as Button
+@onready var menu_button: Button = find_child("MenuButton", true, false) as Button
+@onready var quit_button: Button = find_child("QuitButton", true, false) as Button
 
 var current_dialogue_lines: Array = []
 var dialogue_index: int = 0
@@ -41,13 +42,20 @@ func _ready() -> void:
 	dialogue_panel.visible = false
 	pause_menu.visible = false
 
-	# Connect Pause Menu Buttons
+	# Connect Pause Menu Buttons & Audio
+	var btns = [resume_button, save_button, load_button, settings_button, menu_button, quit_button, next_button]
+	for b in btns:
+		if b:
+			b.mouse_entered.connect(func(): GameManager.play_ui_sound("hover"))
+
 	if resume_button:
 		resume_button.pressed.connect(_on_resume_pressed)
 	if save_button:
 		save_button.pressed.connect(_on_save_pressed)
 	if load_button:
 		load_button.pressed.connect(_on_load_pressed)
+	if settings_button:
+		settings_button.pressed.connect(_on_settings_pressed)
 	if menu_button:
 		menu_button.pressed.connect(_on_menu_pressed)
 	if quit_button:
