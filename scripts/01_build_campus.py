@@ -32,6 +32,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 import game_config as cfg  # noqa: E402
+import materials_pbr       # noqa: E402
 
 PROJECT_ROOT = SCRIPT_DIR.parent
 OUTPUT_DIR = PROJECT_ROOT / "output"
@@ -108,7 +109,7 @@ def remove_default_startup_objects():
 
 
 # ----------------------------------------------------------------------
-# Materials (colour-only; PBR upgrade is Phase 3). Reused by name.
+# Materials (centralized PBR library from materials_pbr.py)
 # ----------------------------------------------------------------------
 def create_material(name, base_color, roughness=0.6, metallic=0.0,
                     emission_color=(0, 0, 0, 1), emission_strength=0.0):
@@ -132,26 +133,7 @@ def create_material(name, base_color, roughness=0.6, metallic=0.0,
 
 
 def make_materials():
-    m = {}
-    m["grass"] = create_material("Mat_Grass", (0.18, 0.45, 0.16), roughness=0.85)
-    m["asphalt"] = create_material("Mat_Asphalt", (0.15, 0.16, 0.17), roughness=0.7)
-    m["road_lines"] = create_material("Mat_RoadLines", (0.95, 0.85, 0.2), roughness=0.4)
-    m["paving"] = create_material("Mat_Paving", (0.75, 0.72, 0.65), roughness=0.6)
-    m["parking"] = create_material("Mat_Parking", (0.22, 0.23, 0.25), roughness=0.75)
-    m["park_lines"] = create_material("Mat_ParkLines", (0.9, 0.9, 0.9), roughness=0.3)
-    m["wall_ext"] = create_material("Mat_WallExt", (0.92, 0.89, 0.82), roughness=0.7)
-    m["wall_trim"] = create_material("Mat_WallTrim", (0.78, 0.42, 0.18), roughness=0.5)
-    m["wall_int"] = create_material("Mat_WallInt", (0.96, 0.95, 0.92), roughness=0.8)
-    m["floor_tile"] = create_material("Mat_FloorTile", (0.82, 0.80, 0.75), roughness=0.4)
-    m["glass"] = create_material("Mat_Glass", (0.3, 0.5, 0.7), roughness=0.1, metallic=0.2)
-    m["wood"] = create_material("Mat_Wood", (0.42, 0.25, 0.12), roughness=0.5)
-    m["metal_dark"] = create_material("Mat_MetalDark", (0.15, 0.15, 0.15), roughness=0.4, metallic=0.8)
-    m["board"] = create_material("Mat_Board", (0.08, 0.25, 0.12), roughness=0.4)
-    m["lamp_glow"] = create_material("Mat_LampGlow", (1.0, 0.95, 0.7), emission_color=(1.0, 0.95, 0.7, 1.0), emission_strength=5.0)
-    m["leaves"] = create_material("Mat_Leaves", (0.12, 0.40, 0.10), roughness=0.8)
-    m["trunk"] = create_material("Mat_Trunk", (0.32, 0.20, 0.10), roughness=0.9)
-    m["door"] = create_material("Mat_InteractiveDoor", (0.45, 0.28, 0.15), roughness=0.4)
-    return m
+    return materials_pbr.build_full_pbr_palette()
 
 
 # ----------------------------------------------------------------------
@@ -577,7 +559,7 @@ def build_props(b):
     wheel_rot = Matrix.Rotation(math.pi / 2, 3, 'Y')   # wheel axis along X
     for idx in range(6):
         cx, cy = 32.0 + idx * 3.4, 36.0
-        cm = create_material(f"Mat_Car_{idx}", colors[idx], roughness=0.3, metallic=0.7)
+        cm = materials_pbr.create_car_paint_material(f"Mat_Car_{idx}", colors[idx])
         b.box(col, f"Car_{idx}_Body", (cx, cy, 0.6), (1.8, 4.0, 0.65), cm)
         b.box(col, f"Car_{idx}_Cabin", (cx, cy - 0.2, 1.2), (1.6, 2.2, 0.55), m["glass"])
         k = 0
@@ -616,24 +598,86 @@ def build_vegetation(b):
 
 
 # ----------------------------------------------------------------------
-# Lights and cameras (Phase 4 will replace the lighting setup)
+# Lights, Sky Atmosphere and Reusable Cameras
 # ----------------------------------------------------------------------
-def build_lighting_and_cameras(b):
-    col = b.cols["lighting"]
-    for name, energy, color, loc, rot in (
-        ("Sun_Daylight", 4.5, (1.0, 0.98, 0.92), (20, -20, 40), (45, 20, 35)),
-        ("Sky_Fill", 1.8, (0.7, 0.85, 1.0), (-20, 20, 35), (-50, -30, -120)),
-    ):
-        ld = bpy.data.lights.get(name) or bpy.data.lights.new(name=name, type='SUN')
-        ld.energy, ld.color = energy, color
-        obj = bpy.data.objects.new(name, ld)
-        obj.location = loc
-        obj.rotation_euler = Euler([math.radians(a) for a in rot], 'XYZ')
-        obj[OWNER_KEY] = OWNER_VALUE
-        col.objects.link(obj)
+def setup_world_sky(scene):
+    """Sets up physically plausible Nishita sky texture and EEVEE Next settings."""
+    world = scene.world or bpy.data.worlds.new("IMRD_SkyWorld")
+    scene.world = world
+    if world.node_tree is None:
+        world.use_nodes = True
+    nt = world.node_tree
+    nt.nodes.clear()
 
-    cams = [(cfg.CAMERA_OVERVIEW, 35, 400, (65, 105, 55), (64, 0, 145)),
-            (cfg.CAMERA_ENTRANCE, 28, 300, (0, 72, 2.2), (85, 0, 180))]
+    sky = nt.nodes.new("ShaderNodeTexSky")
+    sky.location = (-300, 0)
+    sky.sun_elevation = math.radians(38.0)  # ~38 degrees above horizon
+    sky.sun_rotation = math.radians(135.0)  # coming from SE
+    sky.turbidity = 2.4                     # clear atmosphere
+    sky.ground_albedo = 0.25
+
+    bg = nt.nodes.new("ShaderNodeBackground")
+    bg.location = (0, 0)
+    bg.inputs["Strength"].default_value = 1.0
+
+    out = nt.nodes.new("ShaderNodeOutputWorld")
+    out.location = (200, 0)
+
+    nt.links.new(sky.outputs["Color"], bg.inputs["Color"])
+    nt.links.new(bg.outputs["Background"], out.inputs["Surface"])
+
+    # EEVEE Next raytracing & illumination
+    eevee = scene.eevee
+    if hasattr(eevee, "use_raytracing"):
+        eevee.use_raytracing = True
+        if hasattr(eevee, "ray_tracing_options"):
+            eevee.ray_tracing_options.screen_trace_quality = 0.50
+            eevee.ray_tracing_options.trace_max_roughness = 0.65
+    if hasattr(eevee, "fast_gi_method"):
+        eevee.fast_gi_method = "GLOBAL_ILLUMINATION"
+    if hasattr(eevee, "use_shadows"):
+        eevee.use_shadows = True
+
+    # AgX Color Management
+    scene.view_settings.view_transform = "AgX"
+    scene.view_settings.look = "None"
+    scene.view_settings.exposure = 0.0
+
+
+def build_lighting_and_cameras(b):
+    setup_world_sky(b.scene)
+    col = b.cols["lighting"]
+
+    # Primary sun matching Nishita sky elevation (38°) & rotation (135°)
+    sun_data = bpy.data.lights.get("Sun_Daylight") or bpy.data.lights.new(name="Sun_Daylight", type='SUN')
+    sun_data.energy = 4.0
+    sun_data.color = (1.0, 0.98, 0.93)
+    if hasattr(sun_data, "angle"):
+        sun_data.angle = math.radians(0.54)   # realistic solar angular diameter for soft shadows
+    sun_obj = bpy.data.objects.new("Sun_Daylight", sun_data)
+    sun_obj.location = (20, -20, 40)
+    sun_obj.rotation_euler = Euler((math.radians(52), math.radians(15), math.radians(135)), 'XYZ')
+    sun_obj[OWNER_KEY] = OWNER_VALUE
+    col.objects.link(sun_obj)
+
+    # Soft ambient fill
+    fill_data = bpy.data.lights.get("Sky_Fill") or bpy.data.lights.new(name="Sky_Fill", type='SUN')
+    fill_data.energy = 1.2
+    fill_data.color = (0.75, 0.88, 1.0)
+    fill_obj = bpy.data.objects.new("Sky_Fill", fill_data)
+    fill_obj.location = (-20, 20, 35)
+    fill_obj.rotation_euler = Euler((math.radians(-50), math.radians(-30), math.radians(-120)), 'XYZ')
+    fill_obj[OWNER_KEY] = OWNER_VALUE
+    col.objects.link(fill_obj)
+
+    cams = [
+        (cfg.CAMERA_OVERVIEW, 35, 400, (65, 105, 55), (64, 0, 145)),
+        (cfg.CAMERA_ENTRANCE, 28, 300, (0, 72, 2.2), (85, 0, 180)),
+        ("Cam_Facade", 26, 300, (-18.0, 25.0, 2.2), (82, 0, -145)),
+        ("Cam_Classroom", 22, 100, (-10.5, 6.8, 1.8), (75, 0, 30)),
+        ("Cam_Staircase", 24, 100, (1.8, 6.2, 1.6), (72, 0, -25)),
+        ("Cam_Courtyard", 28, 200, (-32.0, 40.0, 1.8), (82, 0, -140)),
+    ]
     for name, lens, clip, loc, rot in cams:
         cd = bpy.data.cameras.get(name) or bpy.data.cameras.new(name)
         cd.lens, cd.clip_end = lens, clip
@@ -642,6 +686,7 @@ def build_lighting_and_cameras(b):
         obj.rotation_euler = Euler([math.radians(a) for a in rot], 'XYZ')
         obj[OWNER_KEY] = OWNER_VALUE
         col.objects.link(obj)
+
     if b.scene.camera is None or b.scene.camera.name not in bpy.data.objects:
         b.scene.camera = bpy.data.objects[cfg.CAMERA_OVERVIEW]
 
@@ -752,6 +797,63 @@ def render_geometry_previews(out_dir=OUTPUT_DIR, res=(1280, 720)):
          scene.camera, scene.display.shading.color_type, scene.display.shading.light) = saved
 
 
+def render_pbr_showcase(out_dir=OUTPUT_DIR / "renders", res=(1280, 720)):
+    """Renders realistic PBR cinematic images using EEVEE Next and Nishita sky."""
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    scene = bpy.context.scene
+    r = scene.render
+
+    saved_engine = r.engine
+    saved_res_x = r.resolution_x
+    saved_res_y = r.resolution_y
+    saved_res_pct = r.resolution_percentage
+    saved_filepath = r.filepath
+    saved_cam = scene.camera
+
+    r.engine = 'BLENDER_EEVEE'
+    r.resolution_x, r.resolution_y, r.resolution_percentage = res[0], res[1], 100
+    if hasattr(scene.eevee, "taa_render_samples"):
+        scene.eevee.taa_render_samples = 32
+
+    targets = [
+        ("overview_pbr.png", cfg.CAMERA_OVERVIEW),
+        ("entrance_pbr.png", cfg.CAMERA_ENTRANCE),
+        ("facade_pbr.png", "Cam_Facade"),
+        ("classroom_pbr.png", "Cam_Classroom"),
+        ("staircase_pbr.png", "Cam_Staircase"),
+        ("courtyard_pbr.png", "Cam_Courtyard"),
+    ]
+
+    for fname, cname in targets:
+        cam_obj = bpy.data.objects.get(cname)
+        if cam_obj:
+            scene.camera = cam_obj
+            target_path = out_dir / fname
+            r.filepath = str(target_path)
+            try:
+                bpy.ops.render.render(write_still=True)
+                print(f"[IMRD Builder] PBR showcase rendered: {target_path}")
+            except Exception as e:
+                print(f"[IMRD Builder] Warning rendering {fname}: {e}")
+
+    # Synchronize legacy root render targets so README and test suites locate them
+    for src_name, dst_name in [("overview_pbr.png", "campus_overview.png"),
+                               ("entrance_pbr.png", "campus_entrance.png")]:
+        src_f = out_dir / src_name
+        dst_f = OUTPUT_DIR / dst_name
+        if src_f.exists():
+            shutil.copy2(src_f, dst_f)
+            print(f"[IMRD Builder] Synchronized root render: {dst_f}")
+
+    r.engine = saved_engine
+    r.resolution_x = saved_res_x
+    r.resolution_y = saved_res_y
+    r.resolution_percentage = saved_res_pct
+    r.filepath = saved_filepath
+    scene.camera = saved_cam
+
+
 def _main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     try:
@@ -763,6 +865,7 @@ def _main():
         save_project()
     if "--render" in argv:
         render_geometry_previews()
+        render_pbr_showcase()
     print("[IMRD Builder] Done.")
 
 
