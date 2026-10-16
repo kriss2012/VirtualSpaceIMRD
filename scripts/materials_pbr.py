@@ -45,11 +45,11 @@ def _get_bsdf_input(bsdf, *candidate_names):
     return None
 
 
-def create_plaster_material(name="Mat_WallExt", base_color=(0.92, 0.89, 0.82),
-                            accent_color=(0.88, 0.84, 0.77), roughness=0.68, bump_strength=0.06):
+def create_plaster_material(name="Mat_WallExt", base_color=(0.48, 0.45, 0.39),
+                            accent_color=(0.38, 0.35, 0.30), roughness=0.68, bump_strength=0.06):
     """
     Subtle architectural exterior/interior wall plaster with micro-stippling
-    and realistic non-uniform surface roughness.
+    and realistic non-uniform surface roughness. Calibrated linear PBR albedo.
     """
     mat = _get_or_create_material(name)
     nodes, links = _clean_node_tree(mat)
@@ -107,7 +107,7 @@ def create_plaster_material(name="Mat_WallExt", base_color=(0.92, 0.89, 0.82),
     return mat
 
 
-def create_concrete_material(name="Mat_Paving", base_color=(0.76, 0.74, 0.68),
+def create_concrete_material(name="Mat_Paving", base_color=(0.32, 0.31, 0.29),
                              roughness=0.72, bump_strength=0.10):
     """
     Architectural concrete with aggregate grain, subtle pitting, and mineral variation.
@@ -130,17 +130,10 @@ def create_concrete_material(name="Mat_Paving", base_color=(0.76, 0.74, 0.68),
     noise_agg.inputs["Roughness"].default_value = 0.65
     links.new(mapping.outputs["Vector"], noise_agg.inputs["Vector"])
 
-    # Macro tone variation (Voronoi/noise blend)
-    noise_macro = nodes.new("ShaderNodeTexNoise")
-    noise_macro.location = (-400, -100)
-    noise_macro.inputs["Scale"].default_value = 4.0
-    noise_macro.inputs["Detail"].default_value = 2.0
-    links.new(mapping.outputs["Vector"], noise_macro.inputs["Vector"])
-
     ramp = nodes.new("ShaderNodeValToRGB")
     ramp.location = (-200, 100)
-    c_dark = [max(0.0, c * 0.88) for c in base_color[:3]]
-    c_light = [min(1.0, c * 1.06) for c in base_color[:3]]
+    c_dark = [max(0.0, c * 0.85) for c in base_color[:3]]
+    c_light = [min(1.0, c * 1.15) for c in base_color[:3]]
     ramp.color_ramp.elements[0].position = 0.25
     ramp.color_ramp.elements[0].color = (*c_dark, 1.0)
     ramp.color_ramp.elements[1].position = 0.75
@@ -173,8 +166,8 @@ def create_concrete_material(name="Mat_Paving", base_color=(0.76, 0.74, 0.68),
     return mat
 
 
-def create_asphalt_material(name="Mat_Asphalt", base_color=(0.14, 0.15, 0.16),
-                            roughness=0.78, bump_strength=0.14):
+def create_asphalt_material(name="Mat_Asphalt", base_color=(0.04, 0.045, 0.05),
+                            roughness=0.76, bump_strength=0.14):
     """
     Road asphalt with tar binder, fine gravel aggregate, and realistic micro-roughness.
     """
@@ -198,9 +191,9 @@ def create_asphalt_material(name="Mat_Asphalt", base_color=(0.14, 0.15, 0.16),
     ramp = nodes.new("ShaderNodeValToRGB")
     ramp.location = (-200, 100)
     ramp.color_ramp.elements[0].position = 0.2
-    ramp.color_ramp.elements[0].color = (0.11, 0.12, 0.13, 1.0)
+    ramp.color_ramp.elements[0].color = (0.025, 0.028, 0.03, 1.0)
     ramp.color_ramp.elements[1].position = 0.8
-    ramp.color_ramp.elements[1].color = (0.19, 0.20, 0.21, 1.0)
+    ramp.color_ramp.elements[1].color = (0.065, 0.07, 0.075, 1.0)
     links.new(noise_agg.outputs["Fac"], ramp.inputs["Fac"])
 
     bump = nodes.new("ShaderNodeBump")
@@ -229,8 +222,8 @@ def create_asphalt_material(name="Mat_Asphalt", base_color=(0.14, 0.15, 0.16),
     return mat
 
 
-def create_glass_material(name="Mat_Glass", tint=(0.88, 0.94, 0.98),
-                          roughness=0.03, transmission=0.88, ior=1.52):
+def create_glass_material(name="Mat_Glass", tint=(0.04, 0.07, 0.10),
+                          roughness=0.03, transmission=0.85, ior=1.52):
     """
     Architectural glazing with physical transmission, IOR 1.52, and clear reflections.
     Configured for responsive viewport viewing in EEVEE Next and clean Cycles refraction.
@@ -241,7 +234,7 @@ def create_glass_material(name="Mat_Glass", tint=(0.88, 0.94, 0.98),
     bsdf = nodes.new("ShaderNodeBsdfPrincipled")
     bsdf.location = (100, 0)
 
-    # Base Color & Tint
+    # Base Color & Tint (dark dielectric for deep exterior glass appearance)
     c_sock = _get_bsdf_input(bsdf, "Base Color")
     if c_sock:
         c_sock.default_value = (*tint[:3], 1.0)
@@ -270,7 +263,7 @@ def create_glass_material(name="Mat_Glass", tint=(0.88, 0.94, 0.98),
     output.location = (400, 0)
     links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
 
-    mat.diffuse_color = (0.3, 0.5, 0.7, 0.4)
+    mat.diffuse_color = (0.1, 0.2, 0.3, 0.4)
     return mat
 
 
