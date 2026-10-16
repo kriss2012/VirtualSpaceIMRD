@@ -10,8 +10,8 @@ func _ready() -> void:
 	print("[VisualEnhancer] Realistic PBR materials & lighting successfully calibrated.")
 
 
-func enhance_campus_environment() -> void:
-	var root = self
+func enhance_campus_environment(target_root: Node = null) -> void:
+	var root = target_root if target_root != null else (get_parent() if get_parent() else self)
 		
 	# 1. Calibrate Directional Sunlight
 	var sun: DirectionalLight3D = root.find_child("DirectionalLight3D", true, false) as DirectionalLight3D
@@ -62,8 +62,8 @@ func enhance_campus_environment() -> void:
 		env.glow_bloom = 0.05
 
 
-func apply_all_campus_materials() -> void:
-	var root = self
+func apply_all_campus_materials(target_root: Node = null) -> void:
+	var root = target_root if target_root != null else (get_parent() if get_parent() else self)
 		
 	# Build rich PBR materials library
 	var mats = build_material_library()

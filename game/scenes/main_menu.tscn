@@ -1,90 +1,344 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_terrain.glb" id="2_terrain"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_architecture.glb" id="3_architecture"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_props.glb" id="4_props"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_vegetation.glb" id="5_vegetation"]
+[ext_resource type="PackedScene" path="res://scenes/imrd_entrance_portico.tscn" id="6_portico"]
+[ext_resource type="PackedScene" path="res://scenes/library_section.tscn" id="7_library"]
+[ext_resource type="PackedScene" path="res://scenes/seminar_hall.tscn" id="8_seminar"]
 
-[node name="MainMenu" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.22, 0.46, 0.82, 1)
+sky_horizon_color = Color(0.78, 0.84, 0.92, 1)
+ground_bottom_color = Color(0.18, 0.22, 0.18, 1)
+ground_horizon_color = Color(0.55, 0.65, 0.58, 1)
+sun_angle_max = 28.0
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+ambient_light_source = 2
+ambient_light_color = Color(0.60, 0.70, 0.85, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 3
+tonemap_exposure = 1.05
+tonemap_white = 1.0
+ssao_enabled = true
+ssao_radius = 1.5
+ssao_intensity = 2.0
+glow_enabled = true
+glow_intensity = 0.2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.05, 0.09, 0.16, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.72, 0.35, 0.6)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.10, 0.18, 0.32, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.72, 0.35, 0.4)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.18, 0.32, 0.58, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1.0, 0.85, 0.25, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.07, 0.12, 0.22, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.72, 0.35, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="MainMenu" type="Node3D"]
 script = ExtResource("1_menu")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 40, 0)
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 1.15
+shadow_enabled = true
+directional_shadow_max_distance = 250.0
+
+[node name="VisualEnvironment" type="Node3D" parent="."]
+
+[node name="campus_terrain" parent="VisualEnvironment" instance=ExtResource("2_terrain")]
+
+[node name="campus_architecture" parent="VisualEnvironment" instance=ExtResource("3_architecture")]
+
+[node name="campus_props" parent="VisualEnvironment" instance=ExtResource("4_props")]
+
+[node name="campus_vegetation" parent="VisualEnvironment" instance=ExtResource("5_vegetation")]
+
+[node name="IMRDEntrancePortico" parent="VisualEnvironment" instance=ExtResource("6_portico")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.5)
+
+[node name="LibrarySection" parent="VisualEnvironment" instance=ExtResource("7_library")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.34, 0)
+
+[node name="SeminarHall" parent="VisualEnvironment" instance=ExtResource("8_seminar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.30, 2)
+
+[node name="IntroCamera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 15.5, -90)
+current = true
+fov = 65.0
+near = 0.1
+far = 500.0
+
+[node name="MenuUI" type="CanvasLayer" parent="."]
+
+[node name="LetterboxTop" type="ColorRect" parent="MenuUI"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 60.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 1)
+
+[node name="LetterboxBottom" type="ColorRect" parent="MenuUI"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+
+[node name="SkipButton" type="Button" parent="MenuUI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -50.0
+offset_right = -18.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "⏩ Skip Intro [Esc / Space]"
+
+[node name="TitleContainer" type="Control" parent="MenuUI"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -140.0
+offset_right = 450.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleVBox" type="VBoxContainer" parent="MenuUI/TitleContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.06, 0.09, 0.13, 1)
-
-[node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(520, 480)
-layout_mode = 2
-
-[node name="VBox" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
-layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 alignment = 1
 
-[node name="HeaderBadge" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+[node name="TitleLine1" type="Label" parent="MenuUI/TitleContainer/TitleVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_font_sizes/font_size = 64
+text = "IMRD"
+horizontal_alignment = 1
+
+[node name="RuleCenter" type="CenterContainer" parent="MenuUI/TitleContainer/TitleVBox"]
+layout_mode = 2
+
+[node name="TitleRule" type="ColorRect" parent="MenuUI/TitleContainer/TitleVBox/RuleCenter"]
+custom_minimum_size = Vector2(280, 3)
+layout_mode = 2
+color = Color(0.85, 0.72, 0.35, 1)
+
+[node name="TitleLine2" type="Label" parent="MenuUI/TitleContainer/TitleVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.98, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 24
+text = "3D CAMPUS WALKTHROUGH"
+horizontal_alignment = 1
+
+[node name="TitleLine3" type="Label" parent="MenuUI/TitleContainer/TitleVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.80, 0.86, 0.95, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = "R. C. PATEL EDUCATIONAL TRUST'S INSTITUTE OF MANAGEMENT RESEARCH & DEVELOPMENT, SHIRPUR"
+horizontal_alignment = 1
+
+[node name="MenuCenter" type="CenterContainer" parent="MenuUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MenuUI/MenuCenter"]
+custom_minimum_size = Vector2(520, 480)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="MenuUI/MenuCenter/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="MarginTop" type="Control" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="HeaderBadge" type="Label" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.72, 0.35, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 text = "R. C. PATEL EDUCATIONAL TRUST'S"
 horizontal_alignment = 1
 
-[node name="Title" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+[node name="Title" type="Label" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 30
 text = "IMRD CAMPUS EXPLORER"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+[node name="Subtitle" type="Label" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.7, 0.78, 0.88, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.70, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 12
 text = "Institute of Management Research and Development, Shirpur"
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="CenterContainer/PanelContainer/VBox"]
+[node name="HSeparator1" type="HSeparator" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="CenterContainer/PanelContainer/VBox"]
+[node name="StartButton" type="Button" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
 theme_override_font_sizes/font_size = 18
-text = "▶ Explore Campus"
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "▶ Start Walkthrough"
 
-[node name="ControlsButton" type="Button" parent="CenterContainer/PanelContainer/VBox"]
-custom_minimum_size = Vector2(0, 42)
+[node name="ControlsButton" type="Button" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
+theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "⌨ Controls & Guide"
 
-[node name="QuitButton" type="Button" parent="CenterContainer/PanelContainer/VBox"]
-custom_minimum_size = Vector2(0, 42)
+[node name="ReplayButton" type="Button" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
+theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "↺ Replay Cinematic Intro"
+
+[node name="QuitButton" type="Button" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
+theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "✕ Exit to Desktop"
 
-[node name="Footer" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+[node name="HSeparator2" type="HSeparator" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.4, 0.48, 0.55, 1)
+
+[node name="Footer" type="Label" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40, 0.48, 0.58, 1)
 theme_override_font_sizes/font_size = 11
 text = "v1.0.0 Standalone 3D Edition • Powered by Godot Engine"
 horizontal_alignment = 1
 
-[node name="ControlsDialog" type="AcceptDialog" parent="."]
+[node name="MarginBottom" type="Control" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="FadeOverlay" type="ColorRect" parent="MenuUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ControlsDialog" type="AcceptDialog" parent="MenuUI"]
 title = "Campus Explorer — Controls Reference"
 size = Vector2i(460, 280)
 dialog_text = "• Movement: W, A, S, D or Arrow Keys

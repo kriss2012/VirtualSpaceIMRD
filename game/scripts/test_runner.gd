@@ -50,14 +50,42 @@ func test_autoloads() -> void:
 
 
 func test_main_menu_scene() -> void:
-	print("\n--- TEST GROUP 2: Main Menu Scene ---")
+	print("\n--- TEST GROUP 2: Main Menu & Intro Cinematic Scene ---")
 	var menu_res = load("res://scenes/main_menu.tscn")
 	assert_true(menu_res != null, "Main menu scene resource exists")
 	var menu_node = menu_res.instantiate()
 	assert_true(menu_node != null, "Main menu instantiated successfully")
+	add_child(menu_node)
+	assert_true(menu_node is Node3D, "Main menu root is 3D scene (Node3D)")
+	
+	# Verify 3D Cinematic Camera & Visual Campus Backdrop
+	assert_true(menu_node.find_child("IntroCamera3D", true, false) != null, "IntroCamera3D present")
+	assert_true(menu_node.find_child("VisualEnvironment", true, false) != null, "Campus 3D VisualEnvironment present")
+	assert_true(menu_node.find_child("DirectionalLight3D", true, false) != null, "Daylight Sun present for fly-through")
+	
+	# Verify UI Elements & Styling
+	assert_true(menu_node.find_child("LetterboxTop", true, false) != null, "Cinematic letterbox top bar present")
+	assert_true(menu_node.find_child("LetterboxBottom", true, false) != null, "Cinematic letterbox bottom bar present")
+	assert_true(menu_node.find_child("SkipButton", true, false) != null, "Skip intro button present")
+	assert_true(menu_node.find_child("TitleContainer", true, false) != null, "Cinematic title container present")
+	assert_true(menu_node.find_child("TitleLine1", true, false) != null, "Title Line 1 (IMRD) present")
+	assert_true(menu_node.find_child("TitleLine2", true, false) != null, "Title Line 2 (3D CAMPUS WALKTHROUGH) present")
+	assert_true(menu_node.find_child("TitleLine3", true, false) != null, "Title Line 3 (Institution) present")
 	assert_true(menu_node.find_child("StartButton", true, false) != null, "Start button found")
 	assert_true(menu_node.find_child("ControlsButton", true, false) != null, "Controls button found")
+	assert_true(menu_node.find_child("ReplayButton", true, false) != null, "Replay intro button found")
 	assert_true(menu_node.find_child("QuitButton", true, false) != null, "Quit button found")
+	assert_true(menu_node.find_child("FadeOverlay", true, false) != null, "Fade overlay present")
+	
+	# Verify Camera Evaluation across timeline
+	if menu_node.has_method("update_camera_pose"):
+		menu_node.update_camera_pose(0.0)
+		var cam: Camera3D = menu_node.find_child("IntroCamera3D", true, false) as Camera3D
+		assert_true(cam != null and cam.position.is_equal_approx(Vector3(24.0, 15.5, -90.0)), "Intro camera establishes at gate (t=0.0s)")
+		menu_node.update_camera_pose(20.0)
+		assert_true(cam != null and cam.position.is_equal_approx(Vector3(-2.1, 3.7, -42.65)), "Intro camera reaches final menu pose (t=20.0s)")
+	
+	remove_child(menu_node)
 	menu_node.free()
 
 
@@ -104,9 +132,19 @@ func test_campus_scene_loading() -> void:
 	assert_true(vis.find_child("LibrarySection", true, false) != null, "Authentic IMRD Library section present")
 	assert_true(vis.find_child("SeminarHall", true, false) != null, "Authentic IMRD Seminar Hall present")
 	
+	# Verify Parked Vehicles & Interior Wall Collisions
+	var vehicles = cols.find_child("Vehicles", true, false)
+	assert_true(vehicles != null, "Vehicles collision container present")
+	assert_true(vehicles.get_child_count() >= 6, "All 6 parked cars have active static body collisions")
+	assert_true(cols.find_child("GroundPartitionWest", true, false) != null, "Ground partition wall collision present")
+	assert_true(cols.find_child("ClassroomWestWall_Front", true, false) != null, "Classroom 101 wall collision present")
+	assert_true(cols.find_child("ComputerLabEastWall_Front", true, false) != null, "Computer Lab wall collision present")
+	assert_true(cols.find_child("SecurityCabin", true, false) != null, "Security cabin collision present")
+	
 	# Verify Doors
 	var doors = campus.find_child("Doors", true, false)
 	assert_true(doors != null, "Doors root present")
+	assert_true(doors.find_child("MainEntrancePortal", true, false) != null, "Main Entrance animated portal present")
 	assert_true(doors.find_child("Classroom101Door", true, false) != null, "Classroom 101 door present")
 	assert_true(doors.find_child("ComputerLabDoor", true, false) != null, "Computer Lab door present")
 	assert_true(doors.find_child("CentralLibraryDoor", true, false) != null, "Central Library door present")
@@ -124,7 +162,9 @@ func test_player_controller() -> void:
 	assert_true(player is CharacterBody3D, "Player is CharacterBody3D")
 	assert_true(player.find_child("CollisionShape3D", true, false) != null, "Player has physics collision shape")
 	assert_true(player.find_child("CameraPivot", true, false) != null, "Player has CameraPivot")
-	assert_true(player.find_child("SpringArm3D", true, false) != null, "Player has SpringArm3D for obstruction avoidance")
+	var spring_arm = player.find_child("SpringArm3D", true, false)
+	assert_true(spring_arm != null, "Player has SpringArm3D for obstruction avoidance")
+	assert_true(spring_arm.shape is SphereShape3D, "SpringArm3D uses SphereShape3D preventing wall/corner clipping")
 	assert_true(player.find_child("Camera3D", true, false) != null, "Player has 3rd-person Camera3D")
 	
 	# Attach to tree for global transform test
@@ -162,6 +202,20 @@ func test_doors_and_interaction() -> void:
 	portal.interact()
 	assert_true(not portal.is_open, "Entrance double doors transition back to CLOSED")
 	portal.free()
+	
+	# 3. Test Standard Single Door
+	var door_res = load("res://scenes/door.tscn")
+	assert_true(door_res != null, "Standard single door scene exists")
+	var sdoor = door_res.instantiate()
+	sdoor._ready()
+	assert_true(sdoor.has_method("interact"), "Single door has interact method")
+	assert_true(not sdoor.is_open, "Single door starts closed")
+	var col_shape = sdoor.find_child("DoorBody", true, false).get_child(0)
+	assert_true(not col_shape.disabled, "DoorBody collision active when closed")
+	sdoor.interact()
+	assert_true(sdoor.is_open, "Single door opened")
+	assert_true(col_shape.disabled, "DoorBody collision disabled when open for passage")
+	sdoor.free()
 
 
 func test_npc_and_missions() -> void:

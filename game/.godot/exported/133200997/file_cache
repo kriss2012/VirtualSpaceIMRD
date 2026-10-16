@@ -1,11 +1,11 @@
-res://scenes/campus.tscn::f179236f28be091d403bd67a2e044fae::1792187679::res://.godot/exported/133200997/export-4efb0727c0a71e2b8de4b464baf9db72-campus.scn
+res://scenes/campus.tscn::b6fdc0747afa61a8393653261dcb9177::1792188586::res://.godot/exported/133200997/export-4efb0727c0a71e2b8de4b464baf9db72-campus.scn
 res://scenes/door.tscn::76a01f32df9595d1b798f1b845e2ab0a::1792183245::res://.godot/exported/133200997/export-3370694a3d56567dea5c3bf0058a536d-door.scn
 res://scenes/item_id_card.tscn::4e2145acaca71874056f24a0b30b87c6::1792183270::res://.godot/exported/133200997/export-3f9f5cd02e09b6fde5613e067a39c843-item_id_card.scn
 res://scenes/main_menu.tscn::eaedd4f9d742154047f99a415af8012e::1792183194::res://.godot/exported/133200997/export-ea5c6ad4629af728dc514cefde332394-main_menu.scn
 res://scenes/npc.tscn::bbbf74cb350e04d02ead720bffe1c55f::1792183587::res://.godot/exported/133200997/export-51652f9d5c9453037b2bf9159a453860-npc.scn
-res://scenes/player.tscn::a41e5e2db706b9b45df1737df442b0af::1792185464::res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
+res://scenes/player.tscn::30e1a786baf63a81cbd276e9bcbe658e::1792188396::res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
 res://scenes/test_runner.tscn::79101db770f2d2a11169b1140dc34fa5::1792184093::res://.godot/exported/133200997/export-678e646d6ce0bf8d0d6af2a1f0fb1d2a-test_runner.scn
-res://scenes/ui.tscn::28ffdf591372392ec2173373ef7a16c8::1792183152::res://.godot/exported/133200997/export-9211dc52ac9df169ba4fe77cbc1dc833-ui.scn
+res://scenes/ui.tscn::75bd58004899cb3d383a23677ae5dd61::1792188668::res://.godot/exported/133200997/export-9211dc52ac9df169ba4fe77cbc1dc833-ui.scn
 res://scenes/classroom_door.tscn::c420d949aaaa58b50948263feb275958::1792187707::res://.godot/exported/133200997/export-c860b29465ef570c1190ed8440237050-classroom_door.scn
 res://scenes/entrance_portal.tscn::9b7a45249c4d4f4d01835863531b0016::1792185401::res://.godot/exported/133200997/export-0f0067046b71863f15b876e351876050-entrance_portal.scn
 res://scenes/imrd_entrance_portico.tscn::e62e3e3ec3b2346d814df48e10f974dc::1792186142::res://.godot/exported/133200997/export-5f3a24acc98a1f29897e23abcb9d8362-imrd_entrance_portico.scn

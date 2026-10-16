@@ -20,6 +20,7 @@ extends Control
 @onready var save_button: Button = $PauseMenu/Center/Panel/VBox/SaveButton
 @onready var load_button: Button = $PauseMenu/Center/Panel/VBox/LoadButton
 @onready var menu_button: Button = $PauseMenu/Center/Panel/VBox/MenuButton
+@onready var quit_button: Button = $PauseMenu/Center/Panel/VBox/QuitButton
 
 var current_dialogue_lines: Array = []
 var dialogue_index: int = 0
@@ -49,6 +50,8 @@ func _ready() -> void:
 		load_button.pressed.connect(_on_load_pressed)
 	if menu_button:
 		menu_button.pressed.connect(_on_menu_pressed)
+	if quit_button:
+		quit_button.pressed.connect(_on_quit_pressed)
 	if next_button:
 		next_button.pressed.connect(_on_next_dialogue_pressed)
 
@@ -153,3 +156,7 @@ func _on_load_pressed() -> void:
 
 func _on_menu_pressed() -> void:
 	GameManager.return_to_main_menu()
+
+
+func _on_quit_pressed() -> void:
+	get_tree().quit()
