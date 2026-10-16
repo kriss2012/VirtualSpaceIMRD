@@ -411,39 +411,210 @@ def create_foliage_material(name="Mat_Leaves", base_color=(0.14, 0.38, 0.12),
     return mat
 
 
-def create_grass_material(name="Mat_Grass", base_color=(0.16, 0.36, 0.14),
-                          roughness=0.85):
+def create_paver_tiles_material(name="Mat_PaverTiles", scale=4.0, roughness=0.72):
     """
-    Lawn grass ground surface with natural patchiness, soil undertones, and high roughness.
+    Interlocking exterior concrete paver slabs with mortar joints, stone aggregate,
+    and individual tile bevel/depth. Ideal for educational institute plazas and walkways.
     """
     mat = _get_or_create_material(name)
     nodes, links = _clean_node_tree(mat)
 
     tex_coord = nodes.new("ShaderNodeTexCoord")
     tex_coord.location = (-800, 0)
+    mapping = nodes.new("ShaderNodeMapping")
+    mapping.location = (-600, 0)
+    mapping.inputs["Scale"].default_value = (scale, scale, scale)
+    links.new(tex_coord.outputs["Object"], mapping.inputs["Vector"])
+
+    # Brick node for individual paver blocks
+    brick = nodes.new("ShaderNodeTexBrick")
+    brick.location = (-350, 100)
+    brick.inputs["Brick Width"].default_value = 0.50
+    brick.inputs["Row Height"].default_value = 0.25
+    brick.inputs["Mortar Size"].default_value = 0.022
+    brick.inputs["Mortar Smooth"].default_value = 0.12
+    brick.inputs["Bias"].default_value = 0.05
+    brick.inputs["Color1"].default_value = (0.23, 0.21, 0.19, 1.0)
+    brick.inputs["Color2"].default_value = (0.28, 0.25, 0.22, 1.0)
+    brick.inputs["Mortar"].default_value = (0.07, 0.07, 0.065, 1.0)
+    links.new(mapping.outputs["Vector"], brick.inputs["Vector"])
+
+    # Fine aggregate noise
+    noise = nodes.new("ShaderNodeTexNoise")
+    noise.location = (-350, -150)
+    noise.inputs["Scale"].default_value = 40.0
+    noise.inputs["Detail"].default_value = 4.0
+    links.new(mapping.outputs["Vector"], noise.inputs["Vector"])
+
+    # Mortar joint recessed bump
+    bump_mortar = nodes.new("ShaderNodeBump")
+    bump_mortar.location = (-100, -100)
+    bump_mortar.inputs["Strength"].default_value = 0.35
+    bump_mortar.inputs["Distance"].default_value = 0.025
+    links.new(brick.outputs["Factor"], bump_mortar.inputs["Height"])
+
+    bump_grain = nodes.new("ShaderNodeBump")
+    bump_grain.location = (100, -100)
+    bump_grain.inputs["Strength"].default_value = 0.08
+    bump_grain.inputs["Distance"].default_value = 0.01
+    links.new(bump_mortar.outputs["Normal"], bump_grain.inputs["Normal"])
+    links.new(noise.outputs["Fac"], bump_grain.inputs["Height"])
+
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.location = (300, 0)
+    links.new(brick.outputs["Color"], _get_bsdf_input(bsdf, "Base Color"))
+    links.new(bump_grain.outputs["Normal"], _get_bsdf_input(bsdf, "Normal"))
+
+    r_sock = _get_bsdf_input(bsdf, "Roughness")
+    if r_sock:
+        r_sock.default_value = roughness
+    m_sock = _get_bsdf_input(bsdf, "Metallic")
+    if m_sock:
+        m_sock.default_value = 0.0
+
+    output = nodes.new("ShaderNodeOutputMaterial")
+    output.location = (550, 0)
+    links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
+
+    mat.diffuse_color = (0.25, 0.23, 0.21, 1.0)
+    return mat
+
+
+def create_soil_material(name="Mat_Soil", base_color=(0.040, 0.028, 0.018), roughness=0.94):
+    """
+    Rich loamy garden soil and tree base surround with coarse crumb texture.
+    """
+    mat = _get_or_create_material(name)
+    nodes, links = _clean_node_tree(mat)
+
+    tex_coord = nodes.new("ShaderNodeTexCoord")
+    tex_coord.location = (-600, 0)
+    noise = nodes.new("ShaderNodeTexNoise")
+    noise.location = (-400, 0)
+    noise.inputs["Scale"].default_value = 24.0
+    noise.inputs["Detail"].default_value = 5.0
+    noise.inputs["Roughness"].default_value = 0.75
+    links.new(tex_coord.outputs["Object"], noise.inputs["Vector"])
+
+    ramp = nodes.new("ShaderNodeValToRGB")
+    ramp.location = (-200, 50)
+    ramp.color_ramp.elements[0].position = 0.2
+    ramp.color_ramp.elements[0].color = (0.025, 0.018, 0.012, 1.0)
+    ramp.color_ramp.elements[1].position = 0.8
+    ramp.color_ramp.elements[1].color = (0.055, 0.040, 0.025, 1.0)
+    links.new(noise.outputs["Fac"], ramp.inputs["Fac"])
+
+    bump = nodes.new("ShaderNodeBump")
+    bump.location = (-200, -150)
+    bump.inputs["Strength"].default_value = 0.22
+    bump.inputs["Distance"].default_value = 0.02
+    links.new(noise.outputs["Fac"], bump.inputs["Height"])
+
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.location = (100, 0)
+    links.new(ramp.outputs["Color"], _get_bsdf_input(bsdf, "Base Color"))
+    links.new(bump.outputs["Normal"], _get_bsdf_input(bsdf, "Normal"))
+
+    r_sock = _get_bsdf_input(bsdf, "Roughness")
+    if r_sock:
+        r_sock.default_value = roughness
+    m_sock = _get_bsdf_input(bsdf, "Metallic")
+    if m_sock:
+        m_sock.default_value = 0.0
+
+    output = nodes.new("ShaderNodeOutputMaterial")
+    output.location = (400, 0)
+    links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
+
+    mat.diffuse_color = (*base_color[:3], 1.0)
+    return mat
+
+
+def create_flowering_shrub_material(name="Mat_FlowerShrub", roughness=0.68):
+    """
+    Dense ornamental shrub foliage interspersed with bougainvillea / red floral blossoms.
+    """
+    mat = _get_or_create_material(name)
+    nodes, links = _clean_node_tree(mat)
+
+    tex_coord = nodes.new("ShaderNodeTexCoord")
+    tex_coord.location = (-700, 0)
+    noise = nodes.new("ShaderNodeTexNoise")
+    noise.location = (-450, 0)
+    noise.inputs["Scale"].default_value = 16.0
+    noise.inputs["Detail"].default_value = 4.0
+    links.new(tex_coord.outputs["Object"], noise.inputs["Vector"])
+
+    ramp = nodes.new("ShaderNodeValToRGB")
+    ramp.location = (-200, 50)
+    # Leaf tones
+    ramp.color_ramp.elements[0].position = 0.15
+    ramp.color_ramp.elements[0].color = (0.022, 0.065, 0.016, 1.0)
+    ramp.color_ramp.elements[1].position = 0.65
+    ramp.color_ramp.elements[1].color = (0.052, 0.135, 0.030, 1.0)
+    # Magenta bougainvillea blossom accents
+    el_flower = ramp.color_ramp.elements.new(0.85)
+    el_flower.color = (0.42, 0.05, 0.16, 1.0)
+    links.new(noise.outputs["Fac"], ramp.inputs["Fac"])
+
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.location = (100, 0)
+    links.new(ramp.outputs["Color"], _get_bsdf_input(bsdf, "Base Color"))
+
+    r_sock = _get_bsdf_input(bsdf, "Roughness")
+    if r_sock:
+        r_sock.default_value = roughness
+    m_sock = _get_bsdf_input(bsdf, "Metallic")
+    if m_sock:
+        m_sock.default_value = 0.0
+
+    output = nodes.new("ShaderNodeOutputMaterial")
+    output.location = (400, 0)
+    links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
+
+    mat.diffuse_color = (0.12, 0.10, 0.08, 1.0)
+    return mat
+
+
+def create_grass_material(name="Mat_Grass", roughness=0.92):
+    """
+    Calibrated natural lawn grass ground surface with soil undertones,
+    fine micro-texture, and realistic outdoor vegetative albedo.
+    """
+    mat = _get_or_create_material(name)
+    nodes, links = _clean_node_tree(mat)
+
+    tex_coord = nodes.new("ShaderNodeTexCoord")
+    tex_coord.location = (-850, 0)
     noise_macro = nodes.new("ShaderNodeTexNoise")
-    noise_macro.location = (-600, 100)
-    noise_macro.inputs["Scale"].default_value = 3.5
+    noise_macro.location = (-650, 100)
+    noise_macro.inputs["Scale"].default_value = 2.2
     noise_macro.inputs["Detail"].default_value = 3.0
     links.new(tex_coord.outputs["Object"], noise_macro.inputs["Vector"])
 
     noise_micro = nodes.new("ShaderNodeTexNoise")
-    noise_micro.location = (-600, -100)
-    noise_micro.inputs["Scale"].default_value = 35.0
+    noise_micro.location = (-650, -100)
+    noise_micro.inputs["Scale"].default_value = 45.0
     noise_micro.inputs["Detail"].default_value = 4.0
     links.new(tex_coord.outputs["Object"], noise_micro.inputs["Vector"])
 
     ramp = nodes.new("ShaderNodeValToRGB")
-    ramp.location = (-200, 50)
-    ramp.color_ramp.elements[0].position = 0.25
-    ramp.color_ramp.elements[0].color = (0.12, 0.28, 0.10, 1.0) # deeper green
-    ramp.color_ramp.elements[1].position = 0.75
-    ramp.color_ramp.elements[1].color = (0.22, 0.42, 0.17, 1.0) # healthy warm grass
+    ramp.location = (-250, 50)
+    # Calibrated realistic linear albedo values for grass (0.03 - 0.15)
+    ramp.color_ramp.elements[0].position = 0.15
+    ramp.color_ramp.elements[0].color = (0.045, 0.038, 0.022, 1.0) # warm soil/thatch
+    ramp.color_ramp.elements[1].position = 0.42
+    ramp.color_ramp.elements[1].color = (0.024, 0.068, 0.018, 1.0) # deep lawn turf
+    el_mid = ramp.color_ramp.elements.new(0.72)
+    el_mid.color = (0.045, 0.125, 0.028, 1.0)                     # healthy rich grass
+    el_high = ramp.color_ramp.elements.new(0.92)
+    el_high.color = (0.068, 0.155, 0.038, 1.0)                    # sunlit tip
+
     links.new(noise_macro.outputs["Fac"], ramp.inputs["Fac"])
 
     bump = nodes.new("ShaderNodeBump")
-    bump.location = (-200, -150)
-    bump.inputs["Strength"].default_value = 0.12
+    bump.location = (-250, -150)
+    bump.inputs["Strength"].default_value = 0.25
     bump.inputs["Distance"].default_value = 0.02
     links.new(noise_micro.outputs["Fac"], bump.inputs["Height"])
 
@@ -462,6 +633,9 @@ def create_grass_material(name="Mat_Grass", base_color=(0.16, 0.36, 0.14),
     output = nodes.new("ShaderNodeOutputMaterial")
     output.location = (400, 0)
     links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
+
+    mat.diffuse_color = (0.045, 0.12, 0.03, 1.0)
+    return mat
 
     mat.diffuse_color = (*base_color[:3], 1.0)
     return mat
