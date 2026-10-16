@@ -347,7 +347,7 @@ def build_terrain(b):
     paver_mat = m.get("paving")
 
     # 1. Macro natural lawn
-    b.box(col, "Ground_Grass", (0, 30, -0.1), (220, 180, 0.2), m["grass"])
+    b.box(col, "Ground_Grass", (0, 30, -0.1), (360, 320, 0.2), m["grass"])
 
     # 2. Main road with curbs and realistic markings
     b.box(col, "Road_Main", (0, 48, 0.02), (9.0, 56.0, 0.04), m["asphalt"])
@@ -418,12 +418,13 @@ def build_shell(b):
         "Slab_Floor_1_Front": ((ox0, ox1), (oy1, sy)),
         "Slab_Floor_1_Landing": ((ox0, ox1), (-sy, oy0)),
     }
+    ceil_mat = m.get("ceiling", m["wall_int"])
     for name, ((x0, x1), (y0, y1)) in pieces.items():
-        b.box(col, name, ((x0 + x1) / 2, (y0 + y1) / 2, z_c), (x1 - x0, y1 - y0, t), m["paving"])
+        b.box(col, name, ((x0 + x1) / 2, (y0 + y1) / 2, z_c), (x1 - x0, y1 - y0, t), ceil_mat)
 
     # Roof and parapets
     rx, ry = cfg.ROOF_HALF
-    b.box(col, "Roof_Main", (0, 0, cfg.ROOF_BOTTOM_Z + cfg.ROOF_THICK / 2), (2 * rx, 2 * ry, cfg.ROOF_THICK), m["paving"])
+    b.box(col, "Roof_Main", (0, 0, cfg.ROOF_BOTTOM_Z + cfg.ROOF_THICK / 2), (2 * rx, 2 * ry, cfg.ROOF_THICK), ceil_mat)
     pz = cfg.ROOF_TOP_Z + cfg.PARAPET_H / 2
     b.box(col, "Parapet_Front", (0, 8.75, pz), (42.0, 0.3, cfg.PARAPET_H), m["wall_trim"])
     b.box(col, "Parapet_Back", (0, -8.75, pz), (42.0, 0.3, cfg.PARAPET_H), m["wall_trim"])
@@ -726,15 +727,26 @@ def setup_world_sky(scene):
 
     sky = nt.nodes.new("ShaderNodeTexSky")
     sky.location = (-300, 0)
-    # Warm golden hour / late afternoon angle (28° elevation) raking across the +Y facade
-    sky.sun_elevation = math.radians(28.0)
-    sky.sun_rotation = math.radians(115.0)
-    sky.turbidity = 2.8                     # natural warm atmosphere
-    sky.ground_albedo = 0.20
+    # Warm golden hour / late afternoon angle (30° elevation) raking across the +Y facade
+    sky.sun_elevation = math.radians(30.0)
+    sky.sun_rotation = math.radians(116.0)
+    sky.sun_disc = True
+    sky.sun_size = math.radians(2.0)
+    sky.sun_intensity = 1.0
+    sky.turbidity = 2.3                     # natural clear atmosphere
+    sky.ground_albedo = 0.32
+    if hasattr(sky, "altitude"):
+        sky.altitude = 120.0
+    if hasattr(sky, "air_density"):
+        sky.air_density = 1.0
+    if hasattr(sky, "dust_density"):
+        sky.dust_density = 0.5
+    if hasattr(sky, "ozone_density"):
+        sky.ozone_density = 1.25
 
     bg = nt.nodes.new("ShaderNodeBackground")
     bg.location = (0, 0)
-    bg.inputs["Strength"].default_value = 0.35  # calibrated to prevent washing out ground shadows
+    bg.inputs["Strength"].default_value = 0.88  # calibrated physically balanced sky radiance
 
     out = nt.nodes.new("ShaderNodeOutputWorld")
     out.location = (200, 0)
@@ -742,69 +754,135 @@ def setup_world_sky(scene):
     nt.links.new(sky.outputs["Color"], bg.inputs["Color"])
     nt.links.new(bg.outputs["Background"], out.inputs["Surface"])
 
-    # EEVEE Next raytracing & illumination
+    # EEVEE Next raytracing, shadows & illumination
     eevee = scene.eevee
     if hasattr(eevee, "use_raytracing"):
         eevee.use_raytracing = True
         if hasattr(eevee, "ray_tracing_options"):
-            eevee.ray_tracing_options.screen_trace_quality = 0.50
-            eevee.ray_tracing_options.trace_max_roughness = 0.65
+            eevee.ray_tracing_options.screen_trace_quality = 0.85
+            eevee.ray_tracing_options.trace_max_roughness = 0.75
+            if hasattr(eevee.ray_tracing_options, "resolution_scale"):
+                eevee.ray_tracing_options.resolution_scale = '1'
+            if hasattr(eevee.ray_tracing_options, "use_denoise"):
+                eevee.ray_tracing_options.use_denoise = True
     if hasattr(eevee, "fast_gi_method"):
         eevee.fast_gi_method = "GLOBAL_ILLUMINATION"
+    if hasattr(eevee, "use_fast_gi"):
+        eevee.use_fast_gi = True
+    if hasattr(eevee, "fast_gi_ray_count"):
+        eevee.fast_gi_ray_count = 4
+    if hasattr(eevee, "gi_diffuse_bounces"):
+        eevee.gi_diffuse_bounces = 3
     if hasattr(eevee, "use_shadows"):
         eevee.use_shadows = True
+    if hasattr(eevee, "shadow_pool_size"):
+        eevee.shadow_pool_size = '1024'
+    if hasattr(eevee, "shadow_ray_count"):
+        eevee.shadow_ray_count = 2
+    if hasattr(eevee, "use_volumetric_shadows"):
+        eevee.use_volumetric_shadows = True
+    if hasattr(eevee, "taa_render_samples"):
+        eevee.taa_render_samples = 48
+    if hasattr(eevee, "use_overscan"):
+        eevee.use_overscan = True
+        eevee.overscan_size = 5.0
 
-    # AgX Color Management
+    # AgX Color Management & Film Exposure
     scene.view_settings.view_transform = "AgX"
-    scene.view_settings.look = "None"
-    scene.view_settings.exposure = -0.30
+    scene.view_settings.look = "AgX - Punchy"
+    scene.view_settings.exposure = 0.15
 
 
 def build_lighting_and_cameras(b):
     setup_world_sky(b.scene)
     col = b.cols["lighting"]
 
-    # Primary sun matching Nishita sky elevation (28°) & rotation (115°)
+    # Primary sun matching Nishita sky elevation (30°) & rotation (116°)
     sun_data = bpy.data.lights.get("Sun_Daylight") or bpy.data.lights.new(name="Sun_Daylight", type='SUN')
-    sun_data.energy = 3.6
-    sun_data.color = (1.0, 0.96, 0.88)
+    sun_data.energy = 5.6
+    sun_data.color = (1.0, 0.95, 0.88)
     if hasattr(sun_data, "angle"):
-        sun_data.angle = math.radians(0.54)   # realistic solar angular diameter for soft shadows
-    sun_obj = bpy.data.objects.new("Sun_Daylight", sun_data)
+        sun_data.angle = math.radians(1.85)   # realistic solar angular diameter for soft contact-hardening shadows
+    if hasattr(sun_data, "shadow_cascade_count"):
+        sun_data.shadow_cascade_count = 4
+    if hasattr(sun_data, "shadow_cascade_max_distance"):
+        sun_data.shadow_cascade_max_distance = 250.0
+    if hasattr(sun_data, "shadow_cascade_fade"):
+        sun_data.shadow_cascade_fade = 0.15
+    if hasattr(sun_data, "shadow_maximum_resolution"):
+        sun_data.shadow_maximum_resolution = 0.0005
+    if hasattr(sun_data, "shadow_filter_radius"):
+        sun_data.shadow_filter_radius = 2.0
+    if hasattr(sun_data, "use_shadow_jitter"):
+        sun_data.use_shadow_jitter = True
+    sun_obj = bpy.data.objects.get("Sun_Daylight") or bpy.data.objects.new("Sun_Daylight", sun_data)
+    sun_obj.data = sun_data
     sun_obj.location = (25, -25, 40)
-    sun_obj.rotation_euler = Euler((math.radians(62), math.radians(12), math.radians(115)), 'XYZ')
+    sun_obj.rotation_euler = Euler((math.radians(60.0), math.radians(14.0), math.radians(116.0)), 'XYZ')
     sun_obj[OWNER_KEY] = OWNER_VALUE
-    col.objects.link(sun_obj)
+    if sun_obj.name not in col.objects:
+        col.objects.link(sun_obj)
 
     # Soft ambient fill
     fill_data = bpy.data.lights.get("Sky_Fill") or bpy.data.lights.new(name="Sky_Fill", type='SUN')
-    fill_data.energy = 0.45
-    fill_data.color = (0.70, 0.85, 1.0)
-    fill_obj = bpy.data.objects.new("Sky_Fill", fill_data)
+    fill_data.energy = 0.70
+    fill_data.color = (0.72, 0.84, 1.0)
+    fill_obj = bpy.data.objects.get("Sky_Fill") or bpy.data.objects.new("Sky_Fill", fill_data)
+    fill_obj.data = fill_data
     fill_obj.location = (-20, 20, 35)
-    fill_obj.rotation_euler = Euler((math.radians(-50), math.radians(-30), math.radians(-120)), 'XYZ')
+    fill_obj.rotation_euler = Euler((math.radians(-52), math.radians(-25), math.radians(-115)), 'XYZ')
     fill_obj[OWNER_KEY] = OWNER_VALUE
-    col.objects.link(fill_obj)
+    if fill_obj.name not in col.objects:
+        col.objects.link(fill_obj)
 
-    # Camera placements and target locations for mathematical orientation
-    cams = [
-        (cfg.CAMERA_OVERVIEW, 35, 400, (65.0, 105.0, 55.0), (0.0, 20.0, 2.0)),
-        (cfg.CAMERA_ENTRANCE, 28, 300, (0.0, 72.0, 2.2), (0.0, 10.0, 3.2)),
-        ("Cam_Facade", 26, 300, (-17.0, 26.0, 2.2), (0.0, 10.0, 3.0)),
-        ("Cam_Classroom", 22, 100, (-8.8, 7.2, 1.7), (-14.5, 3.8, 1.1)),
-        ("Cam_Staircase", 24, 100, (2.0, 7.8, 1.5), (5.0, 4.0, 2.4)),
-        ("Cam_Courtyard", 28, 200, (-26.0, 34.0, 2.0), (-40.0, 48.5, 1.2)),
+    # Architectural Interior & Portico Accent Lights
+    accent_lights = [
+        ("Light_Classroom_Front", (-14.0, 2.5, 3.4), 55.0, (1.0, 0.97, 0.92), 0.45),
+        ("Light_Classroom_Rear", (-14.0, 5.5, 3.4), 45.0, (1.0, 0.96, 0.90), 0.45),
+        ("Light_Lobby_Reception", (-2.5, 4.5, 3.6), 40.0, (1.0, 0.94, 0.86), 0.40),
+        ("Light_Lobby_Stairs", (4.8, 4.2, 4.1), 50.0, (1.0, 0.95, 0.88), 0.45),
+        ("Light_Stairs_Top", (5.0, 1.8, 5.4), 55.0, (1.0, 0.95, 0.88), 0.45),
+        ("Light_Portico_L", (-3.2, 10.2, 3.7), 28.0, (1.0, 0.92, 0.82), 0.30),
+        ("Light_Portico_R", (3.2, 10.2, 3.7), 28.0, (1.0, 0.92, 0.82), 0.30),
     ]
-    for name, lens, clip, loc, target in cams:
+    for l_name, l_loc, l_energy, l_col, l_rad in accent_lights:
+        ld = bpy.data.lights.get(l_name) or bpy.data.lights.new(name=l_name, type='POINT')
+        ld.energy = l_energy
+        ld.color = l_col
+        if hasattr(ld, "shadow_soft_size"):
+            ld.shadow_soft_size = l_rad
+        lo = bpy.data.objects.get(l_name) or bpy.data.objects.new(l_name, ld)
+        lo.data = ld
+        lo.location = Vector(l_loc)
+        lo[OWNER_KEY] = OWNER_VALUE
+        if lo.name not in col.objects:
+            col.objects.link(lo)
+
+    # Curated Cinematic Camera placements and targets
+    cams = [
+        (cfg.CAMERA_OVERVIEW, 40, 500, (48.0, 85.0, 36.0), (-2.0, 26.0, 2.5), 82.0, 8.0),
+        (cfg.CAMERA_ENTRANCE, 36, 400, (-2.5, 46.0, 1.85), (0.0, 9.5, 3.2), 37.0, 5.6),
+        ("Cam_Facade", 30, 300, (-16.0, 17.5, 1.95), (2.0, 8.8, 3.1), 20.0, 4.0),
+        ("Cam_Classroom", 22, 150, (-10.2, 7.2, 1.55), (-14.2, 1.8, 1.35), 6.2, 3.5),
+        ("Cam_Staircase", 24, 150, (4.6, 8.2, 1.45), (5.0, 2.0, 3.2), 4.6, 3.2),
+        ("Cam_Courtyard", 30, 250, (-31.0, 40.0, 1.75), (-40.0, 48.5, 1.1), 12.5, 4.0),
+        ("Cam_Gate", 40, 400, (0.0, 86.0, 1.95), (0.0, 32.0, 3.5), 54.0, 5.6),
+    ]
+    for name, lens, clip, loc, target, dof_dist, fstop in cams:
         cd = bpy.data.cameras.get(name) or bpy.data.cameras.new(name)
         cd.lens, cd.clip_end = lens, clip
-        obj = bpy.data.objects.new(name, cd)
+        if hasattr(cd, "dof"):
+            cd.dof.use_dof = True
+            cd.dof.focus_distance = dof_dist
+            cd.dof.aperture_fstop = fstop
+        obj = bpy.data.objects.get(name) or bpy.data.objects.new(name, cd)
+        obj.data = cd
         obj.location = Vector(loc)
-        # Calculate exact view orientation toward target
         d = Vector(target) - obj.location
         obj.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
         obj[OWNER_KEY] = OWNER_VALUE
-        col.objects.link(obj)
+        if obj.name not in col.objects:
+            col.objects.link(obj)
 
     if b.scene.camera is None or b.scene.camera.name not in bpy.data.objects:
         b.scene.camera = bpy.data.objects[cfg.CAMERA_OVERVIEW]
@@ -942,6 +1020,7 @@ def render_pbr_showcase(out_dir=OUTPUT_DIR / "renders", res=(1280, 720)):
         ("classroom_pbr.png", "Cam_Classroom"),
         ("staircase_pbr.png", "Cam_Staircase"),
         ("courtyard_pbr.png", "Cam_Courtyard"),
+        ("gate_pbr.png", "Cam_Gate"),
     ]
 
     for fname, cname in targets:

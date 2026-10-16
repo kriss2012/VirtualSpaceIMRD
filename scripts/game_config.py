@@ -152,8 +152,9 @@ ENTRANCE_DOOR_B_NAME = "Door_Entrance_B"
 ENTRANCE_DOOR_ID = "door_main"
 CAMERA_OVERVIEW = "Cam_Overview"
 CAMERA_ENTRANCE = "Cam_Entrance"
+CAMERA_GATE = "Cam_Gate"
 STABLE_OBJECT_NAMES = (
-    ENTRANCE_DOOR_NAME, CAMERA_OVERVIEW, CAMERA_ENTRANCE, "Sun_Daylight", "Sky_Fill",
+    ENTRANCE_DOOR_NAME, CAMERA_OVERVIEW, CAMERA_ENTRANCE, CAMERA_GATE, "Sun_Daylight", "Sky_Fill",
     "Ground_Grass", "Road_Main", "Plaza_Front", "Garden_Flowerbed", "Garden_Circle_Plaza",
     "Bld_Plinth", "Canopy_Roof", "Gate_Pillar_L", "Gate_Pillar_R", "Reception_Counter",
 )

@@ -1,0 +1,97 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.09, 0.13, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(520, 480)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="HeaderBadge" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.35, 1)
+theme_override_font_sizes/font_size = 14
+text = "R. C. PATEL EDUCATIONAL TRUST'S"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "IMRD CAMPUS EXPLORER"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.78, 0.88, 1)
+theme_override_font_sizes/font_size = 13
+text = "Institute of Management Research and Development, Shirpur"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="CenterContainer/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "▶ Explore Campus"
+
+[node name="ControlsButton" type="Button" parent="CenterContainer/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "⌨ Controls & Guide"
+
+[node name="QuitButton" type="Button" parent="CenterContainer/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "✕ Exit to Desktop"
+
+[node name="Footer" type="Label" parent="CenterContainer/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.48, 0.55, 1)
+theme_override_font_sizes/font_size = 11
+text = "v1.0.0 Standalone 3D Edition • Powered by Godot Engine"
+horizontal_alignment = 1
+
+[node name="ControlsDialog" type="AcceptDialog" parent="."]
+title = "Campus Explorer — Controls Reference"
+size = Vector2i(460, 280)
+dialog_text = "• Movement: W, A, S, D or Arrow Keys
+• Sprint: Left Shift (Hold for 1.8x speed)
+• Jump: Spacebar
+• Camera Look: Move Mouse
+• Interact: E (Talk to Prof. Sharma, pick up ID card, open doors)
+• Pause / Menu: Escape or Q
+
+Explore the campus entrance, collect your student ID card, and visit the classrooms and grand staircase!"

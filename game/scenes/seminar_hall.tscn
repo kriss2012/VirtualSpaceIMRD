@@ -1,0 +1,251 @@
+[gd_scene load_steps=20 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_StageWood"]
+albedo_color = Color(0.72, 0.54, 0.38, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_AcousticWood"]
+albedo_color = Color(0.78, 0.62, 0.44, 1)
+roughness = 0.50
+
+[sub_resource type="StandardMaterial3D" id="Mat_AcousticDarkSlat"]
+albedo_color = Color(0.25, 0.18, 0.12, 1)
+roughness = 0.60
+
+[sub_resource type="StandardMaterial3D" id="Mat_PodiumSilver"]
+albedo_color = Color(0.85, 0.88, 0.90, 1)
+metallic = 0.85
+roughness = 0.25
+
+[sub_resource type="StandardMaterial3D" id="Mat_PodiumNavy"]
+albedo_color = Color(0.08, 0.16, 0.35, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_BrassSamai"]
+albedo_color = Color(0.88, 0.72, 0.20, 1)
+metallic = 0.85
+roughness = 0.25
+
+[sub_resource type="StandardMaterial3D" id="Mat_AuditoriumChair"]
+albedo_color = Color(0.10, 0.18, 0.40, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="Mat_CarpetFloor"]
+albedo_color = Color(0.20, 0.22, 0.25, 1)
+roughness = 0.90
+
+[sub_resource type="BoxMesh" id="Mesh_StagePlinth"]
+material = SubResource("Mat_StageWood")
+size = Vector3(12.0, 0.45, 5.0)
+
+[sub_resource type="BoxMesh" id="Mesh_AcousticBackdrop"]
+material = SubResource("Mat_AcousticWood")
+size = Vector3(12.0, 4.2, 0.15)
+
+[sub_resource type="BoxMesh" id="Mesh_AcousticSlat"]
+material = SubResource("Mat_AcousticDarkSlat")
+size = Vector3(12.0, 0.05, 0.04)
+
+[sub_resource type="BoxMesh" id="Mesh_PodiumBody"]
+material = SubResource("Mat_PodiumSilver")
+size = Vector3(0.70, 1.15, 0.50)
+
+[sub_resource type="BoxMesh" id="Mesh_PodiumNavyFace"]
+material = SubResource("Mat_PodiumNavy")
+size = Vector3(0.55, 0.90, 0.05)
+
+[sub_resource type="CylinderMesh" id="Mesh_SamaiBase"]
+material = SubResource("Mat_BrassSamai")
+top_radius = 0.25
+bottom_radius = 0.30
+height = 0.08
+
+[sub_resource type="CylinderMesh" id="Mesh_SamaiStem"]
+material = SubResource("Mat_BrassSamai")
+top_radius = 0.04
+bottom_radius = 0.05
+height = 1.20
+
+[sub_resource type="CylinderMesh" id="Mesh_SamaiBowl"]
+material = SubResource("Mat_BrassSamai")
+top_radius = 0.28
+bottom_radius = 0.15
+height = 0.10
+
+[sub_resource type="BoxMesh" id="Mesh_Pedestal"]
+material = SubResource("Mat_StageWood")
+size = Vector3(0.65, 0.75, 0.65)
+
+[sub_resource type="CylinderMesh" id="Mesh_SaraswatiIdol"]
+material = SubResource("Mat_BrassSamai")
+top_radius = 0.18
+bottom_radius = 0.22
+height = 0.50
+
+[sub_resource type="BoxMesh" id="Mesh_ChairSeat"]
+material = SubResource("Mat_AuditoriumChair")
+size = Vector3(0.55, 0.12, 0.50)
+
+[sub_resource type="BoxMesh" id="Mesh_ChairBack"]
+material = SubResource("Mat_AuditoriumChair")
+size = Vector3(0.55, 0.55, 0.10)
+
+[node name="SeminarHall" type="Node3D"]
+
+[node name="Stage" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.225, -4.0)
+
+[node name="StageFloor" type="MeshInstance3D" parent="Stage"]
+mesh = SubResource("Mesh_StagePlinth")
+
+[node name="AcousticWall" type="MeshInstance3D" parent="Stage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.10, -2.40)
+mesh = SubResource("Mesh_AcousticBackdrop")
+
+[node name="Slat1" type="MeshInstance3D" parent="Stage/AcousticWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0.08)
+mesh = SubResource("Mesh_AcousticSlat")
+
+[node name="Slat2" type="MeshInstance3D" parent="Stage/AcousticWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0.08)
+mesh = SubResource("Mesh_AcousticSlat")
+
+[node name="Slat3" type="MeshInstance3D" parent="Stage/AcousticWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0, 0.08)
+mesh = SubResource("Mesh_AcousticSlat")
+
+[node name="Slat4" type="MeshInstance3D" parent="Stage/AcousticWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0.08)
+mesh = SubResource("Mesh_AcousticSlat")
+
+[node name="Slat5" type="MeshInstance3D" parent="Stage/AcousticWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0.08)
+mesh = SubResource("Mesh_AcousticSlat")
+
+[node name="StageProps" type="Node3D" parent="Stage"]
+
+[node name="Podium" type="Node3D" parent="Stage/StageProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.225, 0.5)
+
+[node name="Body" type="MeshInstance3D" parent="Stage/StageProps/Podium"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+mesh = SubResource("Mesh_PodiumBody")
+
+[node name="NavyFace" type="MeshInstance3D" parent="Stage/StageProps/Podium"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0.26)
+mesh = SubResource("Mesh_PodiumNavyFace")
+
+[node name="PodiumLabel" type="Label3D" parent="Stage/StageProps/Podium"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.60, 0.30)
+pixel_size = 0.002
+text = "IMRD\nSHIRPUR"
+font_size = 24
+outline_size = 4
+modulate = Color(0.95, 0.95, 0.95, 1)
+
+[node name="SamaiLamp" type="Node3D" parent="Stage/StageProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0.225, -0.8)
+
+[node name="Base" type="MeshInstance3D" parent="Stage/StageProps/SamaiLamp"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+mesh = SubResource("Mesh_SamaiBase")
+
+[node name="Stem" type="MeshInstance3D" parent="Stage/StageProps/SamaiLamp"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64, 0)
+mesh = SubResource("Mesh_SamaiStem")
+
+[node name="Bowl" type="MeshInstance3D" parent="Stage/StageProps/SamaiLamp"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("Mesh_SamaiBowl")
+
+[node name="SaraswatiPedestal" type="Node3D" parent="Stage/StageProps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0.225, -1.2)
+
+[node name="Pedestal" type="MeshInstance3D" parent="Stage/StageProps/SaraswatiPedestal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
+mesh = SubResource("Mesh_Pedestal")
+
+[node name="Idol" type="MeshInstance3D" parent="Stage/StageProps/SaraswatiPedestal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+mesh = SubResource("Mesh_SaraswatiIdol")
+
+[node name="AuditoriumSeats" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+
+[node name="Row1" type="Node3D" parent="AuditoriumSeats"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Chair1" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair1Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair2" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair2Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair3" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair3Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair4" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair4Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Row2" type="Node3D" parent="AuditoriumSeats"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 1.4)
+
+[node name="Chair1" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair1Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair2" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair2Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair3" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair3Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair4" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair4Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="HallSign" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -4.0)
+pixel_size = 0.003
+text = "DR. A. P. J. ABDUL KALAM SEMINAR HALL\nSES • IMRD SHIRPUR"
+font_size = 28
+outline_size = 6
+outline_color = Color(0.1, 0.1, 0.1, 1)

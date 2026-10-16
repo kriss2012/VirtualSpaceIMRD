@@ -1,0 +1,229 @@
+[gd_scene load_steps=18 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_OakWood"]
+albedo_color = Color(0.68, 0.55, 0.42, 1)
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_DarkWood"]
+albedo_color = Color(0.35, 0.22, 0.12, 1)
+roughness = 0.40
+
+[sub_resource type="StandardMaterial3D" id="Mat_WhiteMarbleFloor"]
+albedo_color = Color(0.92, 0.92, 0.94, 1)
+roughness = 0.12
+metallic_specular = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_LEDPanel"]
+albedo_color = Color(1, 1, 1, 1)
+emission_enabled = true
+emission = Color(0.95, 0.98, 1, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_BookBlue"]
+albedo_color = Color(0.12, 0.28, 0.65, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_BookRed"]
+albedo_color = Color(0.65, 0.15, 0.15, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_BookBlack"]
+albedo_color = Color(0.15, 0.15, 0.16, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="Mat_BookWhite"]
+albedo_color = Color(0.88, 0.88, 0.85, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="Mesh_Floor"]
+material = SubResource("Mat_WhiteMarbleFloor")
+size = Vector3(16.0, 0.15, 14.0)
+
+[sub_resource type="BoxMesh" id="Mesh_BookShelfEnd"]
+material = SubResource("Mat_OakWood")
+size = Vector3(0.65, 2.25, 0.08)
+
+[sub_resource type="BoxMesh" id="Mesh_BookShelfTop"]
+material = SubResource("Mat_OakWood")
+size = Vector3(0.65, 0.05, 3.8)
+
+[sub_resource type="BoxMesh" id="Mesh_BookShelfTier"]
+material = SubResource("Mat_OakWood")
+size = Vector3(0.60, 0.04, 3.8)
+
+[sub_resource type="BoxMesh" id="Mesh_BookRowBlue"]
+material = SubResource("Mat_BookBlue")
+size = Vector3(0.24, 0.28, 3.7)
+
+[sub_resource type="BoxMesh" id="Mesh_BookRowRed"]
+material = SubResource("Mat_BookRed")
+size = Vector3(0.24, 0.28, 3.7)
+
+[sub_resource type="BoxMesh" id="Mesh_BookRowBlack"]
+material = SubResource("Mat_BookBlack")
+size = Vector3(0.24, 0.28, 3.7)
+
+[sub_resource type="BoxMesh" id="Mesh_StudyTable"]
+material = SubResource("Mat_DarkWood")
+size = Vector3(2.2, 0.75, 1.2)
+
+[sub_resource type="BoxMesh" id="Mesh_LEDLight"]
+material = SubResource("Mat_LEDPanel")
+size = Vector3(1.2, 0.05, 2.4)
+
+[node name="LibrarySection" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("Mesh_Floor")
+
+[node name="CeilingLights" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7, 0)
+
+[node name="Light1" type="MeshInstance3D" parent="CeilingLights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -2)
+mesh = SubResource("Mesh_LEDLight")
+
+[node name="Light2" type="MeshInstance3D" parent="CeilingLights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+mesh = SubResource("Mesh_LEDLight")
+
+[node name="Light3" type="MeshInstance3D" parent="CeilingLights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -2)
+mesh = SubResource("Mesh_LEDLight")
+
+[node name="Aisle1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -1.0)
+
+[node name="ShelfEndL" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -1.9)
+mesh = SubResource("Mesh_BookShelfEnd")
+
+[node name="ShelfEndR" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 1.9)
+mesh = SubResource("Mesh_BookShelfEnd")
+
+[node name="ShelfTop" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+mesh = SubResource("Mesh_BookShelfTop")
+
+[node name="ShelfTier1" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.40, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books1" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 0.56, 0)
+mesh = SubResource("Mesh_BookRowBlue")
+
+[node name="ShelfTier2" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books2" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 1.01, 0)
+mesh = SubResource("Mesh_BookRowRed")
+
+[node name="ShelfTier3" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.30, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books3" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 1.46, 0)
+mesh = SubResource("Mesh_BookRowBlack")
+
+[node name="ShelfTier4" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books4" type="MeshInstance3D" parent="Aisle1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 1.91, 0)
+mesh = SubResource("Mesh_BookRowBlue")
+
+[node name="Aisle2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1.0)
+
+[node name="ShelfEndL" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -1.9)
+mesh = SubResource("Mesh_BookShelfEnd")
+
+[node name="ShelfEndR" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 1.9)
+mesh = SubResource("Mesh_BookShelfEnd")
+
+[node name="ShelfTop" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+mesh = SubResource("Mesh_BookShelfTop")
+
+[node name="ShelfTier1" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.40, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books1" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 0.56, 0)
+mesh = SubResource("Mesh_BookRowRed")
+
+[node name="ShelfTier2" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books2" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 1.01, 0)
+mesh = SubResource("Mesh_BookRowBlue")
+
+[node name="ShelfTier3" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.30, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books3" type="MeshInstance3D" parent="Aisle2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 1.46, 0)
+mesh = SubResource("Mesh_BookRowBlack")
+
+[node name="Aisle3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1.0)
+
+[node name="ShelfEndL" type="MeshInstance3D" parent="Aisle3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -1.9)
+mesh = SubResource("Mesh_BookShelfEnd")
+
+[node name="ShelfEndR" type="MeshInstance3D" parent="Aisle3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 1.9)
+mesh = SubResource("Mesh_BookShelfEnd")
+
+[node name="ShelfTop" type="MeshInstance3D" parent="Aisle3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+mesh = SubResource("Mesh_BookShelfTop")
+
+[node name="ShelfTier1" type="MeshInstance3D" parent="Aisle3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.40, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books1" type="MeshInstance3D" parent="Aisle3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 0.56, 0)
+mesh = SubResource("Mesh_BookRowBlue")
+
+[node name="ShelfTier2" type="MeshInstance3D" parent="Aisle3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+mesh = SubResource("Mesh_BookShelfTier")
+
+[node name="Books2" type="MeshInstance3D" parent="Aisle3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 1.01, 0)
+mesh = SubResource("Mesh_BookRowBlack")
+
+[node name="StudyTables" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0, 0, 0)
+
+[node name="Table1" type="MeshInstance3D" parent="StudyTables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -2.5)
+mesh = SubResource("Mesh_StudyTable")
+
+[node name="Table2" type="MeshInstance3D" parent="StudyTables"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 1.5)
+mesh = SubResource("Mesh_StudyTable")
+
+[node name="LibrarySign" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, -4.5)
+pixel_size = 0.003
+text = "IMRD CENTRAL ACADEMIC LIBRARY\nSilence Please • Study & Research Section"
+font_size = 28
+outline_size = 6
+outline_color = Color(0.1, 0.1, 0.1, 1)

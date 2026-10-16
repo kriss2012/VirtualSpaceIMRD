@@ -1,0 +1,181 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scripts/entrance_portal.gd" id="1_portal"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_Frame"]
+albedo_color = Color(0.18, 0.15, 0.12, 1)
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_Teak"]
+albedo_color = Color(0.36, 0.20, 0.10, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_Glass"]
+transparency = 1
+albedo_color = Color(0.12, 0.24, 0.38, 0.55)
+roughness = 0.05
+metallic = 0.2
+
+[sub_resource type="StandardMaterial3D" id="Mat_Brass"]
+albedo_color = Color(0.85, 0.72, 0.25, 1)
+metallic = 0.85
+roughness = 0.2
+
+[sub_resource type="BoxMesh" id="Mesh_FrameTop"]
+material = SubResource("Mat_Frame")
+size = Vector3(3.64, 0.08, 0.25)
+
+[sub_resource type="BoxMesh" id="Mesh_FrameSide"]
+material = SubResource("Mat_Frame")
+size = Vector3(0.08, 2.60, 0.25)
+
+[sub_resource type="BoxMesh" id="Mesh_TransomBar"]
+material = SubResource("Mat_Frame")
+size = Vector3(3.60, 0.06, 0.20)
+
+[sub_resource type="BoxMesh" id="Mesh_Mullion"]
+material = SubResource("Mat_Frame")
+size = Vector3(0.06, 2.20, 0.20)
+
+[sub_resource type="BoxMesh" id="Mesh_SidelightGlass"]
+material = SubResource("Mat_Glass")
+size = Vector3(0.50, 2.14, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_TransomGlass"]
+material = SubResource("Mat_Glass")
+size = Vector3(3.48, 0.30, 0.03)
+
+[sub_resource type="BoxMesh" id="Mesh_DoorLeaf"]
+material = SubResource("Mat_Teak")
+size = Vector3(1.12, 2.14, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_DoorGlass"]
+material = SubResource("Mat_Glass")
+size = Vector3(0.70, 1.40, 0.03)
+
+[sub_resource type="CylinderMesh" id="Mesh_Handle"]
+material = SubResource("Mat_Brass")
+top_radius = 0.02
+bottom_radius = 0.02
+height = 0.45
+
+[sub_resource type="BoxShape3D" id="Shape_SidePanel"]
+size = Vector3(0.55, 2.20, 0.15)
+
+[sub_resource type="BoxShape3D" id="Shape_DoorLeaf"]
+size = Vector3(1.12, 2.14, 0.08)
+
+[sub_resource type="SphereShape3D" id="Shape_InteractArea"]
+radius = 3.2
+
+[node name="EntrancePortal" type="Node3D"]
+script = ExtResource("1_portal")
+
+[node name="Frame" type="Node3D" parent="."]
+
+[node name="FrameTop" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.56, 0)
+mesh = SubResource("Mesh_FrameTop")
+
+[node name="FrameLeft" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.76, 1.30, 0)
+mesh = SubResource("Mesh_FrameSide")
+
+[node name="FrameRight" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.76, 1.30, 0)
+mesh = SubResource("Mesh_FrameSide")
+
+[node name="TransomBar" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.20, 0)
+mesh = SubResource("Mesh_TransomBar")
+
+[node name="MullionLeft" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 1.10, 0)
+mesh = SubResource("Mesh_Mullion")
+
+[node name="MullionRight" type="MeshInstance3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 1.10, 0)
+mesh = SubResource("Mesh_Mullion")
+
+[node name="GlassPanels" type="Node3D" parent="."]
+
+[node name="SidelightLeft" type="MeshInstance3D" parent="GlassPanels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43, 1.10, 0)
+mesh = SubResource("Mesh_SidelightGlass")
+
+[node name="SidelightRight" type="MeshInstance3D" parent="GlassPanels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.43, 1.10, 0)
+mesh = SubResource("Mesh_SidelightGlass")
+
+[node name="TransomGlass" type="MeshInstance3D" parent="GlassPanels"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38, 0)
+mesh = SubResource("Mesh_TransomGlass")
+
+[node name="StaticCollisions" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 2
+
+[node name="SideCollisionLeft" type="CollisionShape3D" parent="StaticCollisions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.43, 1.10, 0)
+shape = SubResource("Shape_SidePanel")
+
+[node name="SideCollisionRight" type="CollisionShape3D" parent="StaticCollisions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.43, 1.10, 0)
+shape = SubResource("Shape_SidePanel")
+
+[node name="HingeLeft" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13, 0, 0)
+
+[node name="DoorLeaf" type="MeshInstance3D" parent="HingeLeft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56, 1.10, 0)
+mesh = SubResource("Mesh_DoorLeaf")
+
+[node name="DoorGlass" type="MeshInstance3D" parent="HingeLeft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56, 1.25, 0.01)
+mesh = SubResource("Mesh_DoorGlass")
+
+[node name="Handle" type="MeshInstance3D" parent="HingeLeft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02, 1.10, 0.05)
+mesh = SubResource("Mesh_Handle")
+
+[node name="DoorBodyLeft" type="StaticBody3D" parent="HingeLeft"]
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HingeLeft/DoorBodyLeft"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56, 1.10, 0)
+shape = SubResource("Shape_DoorLeaf")
+
+[node name="HingeRight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13, 0, 0)
+
+[node name="DoorLeaf" type="MeshInstance3D" parent="HingeRight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56, 1.10, 0)
+mesh = SubResource("Mesh_DoorLeaf")
+
+[node name="DoorGlass" type="MeshInstance3D" parent="HingeRight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56, 1.25, 0.01)
+mesh = SubResource("Mesh_DoorGlass")
+
+[node name="Handle" type="MeshInstance3D" parent="HingeRight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.02, 1.10, 0.05)
+mesh = SubResource("Mesh_Handle")
+
+[node name="DoorBodyRight" type="StaticBody3D" parent="HingeRight"]
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HingeRight/DoorBodyRight"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56, 1.10, 0)
+shape = SubResource("Shape_DoorLeaf")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("Shape_InteractArea")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

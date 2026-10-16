@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/door_controller.gd" id="1_door"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wood"]
+albedo_color = Color(0.24, 0.14, 0.07, 1)
+roughness = 0.42
+
+[sub_resource type="BoxMesh" id="BoxMesh_door"]
+material = SubResource("StandardMaterial3D_wood")
+size = Vector3(1.1, 2.1, 0.06)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_door"]
+size = Vector3(1.1, 2.1, 0.08)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_area"]
+radius = 2.4
+
+[node name="Door" type="Node3D"]
+script = ExtResource("1_door")
+
+[node name="HingePivot" type="Node3D" parent="."]
+
+[node name="DoorMesh" type="MeshInstance3D" parent="HingePivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.05, 0)
+mesh = SubResource("BoxMesh_door")
+
+[node name="DoorBody" type="StaticBody3D" parent="HingePivot"]
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HingePivot/DoorBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.05, 0)
+shape = SubResource("BoxShape3D_door")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1, 0)
+shape = SubResource("SphereShape3D_area")
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

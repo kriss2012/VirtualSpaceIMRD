@@ -263,6 +263,13 @@ def create_glass_material(name="Mat_Glass", tint=(0.04, 0.07, 0.10),
     output.location = (400, 0)
     links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
 
+    if hasattr(mat, "use_raytrace_refraction"):
+        mat.use_raytrace_refraction = True
+    if hasattr(mat, "use_transparent_shadow"):
+        mat.use_transparent_shadow = True
+    if hasattr(mat, "refraction_depth"):
+        mat.refraction_depth = 0.08
+
     mat.diffuse_color = (0.1, 0.2, 0.3, 0.4)
     return mat
 
@@ -720,6 +727,30 @@ def create_car_glass_material(name="Mat_CarGlass"):
     return mat
 
 
+def create_ceiling_material(name="Mat_Ceiling", base_color=(0.74, 0.72, 0.68), roughness=0.82):
+    """Clean off-white architectural plaster for interior ceilings and slab undersides."""
+    mat = _get_or_create_material(name)
+    nodes, links = _clean_node_tree(mat)
+
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.location = (100, 0)
+    c_sock = _get_bsdf_input(bsdf, "Base Color")
+    if c_sock:
+        c_sock.default_value = (*base_color[:3], 1.0)
+    r_sock = _get_bsdf_input(bsdf, "Roughness")
+    if r_sock:
+        r_sock.default_value = roughness
+    m_sock = _get_bsdf_input(bsdf, "Metallic")
+    if m_sock:
+        m_sock.default_value = 0.0
+
+    output = nodes.new("ShaderNodeOutputMaterial")
+    output.location = (400, 0)
+    links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
+    mat.diffuse_color = (*base_color[:3], 1.0)
+    return mat
+
+
 def build_full_pbr_palette():
     """Builds and returns the complete dictionary of PBR materials for IMRD campus."""
     palette = {}
@@ -736,7 +767,8 @@ def build_full_pbr_palette():
     palette["wall_ext"] = create_plaster_material("Mat_WallExt", base_color=(0.48, 0.45, 0.39), accent_color=(0.38, 0.35, 0.30), roughness=0.68)
     palette["wall_trim"] = create_plaster_material("Mat_WallTrim", base_color=(0.40, 0.16, 0.06), accent_color=(0.30, 0.11, 0.04), roughness=0.55)
     palette["wall_int"] = create_plaster_material("Mat_WallInt", base_color=(0.60, 0.58, 0.54), accent_color=(0.50, 0.48, 0.44), roughness=0.75, bump_strength=0.03)
-    palette["floor_tile"] = create_concrete_material("Mat_FloorTile", base_color=(0.42, 0.40, 0.37), roughness=0.38, bump_strength=0.04)
+    palette["floor_tile"] = create_concrete_material("Mat_FloorTile", base_color=(0.42, 0.40, 0.37), roughness=0.28, bump_strength=0.03)
+    palette["ceiling"] = create_ceiling_material("Mat_Ceiling")
     palette["glass"] = create_glass_material("Mat_Glass")
     palette["car_glass"] = create_car_glass_material("Mat_CarGlass")
 

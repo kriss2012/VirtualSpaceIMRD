@@ -1,0 +1,314 @@
+[gd_scene load_steps=31 format=3]
+
+[ext_resource type="Script" path="res://scripts/campus_visual_enhancer.gd" id="1_enhancer"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_terrain.glb" id="2_terrain"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_architecture.glb" id="3_architecture"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_props.glb" id="4_props"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_furniture.glb" id="5_furniture"]
+[ext_resource type="PackedScene" path="res://assets/models/campus_vegetation.glb" id="6_vegetation"]
+[ext_resource type="PackedScene" path="res://scenes/imrd_entrance_portico.tscn" id="7_portico"]
+[ext_resource type="PackedScene" path="res://scenes/library_section.tscn" id="8_library"]
+[ext_resource type="PackedScene" path="res://scenes/seminar_hall.tscn" id="9_seminar"]
+[ext_resource type="PackedScene" path="res://scenes/classroom_door.tscn" id="10_cdoor"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="11_player"]
+[ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="12_npc"]
+[ext_resource type="PackedScene" path="res://scenes/item_id_card.tscn" id="13_id_card"]
+[ext_resource type="PackedScene" path="res://scenes/ui.tscn" id="14_ui"]
+[ext_resource type="Script" path="res://scripts/location_trigger.gd" id="15_loc_trigger"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.22, 0.46, 0.82, 1)
+sky_horizon_color = Color(0.78, 0.84, 0.92, 1)
+ground_bottom_color = Color(0.18, 0.22, 0.18, 1)
+ground_horizon_color = Color(0.55, 0.65, 0.58, 1)
+sun_angle_max = 28.0
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+ambient_light_source = 2
+ambient_light_color = Color(0.60, 0.70, 0.85, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 3
+tonemap_exposure = 1.05
+tonemap_white = 1.0
+ssao_enabled = true
+ssao_radius = 1.5
+ssao_intensity = 2.0
+glow_enabled = true
+glow_intensity = 0.2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(360, 2, 320)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_entrance_ramp"]
+size = Vector3(16, 0.20, 4.02)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_plinth"]
+size = Vector3(43, 0.34, 17)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_stair_ramp"]
+size = Vector3(2.2, 0.25, 7.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor1_west"]
+size = Vector3(24.3, 0.30, 17)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor1_east"]
+size = Vector3(14.3, 0.30, 17)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor1_landing"]
+size = Vector3(2.4, 0.30, 9.92)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor1_balcony"]
+size = Vector3(12, 0.30, 3.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_north"]
+size = Vector3(43, 8.5, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_south_wing"]
+size = Vector3(18, 8.5, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_side"]
+size = Vector3(0.4, 8.5, 18)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_boundary_gate"]
+size = Vector3(25, 2.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_loc_lobby"]
+size = Vector3(12, 4, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_loc_classroom"]
+size = Vector3(14, 4, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_loc_courtyard"]
+size = Vector3(24, 4, 24)
+
+[node name="Campus" type="Node3D"]
+script = ExtResource("1_enhancer")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 40, 0)
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 1.15
+shadow_enabled = true
+directional_shadow_max_distance = 250.0
+
+[node name="VisualEnvironment" type="Node3D" parent="."]
+
+[node name="campus_terrain" parent="VisualEnvironment" instance=ExtResource("2_terrain")]
+
+[node name="campus_architecture" parent="VisualEnvironment" instance=ExtResource("3_architecture")]
+
+[node name="campus_props" parent="VisualEnvironment" instance=ExtResource("4_props")]
+
+[node name="campus_furniture" parent="VisualEnvironment" instance=ExtResource("5_furniture")]
+
+[node name="campus_vegetation" parent="VisualEnvironment" instance=ExtResource("6_vegetation")]
+
+[node name="IMRDEntrancePortico" parent="VisualEnvironment" instance=ExtResource("7_portico")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.5)
+
+[node name="LibrarySection" parent="VisualEnvironment" instance=ExtResource("8_library")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.34, 0)
+
+[node name="SeminarHall" parent="VisualEnvironment" instance=ExtResource("9_seminar")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.30, 2)
+
+[node name="Collisions" type="Node3D" parent="."]
+
+[node name="GroundCollision" type="StaticBody3D" parent="Collisions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -30)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/GroundCollision"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="EntranceStepsRamp" type="StaticBody3D" parent="Collisions"]
+transform = Transform3D(1, 0, 0, 0, 0.9964, -0.0845, 0, 0.0845, 0.9964, 0, 0.17, -10.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/EntranceStepsRamp"]
+shape = SubResource("BoxShape3D_entrance_ramp")
+
+[node name="PlinthCollision" type="StaticBody3D" parent="Collisions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/PlinthCollision"]
+shape = SubResource("BoxShape3D_plinth")
+
+[node name="StairsRampCollision" type="StaticBody3D" parent="Collisions"]
+transform = Transform3D(1, 0, 0, 0, 0.829038, -0.559193, 0, 0.559193, 0.829038, 5, 2.32, -4.36)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/StairsRampCollision"]
+shape = SubResource("BoxShape3D_stair_ramp")
+
+[node name="Floor1_WestSlab" type="StaticBody3D" parent="Collisions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.35, 4.15, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Floor1_WestSlab"]
+shape = SubResource("BoxShape3D_floor1_west")
+
+[node name="Floor1_EastSlab" type="StaticBody3D" parent="Collisions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.35, 4.15, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Floor1_EastSlab"]
+shape = SubResource("BoxShape3D_floor1_east")
+
+[node name="Floor1_LandingRear" type="StaticBody3D" parent="Collisions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 4.15, 3.54)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Floor1_LandingRear"]
+shape = SubResource("BoxShape3D_floor1_landing")
+
+[node name="Floor1_Balcony" type="StaticBody3D" parent="Collisions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.15, -10.25)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Floor1_Balcony"]
+shape = SubResource("BoxShape3D_floor1_balcony")
+
+[node name="Walls" type="Node3D" parent="Collisions"]
+
+[node name="NorthWall" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.3, 8.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/NorthWall"]
+shape = SubResource("BoxShape3D_wall_north")
+
+[node name="SouthWallLeft" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 4.3, -8.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/SouthWallLeft"]
+shape = SubResource("BoxShape3D_wall_south_wing")
+
+[node name="SouthWallRight" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 4.3, -8.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/SouthWallRight"]
+shape = SubResource("BoxShape3D_wall_south_wing")
+
+[node name="WestWall" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.5, 4.3, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/WestWall"]
+shape = SubResource("BoxShape3D_wall_side")
+
+[node name="EastWall" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.5, 4.3, 0)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/EastWall"]
+shape = SubResource("BoxShape3D_wall_side")
+
+[node name="BoundaryGateLeft" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 1.25, -75)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/BoundaryGateLeft"]
+shape = SubResource("BoxShape3D_boundary_gate")
+
+[node name="BoundaryGateRight" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 1.25, -75)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/BoundaryGateRight"]
+shape = SubResource("BoxShape3D_boundary_gate")
+
+[node name="Doors" type="Node3D" parent="."]
+
+[node name="Classroom101Door" parent="Doors" instance=ExtResource("10_cdoor")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8.0, 0.34, -4.2)
+room_name = "Classroom 101"
+
+[node name="ComputerLabDoor" parent="Doors" instance=ExtResource("10_cdoor")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 8.0, 0.34, -4.2)
+room_name = "Computer Lab"
+
+[node name="CentralLibraryDoor" parent="Doors" instance=ExtResource("10_cdoor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0, 0.34, 0.0)
+room_name = "Central Library"
+
+[node name="Classroom201Door" parent="Doors" instance=ExtResource("10_cdoor")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8.0, 4.30, -4.2)
+room_name = "Classroom 201"
+
+[node name="SeminarHallDoor" parent="Doors" instance=ExtResource("10_cdoor")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 8.0, 4.30, -4.2)
+room_name = "Seminar Hall"
+
+[node name="NPCs" type="Node3D" parent="."]
+
+[node name="ProfSharma" parent="NPCs" instance=ExtResource("12_npc")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2.5, 0.0, -50.0)
+
+[node name="Interactives" type="Node3D" parent="."]
+
+[node name="StudentIDCard" parent="Interactives" instance=ExtResource("13_id_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.25, -24.0)
+
+[node name="LocationTriggers" type="Node3D" parent="."]
+
+[node name="LobbyTrigger" type="Area3D" parent="LocationTriggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -4)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("15_loc_trigger")
+location_id = "lobby"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/LobbyTrigger"]
+shape = SubResource("BoxShape3D_loc_lobby")
+
+[node name="ClassroomTrigger" type="Area3D" parent="LocationTriggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1.5, -4)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("15_loc_trigger")
+location_id = "classroom"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/ClassroomTrigger"]
+shape = SubResource("BoxShape3D_loc_classroom")
+
+[node name="CourtyardTrigger" type="Area3D" parent="LocationTriggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 1.5, -48.5)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("15_loc_trigger")
+location_id = "courtyard"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/CourtyardTrigger"]
+shape = SubResource("BoxShape3D_loc_courtyard")
+
+[node name="Player" parent="." instance=ExtResource("11_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -68)
+
+[node name="UI" parent="." instance=ExtResource("14_ui")]

@@ -1,0 +1,202 @@
+[gd_scene load_steps=22 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Mat_WhitePlaster"]
+albedo_color = Color(0.95, 0.95, 0.95, 1)
+roughness = 0.65
+
+[sub_resource type="StandardMaterial3D" id="Mat_CreamWall"]
+albedo_color = Color(0.92, 0.90, 0.85, 1)
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="Mat_Signboard"]
+albedo_color = Color(0.98, 0.98, 0.99, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_NavyText"]
+albedo_color = Color(0.08, 0.16, 0.35, 1)
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_GoldCrest"]
+albedo_color = Color(0.88, 0.72, 0.20, 1)
+metallic = 0.7
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_VerandaFloor"]
+albedo_color = Color(0.85, 0.84, 0.82, 1)
+roughness = 0.25
+metallic_specular = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_StepStone"]
+albedo_color = Color(0.78, 0.77, 0.75, 1)
+roughness = 0.55
+
+[sub_resource type="StandardMaterial3D" id="Mat_TintedGlass"]
+transparency = 1
+albedo_color = Color(0.08, 0.16, 0.28, 0.85)
+roughness = 0.04
+metallic = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_ACUnit"]
+albedo_color = Color(0.82, 0.82, 0.82, 1)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_TeakDoor"]
+albedo_color = Color(0.35, 0.18, 0.08, 1)
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="Mesh_Pillar"]
+material = SubResource("Mat_WhitePlaster")
+size = Vector3(0.85, 4.20, 0.55)
+
+[sub_resource type="BoxMesh" id="Mesh_SignFascia"]
+material = SubResource("Mat_Signboard")
+size = Vector3(15.2, 1.35, 0.50)
+
+[sub_resource type="BoxMesh" id="Mesh_LogoPlate"]
+material = SubResource("Mat_Signboard")
+size = Vector3(1.2, 0.9, 0.08)
+
+[sub_resource type="CylinderMesh" id="Mesh_LogoEmblem"]
+material = SubResource("Mat_GoldCrest")
+top_radius = 0.35
+bottom_radius = 0.35
+height = 0.06
+
+[sub_resource type="BoxMesh" id="Mesh_VerandaCeiling"]
+material = SubResource("Mat_WhitePlaster")
+size = Vector3(15.2, 0.35, 5.2)
+
+[sub_resource type="BoxMesh" id="Mesh_VerandaFloor"]
+material = SubResource("Mat_VerandaFloor")
+size = Vector3(15.2, 0.10, 5.2)
+
+[sub_resource type="BoxMesh" id="Mesh_Step1"]
+material = SubResource("Mat_StepStone")
+size = Vector3(15.6, 0.12, 1.4)
+
+[sub_resource type="BoxMesh" id="Mesh_Step2"]
+material = SubResource("Mat_StepStone")
+size = Vector3(15.6, 0.12, 0.9)
+
+[sub_resource type="BoxMesh" id="Mesh_Step3"]
+material = SubResource("Mat_StepStone")
+size = Vector3(15.6, 0.12, 0.45)
+
+[sub_resource type="BoxMesh" id="Mesh_UpperWindow"]
+material = SubResource("Mat_TintedGlass")
+size = Vector3(2.4, 1.5, 0.05)
+
+[sub_resource type="BoxMesh" id="Mesh_ACCompressor"]
+material = SubResource("Mat_ACUnit")
+size = Vector3(0.85, 0.55, 0.35)
+
+[sub_resource type="BoxMesh" id="Mesh_LobbyGlassDoor"]
+material = SubResource("Mat_TintedGlass")
+size = Vector3(1.4, 2.4, 0.06)
+
+[node name="IMRDEntrancePortico" type="Node3D"]
+
+[node name="Steps" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.7)
+
+[node name="Step1" type="MeshInstance3D" parent="Steps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+mesh = SubResource("Mesh_Step1")
+
+[node name="Step2" type="MeshInstance3D" parent="Steps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, -0.25)
+mesh = SubResource("Mesh_Step2")
+
+[node name="Step3" type="MeshInstance3D" parent="Steps"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.30, -0.48)
+mesh = SubResource("Mesh_Step3")
+
+[node name="Veranda" type="Node3D" parent="."]
+
+[node name="Floor" type="MeshInstance3D" parent="Veranda"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, 0)
+mesh = SubResource("Mesh_VerandaFloor")
+
+[node name="Ceiling" type="MeshInstance3D" parent="Veranda"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.25, 0)
+mesh = SubResource("Mesh_VerandaCeiling")
+
+[node name="Pillars" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.3)
+
+[node name="Pillar1" type="MeshInstance3D" parent="Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 2.22, 0)
+mesh = SubResource("Mesh_Pillar")
+
+[node name="Pillar2" type="MeshInstance3D" parent="Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 2.22, 0)
+mesh = SubResource("Mesh_Pillar")
+
+[node name="Pillar3" type="MeshInstance3D" parent="Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 2.22, 0)
+mesh = SubResource("Mesh_Pillar")
+
+[node name="Pillar4" type="MeshInstance3D" parent="Pillars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 2.22, 0)
+mesh = SubResource("Mesh_Pillar")
+
+[node name="SignboardFascia" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.80, 2.3)
+
+[node name="FasciaBeam" type="MeshInstance3D" parent="SignboardFascia"]
+mesh = SubResource("Mesh_SignFascia")
+
+[node name="SignLabel" type="Label3D" parent="SignboardFascia"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0.28)
+pixel_size = 0.0038
+text = "Institute Of Management Research & Development, Shirpur"
+font_size = 46
+outline_size = 8
+outline_color = Color(0.95, 0.95, 0.95, 1)
+modulate = Color(0.08, 0.16, 0.35, 1)
+
+[node name="LogoBadge" type="MeshInstance3D" parent="SignboardFascia"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0.28)
+mesh = SubResource("Mesh_LogoPlate")
+
+[node name="LogoEmblem" type="MeshInstance3D" parent="SignboardFascia/LogoBadge"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.05)
+mesh = SubResource("Mesh_LogoEmblem")
+
+[node name="UpperFloorsFacade" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.45, 0)
+
+[node name="Window_Floor1_L" type="MeshInstance3D" parent="UpperFloorsFacade"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.4, -2.5)
+mesh = SubResource("Mesh_UpperWindow")
+
+[node name="AC_Floor1_L" type="MeshInstance3D" parent="UpperFloorsFacade"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.45, -2.3)
+mesh = SubResource("Mesh_ACCompressor")
+
+[node name="Window_Floor1_R" type="MeshInstance3D" parent="UpperFloorsFacade"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 1.4, -2.5)
+mesh = SubResource("Mesh_UpperWindow")
+
+[node name="AC_Floor1_R" type="MeshInstance3D" parent="UpperFloorsFacade"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.45, -2.3)
+mesh = SubResource("Mesh_ACCompressor")
+
+[node name="Window_Floor2_L" type="MeshInstance3D" parent="UpperFloorsFacade"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 4.8, -2.5)
+mesh = SubResource("Mesh_UpperWindow")
+
+[node name="Window_Floor2_R" type="MeshInstance3D" parent="UpperFloorsFacade"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 4.8, -2.5)
+mesh = SubResource("Mesh_UpperWindow")
+
+[node name="FoyerDoors" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, -2.5)
+
+[node name="LobbyGlassDoorLeft" type="MeshInstance3D" parent="FoyerDoors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 1.2, 0)
+mesh = SubResource("Mesh_LobbyGlassDoor")
+
+[node name="LobbyGlassDoorRight" type="MeshInstance3D" parent="FoyerDoors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 1.2, 0)
+mesh = SubResource("Mesh_LobbyGlassDoor")
