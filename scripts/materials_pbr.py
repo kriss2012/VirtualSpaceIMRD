@@ -523,32 +523,59 @@ def create_car_paint_material(name, color=(0.85, 0.12, 0.12)):
     return mat
 
 
+def create_car_glass_material(name="Mat_CarGlass"):
+    """Dark tinted automotive glazing."""
+    mat = _get_or_create_material(name)
+    nodes, links = _clean_node_tree(mat)
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.location = (100, 0)
+    c_sock = _get_bsdf_input(bsdf, "Base Color")
+    if c_sock:
+        c_sock.default_value = (0.02, 0.03, 0.04, 1.0)
+    r_sock = _get_bsdf_input(bsdf, "Roughness")
+    if r_sock:
+        r_sock.default_value = 0.06
+    m_sock = _get_bsdf_input(bsdf, "Metallic")
+    if m_sock:
+        m_sock.default_value = 0.1
+    t_sock = _get_bsdf_input(bsdf, "Transmission Weight", "Transmission")
+    if t_sock:
+        t_sock.default_value = 0.35
+
+    output = nodes.new("ShaderNodeOutputMaterial")
+    output.location = (400, 0)
+    links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
+    mat.diffuse_color = (0.04, 0.06, 0.08, 0.8)
+    return mat
+
+
 def build_full_pbr_palette():
     """Builds and returns the complete dictionary of PBR materials for IMRD campus."""
     palette = {}
     palette["grass"] = create_grass_material("Mat_Grass")
-    palette["asphalt"] = create_asphalt_material("Mat_Asphalt", base_color=(0.14, 0.15, 0.16))
-    palette["road_lines"] = create_concrete_material("Mat_RoadLines", base_color=(0.95, 0.85, 0.20), roughness=0.45, bump_strength=0.04)
-    palette["paving"] = create_concrete_material("Mat_Paving", base_color=(0.76, 0.74, 0.68), roughness=0.68, bump_strength=0.08)
-    palette["parking"] = create_asphalt_material("Mat_Parking", base_color=(0.20, 0.21, 0.23), roughness=0.74, bump_strength=0.12)
-    palette["park_lines"] = create_concrete_material("Mat_ParkLines", base_color=(0.90, 0.90, 0.90), roughness=0.40, bump_strength=0.04)
+    palette["asphalt"] = create_asphalt_material("Mat_Asphalt", base_color=(0.04, 0.045, 0.05))
+    palette["road_lines"] = create_concrete_material("Mat_RoadLines", base_color=(0.80, 0.65, 0.08), roughness=0.45, bump_strength=0.04)
+    palette["paving"] = create_concrete_material("Mat_Paving", base_color=(0.32, 0.31, 0.29), roughness=0.68, bump_strength=0.08)
+    palette["parking"] = create_asphalt_material("Mat_Parking", base_color=(0.06, 0.065, 0.07), roughness=0.74, bump_strength=0.12)
+    palette["park_lines"] = create_concrete_material("Mat_ParkLines", base_color=(0.75, 0.75, 0.75), roughness=0.40, bump_strength=0.04)
 
     # Architecture
-    palette["wall_ext"] = create_plaster_material("Mat_WallExt", base_color=(0.92, 0.89, 0.82), accent_color=(0.86, 0.82, 0.75), roughness=0.68)
-    palette["wall_trim"] = create_plaster_material("Mat_WallTrim", base_color=(0.78, 0.42, 0.18), accent_color=(0.72, 0.38, 0.15), roughness=0.55)
-    palette["wall_int"] = create_plaster_material("Mat_WallInt", base_color=(0.96, 0.95, 0.92), accent_color=(0.91, 0.90, 0.87), roughness=0.75, bump_strength=0.03)
-    palette["floor_tile"] = create_concrete_material("Mat_FloorTile", base_color=(0.84, 0.82, 0.78), roughness=0.38, bump_strength=0.04)
+    palette["wall_ext"] = create_plaster_material("Mat_WallExt", base_color=(0.48, 0.45, 0.39), accent_color=(0.38, 0.35, 0.30), roughness=0.68)
+    palette["wall_trim"] = create_plaster_material("Mat_WallTrim", base_color=(0.40, 0.16, 0.06), accent_color=(0.30, 0.11, 0.04), roughness=0.55)
+    palette["wall_int"] = create_plaster_material("Mat_WallInt", base_color=(0.60, 0.58, 0.54), accent_color=(0.50, 0.48, 0.44), roughness=0.75, bump_strength=0.03)
+    palette["floor_tile"] = create_concrete_material("Mat_FloorTile", base_color=(0.42, 0.40, 0.37), roughness=0.38, bump_strength=0.04)
     palette["glass"] = create_glass_material("Mat_Glass")
+    palette["car_glass"] = create_car_glass_material("Mat_CarGlass")
 
     # Props & Furniture
-    palette["wood"] = create_wood_material("Mat_Wood", base_color=(0.42, 0.25, 0.12))
-    palette["door"] = create_wood_material("Mat_InteractiveDoor", base_color=(0.46, 0.28, 0.15), roughness=0.42)
-    palette["metal_dark"] = create_metal_material("Mat_MetalDark", base_color=(0.14, 0.14, 0.15), roughness=0.32, metallic=0.88)
-    palette["board"] = create_metal_material("Mat_Board", base_color=(0.06, 0.22, 0.10), roughness=0.35, metallic=0.0)
+    palette["wood"] = create_wood_material("Mat_Wood", base_color=(0.18, 0.10, 0.04))
+    palette["door"] = create_wood_material("Mat_InteractiveDoor", base_color=(0.20, 0.11, 0.05), roughness=0.42)
+    palette["metal_dark"] = create_metal_material("Mat_MetalDark", base_color=(0.04, 0.04, 0.045), roughness=0.32, metallic=0.88)
+    palette["board"] = create_metal_material("Mat_Board", base_color=(0.03, 0.10, 0.05), roughness=0.35, metallic=0.0)
     palette["lamp_glow"] = create_lamp_glow_material("Mat_LampGlow", color=(1.0, 0.94, 0.75), strength=8.0)
 
     # Vegetation
     palette["leaves"] = create_foliage_material("Mat_Leaves")
-    palette["trunk"] = create_wood_material("Mat_Trunk", base_color=(0.30, 0.20, 0.11), roughness=0.85, bump_strength=0.20)
+    palette["trunk"] = create_wood_material("Mat_Trunk", base_color=(0.12, 0.08, 0.04), roughness=0.85, bump_strength=0.20)
 
     return palette
