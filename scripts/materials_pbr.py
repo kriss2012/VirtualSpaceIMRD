@@ -637,9 +637,6 @@ def create_grass_material(name="Mat_Grass", roughness=0.92):
     mat.diffuse_color = (0.045, 0.12, 0.03, 1.0)
     return mat
 
-    mat.diffuse_color = (*base_color[:3], 1.0)
-    return mat
-
 
 def create_lamp_glow_material(name="Mat_LampGlow", color=(1.0, 0.94, 0.75), strength=8.0):
     """Warm street lamp light fixture emitter with physically pleasant glow."""
