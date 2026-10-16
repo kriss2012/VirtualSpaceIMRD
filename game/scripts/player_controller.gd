@@ -23,6 +23,11 @@ func _ready() -> void:
 	floor_snap_length = 0.50
 	floor_max_angle = deg_to_rad(52.0)
 	floor_constant_speed = true
+	
+	# Apply FOV from settings
+	if camera:
+		camera.fov = GameManager.settings.get("fov", 70.0)
+		
 	# Ensure game state is active if not paused
 	if GameManager.current_state != GameManager.GameState.PAUSED:
 		GameManager.change_state(GameManager.GameState.PLAYING)
@@ -34,8 +39,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	# Mouse look
 	if event is InputEventMouseMotion:
-		rotate_y(-event.relative.x * mouse_sensitivity)
-		camera_pitch = clamp(camera_pitch - event.relative.y * mouse_sensitivity, deg_to_rad(-50.0), deg_to_rad(42.0))
+		var sens_mult: float = GameManager.settings.get("mouse_sensitivity", 1.0)
+		var inv_y: float = -1.0 if GameManager.settings.get("invert_y", false) else 1.0
+		var eff_sens: float = mouse_sensitivity * sens_mult
+		rotate_y(-event.relative.x * eff_sens)
+		camera_pitch = clamp(camera_pitch - (event.relative.y * eff_sens * inv_y), deg_to_rad(-50.0), deg_to_rad(42.0))
 		camera_pivot.rotation.x = camera_pitch
 
 	# Interaction Key

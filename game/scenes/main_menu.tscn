@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" path="res://assets/models/campus_terrain.glb" id="2_terrain"]
@@ -34,55 +34,113 @@ ssao_intensity = 2.0
 glow_enabled = true
 glow_intensity = 0.2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.05, 0.09, 0.16, 0.88)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tactical_panel"]
+bg_color = Color(0.04, 0.07, 0.13, 0.92)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.85, 0.72, 0.35, 0.6)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.45)
-shadow_size = 16
+border_color = Color(0.85, 0.72, 0.35, 0.65)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_intel_panel"]
+bg_color = Color(0.03, 0.05, 0.09, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.55, 0.80, 0.5)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
-bg_color = Color(0.10, 0.18, 0.32, 0.85)
-border_width_left = 1
+content_margin_left = 18.0
+content_margin_right = 18.0
+bg_color = Color(0.06, 0.11, 0.20, 0.85)
+border_width_left = 3
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.85, 0.72, 0.35, 0.4)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(0.85, 0.72, 0.35, 0.45)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
-bg_color = Color(0.18, 0.32, 0.58, 0.95)
-border_width_left = 1
+content_margin_left = 22.0
+content_margin_right = 18.0
+bg_color = Color(0.14, 0.24, 0.44, 0.95)
+border_width_left = 5
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(1.0, 0.85, 0.25, 0.9)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(1.0, 0.85, 0.25, 0.95)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(1.0, 0.85, 0.25, 0.2)
+shadow_size = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
-bg_color = Color(0.07, 0.12, 0.22, 0.95)
-border_width_left = 2
+content_margin_left = 20.0
+content_margin_right = 18.0
+bg_color = Color(0.08, 0.15, 0.28, 0.98)
+border_width_left = 4
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.85, 0.72, 0.35, 1.0)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
+content_margin_left = 18.0
+content_margin_right = 18.0
+bg_color = Color(0.04, 0.06, 0.10, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.30, 0.38, 0.3)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal"]
+bg_color = Color(0.03, 0.06, 0.11, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.72, 0.35, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.75)
+shadow_size = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_active"]
+bg_color = Color(0.12, 0.22, 0.40, 0.95)
+border_width_bottom = 3
+border_color = Color(1.0, 0.85, 0.25, 1.0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_inactive"]
+bg_color = Color(0.05, 0.09, 0.16, 0.8)
+border_width_bottom = 1
+border_color = Color(0.3, 0.4, 0.5, 0.5)
 
 [node name="MainMenu" type="Node3D"]
 script = ExtResource("1_menu")
@@ -128,19 +186,71 @@ far = 500.0
 [node name="LetterboxTop" type="ColorRect" parent="MenuUI"]
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 60.0
+offset_bottom = 54.0
 grow_horizontal = 2
-color = Color(0, 0, 0, 1)
+color = Color(0.02, 0.03, 0.05, 1)
+
+[node name="TopBarMargin" type="MarginContainer" parent="MenuUI/LetterboxTop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 14
+
+[node name="TopHBox" type="HBoxContainer" parent="MenuUI/LetterboxTop/TopBarMargin"]
+layout_mode = 2
+
+[node name="TopBrandLabel" type="Label" parent="MenuUI/LetterboxTop/TopBarMargin/TopHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.35, 1)
+theme_override_font_sizes/font_size = 14
+text = "[ RCPET IMRD // CAMPUS WALKTHROUGH ]"
+
+[node name="Spacer" type="Control" parent="MenuUI/LetterboxTop/TopBarMargin/TopHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TopClockLabel" type="Label" parent="MenuUI/LetterboxTop/TopBarMargin/TopHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.75, 0.88, 1)
+theme_override_font_sizes/font_size = 13
+text = "SYSTEM CLOCK: 00:00:00 // STATUS: NORMAL"
 
 [node name="LetterboxBottom" type="ColorRect" parent="MenuUI"]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -60.0
+offset_top = -54.0
 grow_horizontal = 2
 grow_vertical = 0
-color = Color(0, 0, 0, 1)
+color = Color(0.02, 0.03, 0.05, 1)
+
+[node name="BottomBarMargin" type="MarginContainer" parent="MenuUI/LetterboxBottom"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 14
+
+[node name="BottomHBox" type="HBoxContainer" parent="MenuUI/LetterboxBottom/BottomBarMargin"]
+layout_mode = 2
+
+[node name="HintLabel" type="Label" parent="MenuUI/LetterboxBottom/BottomBarMargin/BottomHBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.65, 0.78, 1)
+theme_override_font_sizes/font_size = 13
+text = "[ ESC / SPACE ] SKIP INTRO   •   [ MOUSE HOVER ] TACTICAL INTEL   •   [ ENTER / CLICK ] SELECT ACTION"
 
 [node name="SkipButton" type="Button" parent="MenuUI"]
 anchors_preset = 3
@@ -148,15 +258,15 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -230.0
-offset_top = -50.0
-offset_right = -18.0
+offset_left = -240.0
+offset_top = -48.0
+offset_right = -20.0
 offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
@@ -168,12 +278,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -450.0
+offset_left = -480.0
 offset_top = -140.0
-offset_right = 450.0
+offset_right = 480.0
 offset_bottom = 140.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TitleVBox" type="VBoxContainer" parent="MenuUI/TitleContainer"]
 layout_mode = 1
@@ -223,67 +334,97 @@ theme_override_font_sizes/font_size = 13
 text = "R. C. PATEL EDUCATIONAL TRUST'S INSTITUTE OF MANAGEMENT RESEARCH & DEVELOPMENT, SHIRPUR"
 horizontal_alignment = 1
 
-[node name="MenuCenter" type="CenterContainer" parent="MenuUI"]
+[node name="MenuContainer" type="Control" parent="MenuUI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 60.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuMargin" type="MarginContainer" parent="MenuUI/MenuContainer"]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 20
 
-[node name="PanelContainer" type="PanelContainer" parent="MenuUI/MenuCenter"]
-custom_minimum_size = Vector2(520, 480)
+[node name="MainHBox" type="HBoxContainer" parent="MenuUI/MenuContainer/MenuMargin"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_constants/separation = 40
 
-[node name="VBox" type="VBoxContainer" parent="MenuUI/MenuCenter/PanelContainer"]
+[node name="ActionPanel" type="PanelContainer" parent="MenuUI/MenuContainer/MenuMargin/MainHBox"]
+custom_minimum_size = Vector2(480, 0)
 layout_mode = 2
-theme_override_constants/separation = 14
-alignment = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_tactical_panel")
 
-[node name="MarginTop" type="Control" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
-custom_minimum_size = Vector2(0, 4)
+[node name="ActionMargin" type="MarginContainer" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel"]
 layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
 
-[node name="HeaderBadge" type="Label" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+[node name="VBox" type="VBoxContainer" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="InsigniaHeader" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.72, 0.35, 1)
-theme_override_font_sizes/font_size = 13
-text = "R. C. PATEL EDUCATIONAL TRUST'S"
-horizontal_alignment = 1
-
-[node name="Title" type="Label" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
-theme_override_constants/shadow_offset_x = 2
-theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 30
-text = "IMRD CAMPUS EXPLORER"
-horizontal_alignment = 1
-
-[node name="Subtitle" type="Label" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.70, 0.78, 0.88, 1)
 theme_override_font_sizes/font_size = 12
-text = "Institute of Management Research and Development, Shirpur"
-horizontal_alignment = 1
+text = "RCPET'S IMRD • SHIRPUR"
 
-[node name="HSeparator1" type="HSeparator" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+[node name="MainTitle" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "IMRD CAMPUS"
+
+[node name="SubTitle" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.75, 0.88, 1)
+theme_override_font_sizes/font_size = 12
+text = "// ACADEMIC WALKTHROUGH & SIMULATION"
+
+[node name="HSeparator1" type="HSeparator" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
-custom_minimum_size = Vector2(0, 48)
+[node name="StartButton" type="Button" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "▶ Start Walkthrough"
+alignment = 0
+text = "▶ [ 01 ]  START WALKTHROUGH"
 
-[node name="ControlsButton" type="Button" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
-custom_minimum_size = Vector2(0, 40)
+[node name="ContinueButton" type="Button" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
+theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
+theme_override_colors/font_disabled_color = Color(0.4, 0.45, 0.55, 0.6)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+alignment = 0
+text = "  [ 02 ]  CONTINUE JOURNEY (RESUME)"
+
+[node name="SettingsButton" type="Button" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
 theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
@@ -291,10 +432,11 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "⌨ Controls & Guide"
+alignment = 0
+text = "  [ 03 ]  SETTINGS & DISPLAY"
 
-[node name="ReplayButton" type="Button" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
-custom_minimum_size = Vector2(0, 40)
+[node name="ControlsButton" type="Button" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
 theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
@@ -302,10 +444,11 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "↺ Replay Cinematic Intro"
+alignment = 0
+text = "  [ 04 ]  CONTROLS & DIRECTORY"
 
-[node name="QuitButton" type="Button" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
-custom_minimum_size = Vector2(0, 40)
+[node name="ReplayButton" type="Button" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
 theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
@@ -313,30 +456,560 @@ theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "✕ Exit to Desktop"
+alignment = 0
+text = "  [ 05 ]  REPLAY CINEMATIC INTRO"
 
-[node name="HSeparator2" type="HSeparator" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+[node name="QuitButton" type="Button" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.93, 0.98, 1)
+theme_override_colors/font_hover_color = Color(1, 0.85, 0.25, 1)
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+alignment = 0
+text = "  [ 06 ]  EXIT TO DESKTOP"
+
+[node name="HSeparator2" type="HSeparator" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
 layout_mode = 2
 
-[node name="Footer" type="Label" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
+[node name="FooterLabel" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/ActionPanel/ActionMargin/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.40, 0.48, 0.58, 1)
 theme_override_font_sizes/font_size = 11
-text = "v1.0.0 Standalone 3D Edition • Powered by Godot Engine"
-horizontal_alignment = 1
+text = "v1.0.0 AAA Edition • Godot Engine v4.7.2"
 
-[node name="MarginBottom" type="Control" parent="MenuUI/MenuCenter/PanelContainer/VBox"]
-custom_minimum_size = Vector2(0, 4)
+[node name="IntelPanel" type="PanelContainer" parent="MenuUI/MenuContainer/MenuMargin/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_intel_panel")
+
+[node name="IntelMargin" type="MarginContainer" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="IntelVBox" type="VBoxContainer" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="IntelBadge" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin/IntelVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.35, 1)
+theme_override_font_sizes/font_size = 12
+text = "[ BRIEFING // NEW STUDENT INDUCTION ]"
+
+[node name="IntelTitle" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin/IntelVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "CAMPUS EXPLORATION: ACTIVE"
+
+[node name="HSep1" type="HSeparator" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin/IntelVBox"]
 layout_mode = 2
 
-[node name="FadeOverlay" type="ColorRect" parent="MenuUI"]
+[node name="IntelDesc" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin/IntelVBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.88, 0.95, 1)
+theme_override_font_sizes/font_size = 14
+text = "Begin your academic journey at the main boulevard gates. Explore the ground floor entrance plinth, double doors, classrooms, and meet Prof. Sharma."
+autowrap_mode = 3
+
+[node name="HSep2" type="HSeparator" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin/IntelVBox"]
+layout_mode = 2
+
+[node name="IntelObjective" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin/IntelVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.72, 0.82, 0.92, 1)
+theme_override_font_sizes/font_size = 13
+text = "PRIMARY DIRECTIVE:
+• Report to Faculty Guide Prof. Sharma at the entrance plaza
+• Locate and recover your missing Student ID Card
+• Explore all 3 designated campus sectors"
+autowrap_mode = 3
+
+[node name="HSep3" type="HSeparator" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin/IntelVBox"]
+layout_mode = 2
+
+[node name="IntelStatus" type="Label" parent="MenuUI/MenuContainer/MenuMargin/MainHBox/IntelPanel/IntelMargin/IntelVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.85, 0.45, 1)
+theme_override_font_sizes/font_size = 13
+text = "STATUS: READY TO DEPLOY"
+
+[node name="SettingsModal" type="Control" parent="MenuUI"]
+visible = false
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-color = Color(0, 0, 0, 1)
+
+[node name="SettingsBackdrop" type="ColorRect" parent="MenuUI/SettingsModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.02, 0.04, 0.85)
+
+[node name="Center" type="CenterContainer" parent="MenuUI/SettingsModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="MenuUI/SettingsModal/Center"]
+custom_minimum_size = Vector2(760, 560)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="Margin" type="MarginContainer" parent="MenuUI/SettingsModal/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="VBox" type="VBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ModalHeader" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_font_sizes/font_size = 20
+text = "⚙ // SYSTEM CONFIGURATION & PREFERENCES"
+
+[node name="TabBar" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TabGraphicsBtn" type="Button" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabBar"]
+custom_minimum_size = Vector2(210, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "[ 1. GRAPHICS & DISPLAY ]"
+
+[node name="TabAudioBtn" type="Button" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabBar"]
+custom_minimum_size = Vector2(210, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "[ 2. AUDIO & ACOUSTICS ]"
+
+[node name="TabControlsBtn" type="Button" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabBar"]
+custom_minimum_size = Vector2(210, 36)
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "[ 3. CONTROLS & CAMERA ]"
+
+[node name="ContentSeparator" type="HSeparator" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="TabContent" type="Control" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelGraphics" type="VBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="RowFS" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowFS"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Exclusive Fullscreen Mode"
+
+[node name="CheckFullscreen" type="CheckButton" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowFS"]
+layout_mode = 2
+
+[node name="RowRes" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowRes"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Screen Resolution"
+
+[node name="OptResolution" type="OptionButton" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowRes"]
+custom_minimum_size = Vector2(220, 32)
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "1280 x 720 (HD)"
+popup/item_0/id = 0
+popup/item_1/text = "1600 x 900 (HD+)"
+popup/item_1/id = 1
+popup/item_2/text = "1920 x 1080 (FHD)"
+popup/item_2/id = 2
+
+[node name="RowShadows" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowShadows"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Directional Daylight Shadows"
+
+[node name="CheckShadows" type="CheckButton" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowShadows"]
+layout_mode = 2
+button_pressed = true
+
+[node name="RowSSAO" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowSSAO"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Screen-Space Ambient Occlusion (SSAO)"
+
+[node name="CheckSSAO" type="CheckButton" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowSSAO"]
+layout_mode = 2
+button_pressed = true
+
+[node name="RowGlow" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowGlow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Atmospheric Glow & Bloom FX"
+
+[node name="CheckGlow" type="CheckButton" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowGlow"]
+layout_mode = 2
+button_pressed = true
+
+[node name="RowVSync" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowVSync"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vertical Synchronization (V-Sync)"
+
+[node name="CheckVSync" type="CheckButton" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelGraphics/RowVSync"]
+layout_mode = 2
+button_pressed = true
+
+[node name="PanelAudio" type="VBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="RowMaster" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowMaster"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+text = "Master Volume"
+
+[node name="SliderMaster" type="HSlider" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowMaster"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="LblMasterVal" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowMaster"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="RowMusic" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowMusic"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+text = "Music & Ambient Wind"
+
+[node name="SliderMusic" type="HSlider" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowMusic"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="LblMusicVal" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowMusic"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "80%"
+horizontal_alignment = 2
+
+[node name="RowSFX" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowSFX"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+text = "Sound Effects & Footsteps"
+
+[node name="SliderSFX" type="HSlider" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowSFX"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.05
+value = 0.9
+
+[node name="LblSFXVal" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowSFX"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "90%"
+horizontal_alignment = 2
+
+[node name="RowUI" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowUI"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tactical Menu Sounds & Clicks"
+
+[node name="CheckUISound" type="CheckButton" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelAudio/RowUI"]
+layout_mode = 2
+button_pressed = true
+
+[node name="PanelControls" type="VBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="RowSens" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls/RowSens"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+text = "Mouse Look Sensitivity"
+
+[node name="SliderSens" type="HSlider" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls/RowSens"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.4
+max_value = 2.5
+step = 0.1
+value = 1.0
+
+[node name="LblSensVal" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls/RowSens"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "1.0x"
+horizontal_alignment = 2
+
+[node name="RowInv" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls/RowInv"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Invert Vertical Look (Pitch)"
+
+[node name="CheckInvertY" type="CheckButton" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls/RowInv"]
+layout_mode = 2
+
+[node name="RowFOV" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls/RowFOV"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+text = "Camera Field of View (FOV)"
+
+[node name="SliderFOV" type="HSlider" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls/RowFOV"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 60.0
+max_value = 95.0
+step = 1.0
+value = 70.0
+
+[node name="LblFOVVal" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls/RowFOV"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "70°"
+horizontal_alignment = 2
+
+[node name="KeymapLabel" type="Label" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/TabContent/PanelControls"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 12
+text = "• WASD: Movement | Shift: Sprint | Space: Jump & Stair Steps | E: Interact | Esc: Pause"
+
+[node name="ActionRow" type="HBoxContainer" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 2
+
+[node name="BtnSettingsReset" type="Button" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/ActionRow"]
+custom_minimum_size = Vector2(160, 38)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "↺ Reset Defaults"
+
+[node name="BtnSettingsApply" type="Button" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/ActionRow"]
+custom_minimum_size = Vector2(170, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "✔ Apply & Save"
+
+[node name="BtnSettingsClose" type="Button" parent="MenuUI/SettingsModal/Center/Panel/Margin/VBox/ActionRow"]
+custom_minimum_size = Vector2(150, 38)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "✕ Back to Menu"
+
+[node name="ControlsModal" type="Control" parent="MenuUI"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlsBackdrop" type="ColorRect" parent="MenuUI/ControlsModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.02, 0.04, 0.85)
+
+[node name="Center" type="CenterContainer" parent="MenuUI/ControlsModal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="MenuUI/ControlsModal/Center"]
+custom_minimum_size = Vector2(780, 540)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal")
+
+[node name="Margin" type="MarginContainer" parent="MenuUI/ControlsModal/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="VBox" type="VBoxContainer" parent="MenuUI/ControlsModal/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Header" type="Label" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_font_sizes/font_size = 20
+text = "📖 // TACTICAL CONTROLS & CAMPUS DIRECTORY"
+
+[node name="HSeparator" type="HSeparator" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ContentVBox" type="VBoxContainer" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="Sec1" type="Label" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox/Scroll/ContentVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.35, 1)
+theme_override_font_sizes/font_size = 14
+text = "[ 01 // KEYBOARD & MOUSE CONTROLS ]"
+
+[node name="KeysText" type="Label" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox/Scroll/ContentVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.94, 0.98, 1)
+theme_override_font_sizes/font_size = 13
+text = "• W, A, S, D / Arrow Keys : 3D Player Movement
+• Left Shift (Hold) : Sprint Boost (1.8x movement velocity)
+• Spacebar : Jump & Traverse Architectural Steps
+• Mouse Movement : 360-Degree Free Camera Look
+• E : Interact with Faculty Guide (Prof. Sharma), Pickup ID Card, Open/Close Doors
+• Escape / Q : Pause Walkthrough & Access In-Game Operations Menu"
+
+[node name="Sec2" type="Label" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox/Scroll/ContentVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.72, 0.35, 1)
+theme_override_font_sizes/font_size = 14
+text = "[ 02 // CAMPUS DIRECTORY & LANDMARKS ]"
+
+[node name="DirText" type="Label" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox/Scroll/ContentVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.88, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+text = "• Main Entrance Gate : Security Cabin & Parking Zone (Vehicles 1 to 6)
+• Main Academic Plinth : High-pillar portico and dual entrance doors
+• Ground Floor Lobby : Prof. Sharma's Orientation Station & Lost ID Card
+• Classroom 101 & Computer Lab : Ground floor west wing
+• Grand Central Staircase : Wide ramp and steps leading to Floor 2
+• Second Floor Classroom 201 : Advanced lecture room
+• Seminar Hall : Grand 150-seat conference theater on Floor 2
+• Central Library : Reading halls, book stacks & study carrels"
+
+[node name="ActionRow" type="HBoxContainer" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox"]
+layout_mode = 2
+alignment = 2
+
+[node name="BtnControlsClose" type="Button" parent="MenuUI/ControlsModal/Center/Panel/Margin/VBox/ActionRow"]
+custom_minimum_size = Vector2(180, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.25, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "✕ Back to Menu"
 
 [node name="ControlsDialog" type="AcceptDialog" parent="MenuUI"]
 title = "Campus Explorer — Controls Reference"
@@ -349,3 +1022,12 @@ dialog_text = "• Movement: W, A, S, D or Arrow Keys
 • Pause / Menu: Escape or Q
 
 Explore the campus entrance, collect your student ID card, and visit the classrooms and grand staircase!"
+
+[node name="FadeOverlay" type="ColorRect" parent="MenuUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
