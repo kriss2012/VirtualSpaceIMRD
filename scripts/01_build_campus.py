@@ -733,16 +733,16 @@ def render_geometry_previews(out_dir=OUTPUT_DIR, res=(1280, 720)):
         shoot("geometry_preview_overview.png", bpy.data.objects[cfg.CAMERA_OVERVIEW])
         shoot("geometry_preview_facade.png", temp_cam("_tmp_facade", (-22, 34, 6), (84, 0, -145), lens=24))
         plan = temp_cam("_tmp_plan", (0, 0, 40), (0, 0, 0), ortho=46)
-        hidden = []
         for thr, fname in ((cfg.G_CEILING_Z - 0.01, "geometry_preview_plan_ground.png"),
                            (cfg.ROOF_BOTTOM_Z - 0.01, "geometry_preview_plan_upper.png")):
+            hidden = []
             for o in bpy.data.objects:
                 if o.type == 'MESH' and not o.name.startswith("_tmp") and _obj_min_z(o) >= thr and not o.hide_render:
                     o.hide_render = True
                     hidden.append(o)
             shoot(fname, plan)
-        for o in hidden:
-            o.hide_render = False
+            for o in hidden:
+                o.hide_render = False
     finally:
         for o in tmp:
             cam = o.data
