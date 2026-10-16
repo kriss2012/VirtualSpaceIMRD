@@ -151,20 +151,32 @@ func _on_dialogue_ended() -> void:
 
 
 func _on_resume_pressed() -> void:
+	GameManager.play_ui_sound("click")
 	GameManager.change_state(GameManager.GameState.PLAYING)
 
 
 func _on_save_pressed() -> void:
+	GameManager.play_ui_sound("click")
 	SaveManager.save_game()
 
 
 func _on_load_pressed() -> void:
+	GameManager.play_ui_sound("click")
 	SaveManager.load_game()
 
 
+func _on_settings_pressed() -> void:
+	GameManager.play_ui_sound("click")
+	var settings_dialog = find_child("PauseSettingsModal", true, false)
+	if settings_dialog:
+		settings_dialog.visible = not settings_dialog.visible
+
+
 func _on_menu_pressed() -> void:
+	GameManager.play_ui_sound("click")
 	GameManager.return_to_main_menu()
 
 
 func _on_quit_pressed() -> void:
+	GameManager.play_ui_sound("click")
 	get_tree().quit()
