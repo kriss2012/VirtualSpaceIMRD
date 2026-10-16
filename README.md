@@ -8,6 +8,7 @@
   <strong>A browser-based interactive 3D campus experience</strong><br>
   built to transform a traditional institute website into an immersive,
   game-like virtual campus walkthrough.
+  
 </p>
 
 <br>
