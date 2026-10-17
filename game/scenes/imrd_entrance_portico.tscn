@@ -36,7 +36,7 @@ size = Vector3(0.85, 4.20, 0.55)
 
 [sub_resource type="BoxMesh" id="Mesh_SignFascia"]
 material = SubResource("Mat_Signboard")
-size = Vector3(15.2, 1.35, 0.50)
+size = Vector3(11.95, 1.35, 0.45)
 
 [sub_resource type="BoxMesh" id="Mesh_VerandaCeiling"]
 material = SubResource("Mat_WhitePlaster")
@@ -89,19 +89,19 @@ mesh = SubResource("Mesh_VerandaCeiling")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.3)
 
 [node name="Pillar1" type="MeshInstance3D" parent="Pillars"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 2.22, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 2.22, 0)
 mesh = SubResource("Mesh_Pillar")
 
 [node name="Pillar2" type="MeshInstance3D" parent="Pillars"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, 2.22, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 2.22, 0)
 mesh = SubResource("Mesh_Pillar")
 
 [node name="Pillar3" type="MeshInstance3D" parent="Pillars"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, 2.22, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85, 2.22, 0)
 mesh = SubResource("Mesh_Pillar")
 
 [node name="Pillar4" type="MeshInstance3D" parent="Pillars"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 2.22, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 2.22, 0)
 mesh = SubResource("Mesh_Pillar")
 
 [node name="SignboardFascia" type="Node3D" parent="."]
