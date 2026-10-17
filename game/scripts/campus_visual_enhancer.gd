@@ -7,6 +7,7 @@ extends Node
 func _ready() -> void:
 	enhance_campus_environment()
 	apply_all_campus_materials()
+	calibrate_stair_railings()
 	print("[VisualEnhancer] Realistic PBR materials & lighting successfully calibrated.")
 
 
@@ -264,3 +265,43 @@ func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 	elif "backpack" in name_lower:
 		return lib["Mat_Backpack"]
 	return null
+
+
+func calibrate_stair_railings(target_root: Node = null) -> void:
+	var root = target_root if target_root != null else (get_parent() if get_parent() else self)
+	
+	# 1. Hide the old glitchy Blender stair rails that poke past the landing into the walkway
+	var r_l = root.find_child("Rail_Stair_L", true, false)
+	if r_l is Node3D:
+		r_l.visible = false
+	var r_r = root.find_child("Rail_Stair_R", true, false)
+	if r_r is Node3D:
+		r_r.visible = false
+		
+	# 2. Calibrate SecondFloorEnvironment void guards to extend all the way to Z = -1.10
+	var g_l = root.find_child("StairVoidGuardLeft", true, false)
+	if g_l is Node3D:
+		g_l.position = Vector3(3.90, 4.85, -3.55)
+		var h = g_l.find_child("Handrail", true, false)
+		if h and h.mesh and h.mesh is BoxMesh:
+			h.mesh.size = Vector3(0.06, 0.06, 4.90)
+		var gl = g_l.find_child("Glass", true, false)
+		if gl and gl.mesh and gl.mesh is BoxMesh:
+			gl.mesh.size = Vector3(0.02, 0.90, 4.80)
+		var col = g_l.find_child("CollisionShape3D", true, false)
+		if col and col.shape and col.shape is BoxShape3D:
+			col.shape.size = Vector3(0.18, 1.20, 4.90)
+			
+	var g_r = root.find_child("StairVoidGuardRight", true, false)
+	if g_r is Node3D:
+		g_r.position = Vector3(6.10, 4.85, -3.55)
+		var h = g_r.find_child("Handrail", true, false)
+		if h and h.mesh and h.mesh is BoxMesh:
+			h.mesh.size = Vector3(0.06, 0.06, 4.90)
+		var gl = g_r.find_child("Glass", true, false)
+		if gl and gl.mesh and gl.mesh is BoxMesh:
+			gl.mesh.size = Vector3(0.02, 0.90, 4.80)
+		var col = g_r.find_child("CollisionShape3D", true, false)
+		if col and col.shape and col.shape is BoxShape3D:
+			col.shape.size = Vector3(0.18, 1.20, 4.90)
+
