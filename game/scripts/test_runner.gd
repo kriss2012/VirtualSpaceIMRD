@@ -310,9 +310,14 @@ func test_stair_climb_and_second_floor() -> void:
 	assert_true(has_bottom_pt, "Stair ramp connects seamlessly to ground plinth (Y=0.34 at Z=-5.85)")
 	assert_true(has_top_pt, "Stair ramp connects seamlessly to second floor landing (Y=4.30 at Z=-1.10)")
 	
-	# Check second floor door accessibility
+	# Check second floor door accessibility & alignment
 	var c201 = campus.find_child("Classroom201Door", true, false)
 	assert_true(c201 != null and c201.position.y >= 4.0, "Classroom 201 door accessible on second floor (Y >= 4.0)")
+	assert_true(c201 != null and c201.transform.basis.x.z < -0.9, "Classroom 201 door oriented along -Z to seal doorway opening")
+	assert_true(c201 != null and not c201.is_open, "Classroom 201 door closed by default with active player collision")
+	var f1_wall_f = campus.find_child("Floor1WestWall_Front", true, false)
+	var f1_wall_r = campus.find_child("Floor1WestWall_Rear", true, false)
+	assert_true(f1_wall_f != null and f1_wall_r != null, "Second floor Classroom 201 wall colliders present preventing wall pass-through")
 	var seminar = campus.find_child("SeminarHallDoor", true, false)
 	assert_true(seminar != null and seminar.position.y >= 4.0, "Seminar Hall door accessible on second floor (Y >= 4.0)")
 	assert_true(abs(seminar.position.z) < 0.1 and seminar.position.x > 12.0, "Seminar Hall door relocated to open hallway partition wall (Z ~ 0, X > 12)")

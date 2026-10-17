@@ -115,6 +115,9 @@ size = Vector3(0.3, 3.96, 2.45)
 [sub_resource type="BoxShape3D" id="BoxShape3D_class_wall_r"]
 size = Vector3(0.3, 3.96, 4.95)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_door_lintel"]
+size = Vector3(0.3, 1.76, 1.10)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_security_cabin"]
 size = Vector3(2.8, 3.2, 2.8)
 
@@ -378,6 +381,38 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1EastWall"]
 shape = SubResource("BoxShape3D_wall_east_solid")
 
+[node name="Floor1WestWall_Front" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6.28, -7.275)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1WestWall_Front"]
+shape = SubResource("BoxShape3D_class_wall_f")
+
+[node name="Floor1WestWall_Rear" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6.28, -2.475)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1WestWall_Rear"]
+shape = SubResource("BoxShape3D_class_wall_r")
+
+[node name="Floor1WestWall_Lintel" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 7.38, -5.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1WestWall_Lintel"]
+shape = SubResource("BoxShape3D_door_lintel")
+
+[node name="ClassroomWestWall_Lintel" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.42, -5.5)
+collision_layer = 1
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/ClassroomWestWall_Lintel"]
+shape = SubResource("BoxShape3D_door_lintel")
+
 [node name="SecurityCabin" type="StaticBody3D" parent="Collisions/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 1.6, -73.5)
 collision_layer = 1
@@ -474,11 +509,11 @@ shape = SubResource("BoxShape3D_car")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, -8.5)
 
 [node name="Classroom101Door" parent="Doors" instance=ExtResource("10_cdoor")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8.0, 0.34, -4.95)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -8.0, 0.34, -4.95)
 room_name = "Classroom 101"
 
 [node name="ComputerLabDoor" parent="Doors" instance=ExtResource("10_cdoor")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 8.0, 0.34, -6.05)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 8.0, 0.34, -6.05)
 room_name = "Computer Lab"
 
 [node name="CentralLibraryDoor" parent="Doors" instance=ExtResource("10_cdoor")]
@@ -486,7 +521,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.55, 0.34, 0.0)
 room_name = "Central Library"
 
 [node name="Classroom201Door" parent="Doors" instance=ExtResource("10_cdoor")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8.0, 4.30, -4.95)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -8.0, 4.30, -4.95)
 room_name = "Classroom 201"
 
 [node name="SeminarHallDoor" parent="Doors" instance=ExtResource("10_cdoor")]

@@ -8,6 +8,7 @@ func _ready() -> void:
 	enhance_campus_environment()
 	apply_all_campus_materials()
 	calibrate_stair_railings()
+	calibrate_classroom_doors()
 	print("[VisualEnhancer] Realistic PBR materials & lighting successfully calibrated.")
 
 
@@ -304,4 +305,66 @@ func calibrate_stair_railings(target_root: Node = null) -> void:
 		var col = g_r.find_child("CollisionShape3D", true, false)
 		if col and col.shape and col.shape is BoxShape3D:
 			col.shape.size = Vector3(0.18, 1.20, 4.90)
+
+
+func calibrate_classroom_doors(target_root: Node = null) -> void:
+	var root = target_root if target_root != null else (get_parent() if get_parent() else self)
+	var walls_node = root.find_child("Walls", true, false)
+	
+	# 1. Calibrate Classroom 201 Door (Second Floor)
+	var c201 = root.find_child("Classroom201Door", true, false)
+	if c201 is Node3D:
+		c201.transform = Transform3D(Vector3(0, 0, -1), Vector3(0, 1, 0), Vector3(1, 0, 0), Vector3(-8.0, 4.30, -4.95))
+		if "is_open" in c201:
+			c201.is_open = false
+		if c201.has_method("apply_rotation"):
+			c201.apply_rotation(0.0)
+		if c201.has_method("update_collision"):
+			c201.update_collision()
+			
+	# 2. Calibrate Classroom 101 Door (Ground Floor)
+	var c101 = root.find_child("Classroom101Door", true, false)
+	if c101 is Node3D:
+		c101.transform = Transform3D(Vector3(0, 0, -1), Vector3(0, 1, 0), Vector3(1, 0, 0), Vector3(-8.0, 0.34, -4.95))
+		if "is_open" in c101:
+			c101.is_open = false
+		if c101.has_method("apply_rotation"):
+			c101.apply_rotation(0.0)
+		if c101.has_method("update_collision"):
+			c101.update_collision()
+			
+	# 3. Calibrate Computer Lab Door (Ground Floor)
+	var clab = root.find_child("ComputerLabDoor", true, false)
+	if clab is Node3D:
+		clab.transform = Transform3D(Vector3(0, 0, 1), Vector3(0, 1, 0), Vector3(-1, 0, 0), Vector3(8.0, 0.34, -6.05))
+		if "is_open" in clab:
+			clab.is_open = false
+		if clab.has_method("apply_rotation"):
+			clab.apply_rotation(0.0)
+		if clab.has_method("update_collision"):
+			clab.update_collision()
+
+	# 4. Ensure Floor 1 West Wall (Classroom 201) collision bodies exist so player cannot pass through walls
+	if walls_node:
+		_ensure_wall_collision(walls_node, "Floor1WestWall_Front", Vector3(-8.0, 6.28, -7.275), Vector3(0.3, 3.96, 2.45))
+		_ensure_wall_collision(walls_node, "Floor1WestWall_Rear", Vector3(-8.0, 6.28, -2.475), Vector3(0.3, 3.96, 4.95))
+		_ensure_wall_collision(walls_node, "Floor1WestWall_Lintel", Vector3(-8.0, 7.38, -5.50), Vector3(0.3, 1.76, 1.10))
+		_ensure_wall_collision(walls_node, "ClassroomWestWall_Lintel", Vector3(-8.0, 3.42, -5.50), Vector3(0.3, 1.76, 1.10))
+
+
+func _ensure_wall_collision(parent: Node, node_name: String, pos: Vector3, size: Vector3) -> void:
+	var existing = parent.find_child(node_name, true, false)
+	if existing == null:
+		var body = StaticBody3D.new()
+		body.name = node_name
+		body.position = pos
+		body.collision_layer = 1
+		body.collision_mask = 2
+		var col = CollisionShape3D.new()
+		var box = BoxShape3D.new()
+		box.size = size
+		col.shape = box
+		body.add_child(col)
+		parent.add_child(body)
+
 
