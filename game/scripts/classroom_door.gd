@@ -14,6 +14,8 @@ var target_angle: float = 0.0
 
 
 func _ready() -> void:
+	if not sign_label:
+		sign_label = get_node_or_null("Signboard/Label3D")
 	if sign_label:
 		sign_label.text = room_name
 	target_angle = deg_to_rad(open_angle) if is_open else 0.0
@@ -29,6 +31,8 @@ func _process(delta: float) -> void:
 
 
 func apply_rotation(ang: float) -> void:
+	if not hinge_pivot:
+		hinge_pivot = get_node_or_null("HingePivot")
 	if hinge_pivot:
 		hinge_pivot.rotation.y = ang
 
@@ -46,8 +50,10 @@ func interact() -> void:
 
 
 func update_collision() -> void:
+	if not collision_shape:
+		collision_shape = get_node_or_null("HingePivot/DoorBody/CollisionShape3D")
 	if collision_shape:
-		collision_shape.disabled = is_open
+		collision_shape.set_deferred("disabled", is_open)
 
 
 func _on_interaction_area_body_entered(body: Node3D) -> void:

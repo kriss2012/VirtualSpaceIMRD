@@ -94,8 +94,14 @@ size = Vector3(1.9, 1.5, 4.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_part_west"]
 size = Vector3(17, 3.96, 0.3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_part_east"]
-size = Vector3(13.5, 3.96, 0.3)
+[sub_resource type="BoxShape3D" id="BoxShape3D_part_east_a"]
+size = Vector3(4.90, 3.96, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_part_east_b"]
+size = Vector3(6.30, 3.96, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_east_solid"]
+size = Vector3(0.3, 3.96, 8.25)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_part_main"]
 size = Vector3(17.25, 3.96, 0.3)
@@ -147,7 +153,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 4.225)
 
 [node name="SeminarHall" parent="VisualEnvironment" instance=ExtResource("9_seminar")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.25, 4.30, 4.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.25, 4.30, -4.25)
 
 [node name="SecondFloorEnvironment" parent="VisualEnvironment" instance=ExtResource("17_floor2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -348,45 +354,29 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1PartitionWest"]
 shape = SubResource("BoxShape3D_part_west")
 
-[node name="Floor1PartitionEast" type="StaticBody3D" parent="Collisions/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.75, 6.3, 0)
+[node name="Floor1PartitionEast_A" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.45, 6.3, 0)
 collision_layer = 1
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1PartitionEast"]
-shape = SubResource("BoxShape3D_part_east")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1PartitionEast_A"]
+shape = SubResource("BoxShape3D_part_east_a")
 
-[node name="Floor1WestWall_Front" type="StaticBody3D" parent="Collisions/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6.3, -7.275)
+[node name="Floor1PartitionEast_B" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.25, 6.3, 0)
 collision_layer = 1
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1WestWall_Front"]
-shape = SubResource("BoxShape3D_class_wall_f")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1PartitionEast_B"]
+shape = SubResource("BoxShape3D_part_east_b")
 
-[node name="Floor1WestWall_Rear" type="StaticBody3D" parent="Collisions/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6.3, -2.475)
+[node name="Floor1EastWall" type="StaticBody3D" parent="Collisions/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.0, 6.3, -4.225)
 collision_layer = 1
 collision_mask = 2
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1WestWall_Rear"]
-shape = SubResource("BoxShape3D_class_wall_r")
-
-[node name="Floor1EastWall_Front" type="StaticBody3D" parent="Collisions/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6.3, -7.275)
-collision_layer = 1
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1EastWall_Front"]
-shape = SubResource("BoxShape3D_class_wall_f")
-
-[node name="Floor1EastWall_Rear" type="StaticBody3D" parent="Collisions/Walls"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 6.3, -2.475)
-collision_layer = 1
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1EastWall_Rear"]
-shape = SubResource("BoxShape3D_class_wall_r")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/Walls/Floor1EastWall"]
+shape = SubResource("BoxShape3D_wall_east_solid")
 
 [node name="SecurityCabin" type="StaticBody3D" parent="Collisions/Walls"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 1.6, -73.5)
@@ -500,7 +490,7 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -8.0, 4.30, -4.95)
 room_name = "Classroom 201"
 
 [node name="SeminarHallDoor" parent="Doors" instance=ExtResource("10_cdoor")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 8.0, 4.30, -6.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.95, 4.30, 0)
 room_name = "Seminar Hall"
 
 [node name="NPCs" type="Node3D" parent="."]

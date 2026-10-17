@@ -45,7 +45,7 @@ height = 0.08
 size = Vector3(0.97, 2.12, 0.08)
 
 [sub_resource type="BoxShape3D" id="Shape_InteractArea"]
-size = Vector3(1.40, 2.10, 1.50)
+size = Vector3(1.80, 2.20, 2.60)
 
 [node name="ClassroomDoor" type="Node3D"]
 script = ExtResource("1_cdoor")
@@ -99,7 +99,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.05, 0.60)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.05, 0)
 shape = SubResource("Shape_InteractArea")
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]

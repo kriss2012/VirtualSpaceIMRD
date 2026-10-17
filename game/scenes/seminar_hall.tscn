@@ -36,15 +36,15 @@ roughness = 0.90
 
 [sub_resource type="BoxMesh" id="Mesh_StagePlinth"]
 material = SubResource("Mat_StageWood")
-size = Vector3(12.0, 0.45, 5.0)
+size = Vector3(8.6, 0.35, 2.4)
 
 [sub_resource type="BoxMesh" id="Mesh_AcousticBackdrop"]
 material = SubResource("Mat_AcousticWood")
-size = Vector3(12.0, 4.2, 0.15)
+size = Vector3(8.6, 3.2, 0.12)
 
 [sub_resource type="BoxMesh" id="Mesh_AcousticSlat"]
 material = SubResource("Mat_AcousticDarkSlat")
-size = Vector3(12.0, 0.05, 0.04)
+size = Vector3(8.6, 0.05, 0.04)
 
 [sub_resource type="BoxMesh" id="Mesh_PodiumBody"]
 material = SubResource("Mat_PodiumSilver")
@@ -93,39 +93,35 @@ size = Vector3(0.55, 0.55, 0.10)
 [node name="SeminarHall" type="Node3D"]
 
 [node name="Stage" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.225, -4.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.175, -2.6)
 
 [node name="StageFloor" type="MeshInstance3D" parent="Stage"]
 mesh = SubResource("Mesh_StagePlinth")
 
 [node name="AcousticWall" type="MeshInstance3D" parent="Stage"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.10, -2.40)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60, -1.15)
 mesh = SubResource("Mesh_AcousticBackdrop")
 
 [node name="Slat1" type="MeshInstance3D" parent="Stage/AcousticWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0, 0.07)
 mesh = SubResource("Mesh_AcousticSlat")
 
 [node name="Slat2" type="MeshInstance3D" parent="Stage/AcousticWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0.07)
 mesh = SubResource("Mesh_AcousticSlat")
 
 [node name="Slat3" type="MeshInstance3D" parent="Stage/AcousticWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.07)
 mesh = SubResource("Mesh_AcousticSlat")
 
 [node name="Slat4" type="MeshInstance3D" parent="Stage/AcousticWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0.08)
-mesh = SubResource("Mesh_AcousticSlat")
-
-[node name="Slat5" type="MeshInstance3D" parent="Stage/AcousticWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0.07)
 mesh = SubResource("Mesh_AcousticSlat")
 
 [node name="StageProps" type="Node3D" parent="Stage"]
 
 [node name="Podium" type="Node3D" parent="Stage/StageProps"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.225, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0.175, 0.4)
 
 [node name="Body" type="MeshInstance3D" parent="Stage/StageProps/Podium"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
@@ -144,7 +140,7 @@ outline_size = 4
 modulate = Color(0.95, 0.95, 0.95, 1)
 
 [node name="SamaiLamp" type="Node3D" parent="Stage/StageProps"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 0.225, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, 0.175, -0.4)
 
 [node name="Base" type="MeshInstance3D" parent="Stage/StageProps/SamaiLamp"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
@@ -159,7 +155,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 mesh = SubResource("Mesh_SamaiBowl")
 
 [node name="SaraswatiPedestal" type="Node3D" parent="Stage/StageProps"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 0.225, -1.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0.175, -0.6)
 
 [node name="Pedestal" type="MeshInstance3D" parent="Stage/StageProps/SaraswatiPedestal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
@@ -170,81 +166,165 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
 mesh = SubResource("Mesh_SaraswatiIdol")
 
 [node name="AuditoriumSeats" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 0)
 
 [node name="Row1" type="Node3D" parent="AuditoriumSeats"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6)
 
 [node name="Chair1" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0.25, 0)
 mesh = SubResource("Mesh_ChairSeat")
 
 [node name="Chair1Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.55, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0.55, 0.25)
 mesh = SubResource("Mesh_ChairBack")
 
 [node name="Chair2" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.25, 0)
 mesh = SubResource("Mesh_ChairSeat")
 
 [node name="Chair2Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.55, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.55, 0.25)
 mesh = SubResource("Mesh_ChairBack")
 
 [node name="Chair3" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.25, 0)
 mesh = SubResource("Mesh_ChairSeat")
 
 [node name="Chair3Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.55, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.55, 0.25)
 mesh = SubResource("Mesh_ChairBack")
 
 [node name="Chair4" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.25, 0)
 mesh = SubResource("Mesh_ChairSeat")
 
 [node name="Chair4Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.55, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair5" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair5Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair6" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair6Back" type="MeshInstance3D" parent="AuditoriumSeats/Row1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.55, 0.25)
 mesh = SubResource("Mesh_ChairBack")
 
 [node name="Row2" type="Node3D" parent="AuditoriumSeats"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 1.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0.7)
 
 [node name="Chair1" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0.25, 0)
 mesh = SubResource("Mesh_ChairSeat")
 
 [node name="Chair1Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0.55, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0.55, 0.25)
 mesh = SubResource("Mesh_ChairBack")
 
 [node name="Chair2" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.25, 0)
 mesh = SubResource("Mesh_ChairSeat")
 
 [node name="Chair2Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.55, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.55, 0.25)
 mesh = SubResource("Mesh_ChairBack")
 
 [node name="Chair3" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.25, 0)
 mesh = SubResource("Mesh_ChairSeat")
 
 [node name="Chair3Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.55, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.55, 0.25)
 mesh = SubResource("Mesh_ChairBack")
 
 [node name="Chair4" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.25, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.25, 0)
 mesh = SubResource("Mesh_ChairSeat")
 
 [node name="Chair4Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.55, 0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair5" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair5Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair6" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair6Back" type="MeshInstance3D" parent="AuditoriumSeats/Row2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Row3" type="Node3D" parent="AuditoriumSeats"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.24, 2.0)
+
+[node name="Chair1" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair1Back" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair2" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair2Back" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair3" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair3Back" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair4" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair4Back" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair5" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair5Back" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.55, 0.25)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="Chair6" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.25, 0)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="Chair6Back" type="MeshInstance3D" parent="AuditoriumSeats/Row3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0, 0.55, 0.25)
 mesh = SubResource("Mesh_ChairBack")
 
 [node name="HallSign" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.8, -4.0)
-pixel_size = 0.003
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 3.2, -3.7)
+double_sided = false
+pixel_size = 0.0028
 text = "DR. A. P. J. ABDUL KALAM SEMINAR HALL\nSES • IMRD SHIRPUR"
 font_size = 28
 outline_size = 6

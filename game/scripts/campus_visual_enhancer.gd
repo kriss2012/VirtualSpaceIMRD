@@ -119,13 +119,41 @@ func build_material_library() -> Dictionary:
 	lamp.emission_energy_multiplier = 3.0
 	lib["Mat_LampGlow"] = lamp
 	
-	# Cars (Vibrant metallic colors)
-	lib["Mat_Car_0"] = create_mat(Color(0.80, 0.10, 0.10), 0.20, 0.65) # Crimson red
-	lib["Mat_Car_1"] = create_mat(Color(0.10, 0.28, 0.78), 0.20, 0.65) # Royal blue
-	lib["Mat_Car_2"] = create_mat(Color(0.75, 0.75, 0.78), 0.25, 0.80) # Silver metallic
-	lib["Mat_Car_3"] = create_mat(Color(0.92, 0.92, 0.92), 0.20, 0.30) # Pearl white
-	lib["Mat_Car_4"] = create_mat(Color(0.12, 0.50, 0.25), 0.20, 0.65) # Emerald green
-	lib["Mat_Car_5"] = create_mat(Color(0.85, 0.65, 0.15), 0.20, 0.70) # Golden bronze
+	# Cars & Bikes (Authentic reference models: Tata Nano EV, Corvette C8 Z06, Tata Punch.ev, Joy e-bike Beast, Aurore EV)
+	lib["Mat_Car_NanoWhite"] = create_mat(Color(0.95, 0.95, 0.95), 0.18, 0.35) # Pure gloss white
+	lib["Mat_Car_CorvetteRed"] = create_mat(Color(0.86, 0.07, 0.09), 0.15, 0.75) # Torch Red supercar metallic
+	lib["Mat_Car_PunchLime"] = create_mat(Color(0.72, 0.82, 0.15), 0.20, 0.65) # Citron / Lime-Yellow EV SUV
+	lib["Mat_Bike_BeastGreen"] = create_mat(Color(0.18, 0.82, 0.15), 0.18, 0.70) # Joy e-bike Beast lime green
+	lib["Mat_Bike_AuroreBlue"] = create_mat(Color(0.12, 0.45, 0.78), 0.18, 0.75) # Metallic Electric Blue sports bike
+	lib["Mat_Car_SedanSilver"] = create_mat(Color(0.84, 0.86, 0.88), 0.22, 0.85) # Metallic silver executive sedan
+	lib["Mat_PlasticBlack"] = create_mat(Color(0.04, 0.04, 0.045), 0.65, 0.0) # Matte/satin black claddings
+	lib["Mat_CarbonFiber"] = create_mat(Color(0.05, 0.05, 0.055), 0.35, 0.3) # Dark woven carbon fiber
+	lib["Mat_EV_Plate"] = create_mat(Color(0.08, 0.65, 0.22), 0.35, 0.0) # Electric vehicle green number plate
+	lib["Mat_TireRubber"] = create_mat(Color(0.03, 0.03, 0.035), 0.85, 0.0) # Matte tire rubber
+	lib["Mat_AlloySilver"] = create_mat(Color(0.82, 0.84, 0.86), 0.25, 0.88) # Machined alloy silver wheels
+	
+	# Emissive Vehicle Lights
+	var led_headlight = StandardMaterial3D.new()
+	led_headlight.albedo_color = Color(1.0, 1.0, 1.0)
+	led_headlight.emission_enabled = true
+	led_headlight.emission = Color(0.95, 0.98, 1.0)
+	led_headlight.emission_energy_multiplier = 2.5
+	lib["Mat_Headlight_LED"] = led_headlight
+	
+	var led_taillight = StandardMaterial3D.new()
+	led_taillight.albedo_color = Color(0.90, 0.05, 0.05)
+	led_taillight.emission_enabled = true
+	led_taillight.emission = Color(0.95, 0.05, 0.05)
+	led_taillight.emission_energy_multiplier = 2.0
+	lib["Mat_Taillight_LED"] = led_taillight
+	
+	# Legacy car color fallbacks
+	lib["Mat_Car_0"] = lib["Mat_Car_NanoWhite"]
+	lib["Mat_Car_1"] = lib["Mat_Car_CorvetteRed"]
+	lib["Mat_Car_2"] = lib["Mat_Car_PunchLime"]
+	lib["Mat_Car_3"] = lib["Mat_Bike_BeastGreen"]
+	lib["Mat_Car_4"] = lib["Mat_Bike_AuroreBlue"]
+	lib["Mat_Car_5"] = lib["Mat_Car_SedanSilver"]
 	
 	var car_glass = StandardMaterial3D.new()
 	car_glass.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA

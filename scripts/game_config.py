@@ -214,11 +214,18 @@ def _build_openings():
                         hinge=hinge, swing=swing, leaf_w=DOOR_LEAF_W, leaf_h=DOOR_LEAF_H,
                         leaf_t=DOOR_LEAF_T, door_name=f"Door_{name}"))
 
-    for fl in ("G", "1"):
-        door(f"door_{fl.lower()}_class_l", f"{fl}_Class_L", f"{fl}_CLASS_L", fl, 5.5, "lo", -1)
-        door(f"door_{fl.lower()}_class_r", f"{fl}_Class_R", f"{fl}_CLASS_R", fl, 5.5, "lo", +1)
-        door(f"door_{fl.lower()}_back_l", f"{fl}_Back_L", f"{fl}_PART", fl, -19.0, "lo", +1)
-        door(f"door_{fl.lower()}_back_r", f"{fl}_Back_R", f"{fl}_PART", fl, 19.0, "hi", +1)
+    # Ground floor doors
+    door("door_g_class_l", "G_Class_L", "G_CLASS_L", "G", 5.5, "lo", -1)
+    door("door_g_class_r", "G_Class_R", "G_CLASS_R", "G", 5.5, "lo", +1)
+    door("door_g_back_l", "G_Back_L", "G_PART", "G", -19.0, "lo", +1)
+    door("door_g_back_r", "G_Back_R", "G_PART", "G", 19.0, "hi", +1)
+
+    # First floor doors (Floor 2):
+    # Classroom 201 door on West wall
+    door("door_1_class_l", "1_Class_L", "1_CLASS_L", "1", 5.5, "lo", -1)
+    # Seminar Hall door moved to open hallway partition wall at X = 13.5 (no door near stairs)
+    door("door_1_seminar", "1_Seminar_Hall", "1_PART", "1", 13.5, "lo", +1)
+    door("door_1_back_l", "1_Back_L", "1_PART", "1", -19.0, "lo", +1)
     door("door_1_balcony", "1_Balcony", "1_FRONT", "1", 0.0, "lo", -1)
 
     # Archways (no leaf)

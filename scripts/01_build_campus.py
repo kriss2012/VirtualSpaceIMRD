@@ -649,20 +649,139 @@ def build_props(b):
         b.box(col, f"Garden_Bench_{k}", (-40 + math.cos(ang) * 4.2, 48.5 + math.sin(ang) * 4.2, 0.26),
               (1.6, 0.5, 0.4), m["wood"])
 
-    colors = [(0.85, 0.12, 0.12), (0.12, 0.35, 0.85), (0.92, 0.92, 0.92),
-              (0.15, 0.15, 0.15), (0.88, 0.75, 0.10), (0.25, 0.65, 0.30)]
+    # ------------------------------------------------------------------
+    # High-fidelity Procedural Campus Vehicles from Reference Images
+    # ------------------------------------------------------------------
+    mat_white = materials_pbr.create_car_paint_material("Mat_Car_NanoWhite", (0.95, 0.95, 0.95))
+    mat_red = materials_pbr.create_car_paint_material("Mat_Car_CorvetteRed", (0.86, 0.07, 0.09))
+    mat_lime = materials_pbr.create_car_paint_material("Mat_Car_PunchLime", (0.72, 0.82, 0.15))
+    mat_beast_green = materials_pbr.create_car_paint_material("Mat_Bike_BeastGreen", (0.18, 0.82, 0.15))
+    mat_aurore_blue = materials_pbr.create_car_paint_material("Mat_Bike_AuroreBlue", (0.12, 0.45, 0.78))
+    mat_silver = materials_pbr.create_metal_material("Mat_AlloySilver", (0.82, 0.84, 0.86), roughness=0.25, metallic=0.88)
+    mat_black = materials_pbr.create_metal_material("Mat_PlasticBlack", (0.04, 0.04, 0.045), roughness=0.65, metallic=0.0)
+    mat_carbon = materials_pbr.create_metal_material("Mat_CarbonFiber", (0.05, 0.05, 0.055), roughness=0.35, metallic=0.3)
+    mat_ev_green = materials_pbr.create_concrete_material("Mat_EV_Plate", (0.08, 0.65, 0.22), roughness=0.35)
+    mat_led_white = materials_pbr.create_lamp_glow_material("Mat_Headlight_LED", (1.0, 1.0, 1.0), strength=12.0)
+    mat_led_red = materials_pbr.create_lamp_glow_material("Mat_Taillight_LED", (0.95, 0.05, 0.05), strength=8.0)
+    mat_rubber = materials_pbr.create_metal_material("Mat_TireRubber", (0.03, 0.03, 0.035), roughness=0.85, metallic=0.0)
+    mat_glass = m.get("car_glass", m["glass"])
+
     wheel_rot = Matrix.Rotation(math.pi / 2, 3, 'Y')   # wheel axis along X
-    for idx in range(6):
-        cx, cy = 32.0 + idx * 3.4, 36.0
-        cm = materials_pbr.create_car_paint_material(f"Mat_Car_{idx}", colors[idx])
-        b.box(col, f"Car_{idx}_Body", (cx, cy, 0.6), (1.8, 4.0, 0.65), cm)
-        b.box(col, f"Car_{idx}_Cabin", (cx, cy - 0.2, 1.2), (1.6, 2.2, 0.55), m.get("car_glass", m["glass"]))
-        k = 0
-        for wx in (-0.95, 0.95):
-            for wy in (cy - 1.2, cy + 1.2):
-                b.cyl(col, f"Car_{idx}_Wheel_{k}", (cx + wx, wy, 0.32), 0.32, 0.2, m["metal_dark"],
-                      rot=wheel_rot, segments=20)
-                k += 1
+
+    # 1. TATA NANO EV (IMAGE 1: White compact EV hatchback with black bumper fascia & green plate)
+    c0_x, c0_y = 32.0, 36.0
+    b.box(col, "Car_0_Body", (c0_x, c0_y, 0.62), (1.52, 3.10, 0.65), mat_white)
+    b.box(col, "Car_0_FrontHood", (c0_x, c0_y + 1.15, 0.68), (1.42, 0.85, 0.45), mat_white)
+    b.box(col, "Car_0_Cabin", (c0_x, c0_y - 0.15, 1.28), (1.42, 2.10, 0.70), mat_glass)
+    b.box(col, "Car_0_Roof", (c0_x, c0_y - 0.15, 1.64), (1.36, 1.95, 0.06), mat_white)
+    b.box(col, "Car_0_BumperFront", (c0_x, c0_y + 1.56, 0.35), (1.48, 0.14, 0.38), mat_black)
+    b.box(col, "Car_0_BumperRear", (c0_x, c0_y - 1.56, 0.35), (1.48, 0.14, 0.38), mat_black)
+    b.box(col, "Car_0_PlateFront", (c0_x, c0_y + 1.64, 0.32), (0.42, 0.02, 0.11), mat_ev_green)
+    b.box(col, "Car_0_PlateRear", (c0_x, c0_y - 1.64, 0.36), (0.42, 0.02, 0.11), mat_ev_green)
+    for s, nm in ((-1, "L"), (1, "R")):
+        b.box(col, f"Car_0_Headlight_{nm}", (c0_x + s * 0.52, c0_y + 1.48, 0.70), (0.28, 0.12, 0.18), mat_led_white)
+        b.box(col, f"Car_0_Taillight_{nm}", (c0_x + s * 0.66, c0_y - 1.54, 1.05), (0.08, 0.06, 0.48), mat_led_red)
+        b.box(col, f"Car_0_Mirror_{nm}", (c0_x + s * 0.82, c0_y + 0.45, 1.08), (0.16, 0.12, 0.10), mat_black)
+    b.cyl(col, "Car_0_Antenna", (c0_x, c0_y + 0.65, 1.76), 0.015, 0.22, mat_black)
+    for k, (wx, wy) in enumerate([(-0.74, 0.95), (0.74, 0.95), (-0.74, -0.95), (0.74, -0.95)]):
+        b.cyl(col, f"Car_0_Wheel_{k}", (c0_x + wx, c0_y + wy, 0.26), 0.26, 0.16, mat_rubber, rot=wheel_rot, segments=20)
+        b.cyl(col, f"Car_0_Hubcap_{k}", (c0_x + wx + (0.01 if wx > 0 else -0.01), c0_y + wy, 0.26), 0.14, 0.17, mat_silver, rot=wheel_rot, segments=16)
+
+    # 2. CHEVROLET CORVETTE C8 Z06 (IMAGE 2: Torch Red exotic supercar with carbon rear wing & splitters)
+    c1_x, c1_y = 35.4, 36.0
+    b.box(col, "Car_1_Body", (c1_x, c1_y, 0.52), (1.98, 4.55, 0.40), mat_red)
+    b.box(col, "Car_1_FrontNose", (c1_x, c1_y + 1.25, 0.46), (1.92, 2.10, 0.34), mat_red)
+    b.box(col, "Car_1_RearDeck", (c1_x, c1_y - 0.95, 0.56), (2.02, 2.45, 0.42), mat_red)
+    b.box(col, "Car_1_FrontSplitter", (c1_x, c1_y + 2.32, 0.16), (1.95, 0.22, 0.05), mat_carbon)
+    b.box(col, "Car_1_Cabin", (c1_x, c1_y + 0.10, 0.88), (1.42, 1.85, 0.38), mat_glass)
+    b.box(col, "Car_1_Roof", (c1_x, c1_y + 0.05, 1.08), (1.30, 1.20, 0.04), mat_carbon)
+    for s, nm in ((-1, "L"), (1, "R")):
+        b.box(col, f"Car_1_SideSkirt_{nm}", (c1_x + s * 0.98, c1_y, 0.16), (0.08, 3.40, 0.05), mat_carbon)
+        b.box(col, f"Car_1_SideScoop_{nm}", (c1_x + s * 0.98, c1_y - 0.25, 0.54), (0.10, 0.65, 0.36), mat_carbon)
+        b.box(col, f"Car_1_Headlight_{nm}", (c1_x + s * 0.72, c1_y + 1.95, 0.56), (0.35, 0.20, 0.06), mat_led_white)
+        b.box(col, f"Car_1_Taillight_{nm}", (c1_x + s * 0.72, c1_y - 2.18, 0.65), (0.32, 0.06, 0.08), mat_led_red)
+        b.box(col, f"Car_1_WingStrut_{nm}", (c1_x + s * 0.52, c1_y - 2.15, 0.92), (0.05, 0.10, 0.38), mat_carbon)
+        b.box(col, f"Car_1_WingEnd_{nm}", (c1_x + s * 0.88, c1_y - 2.18, 1.12), (0.03, 0.36, 0.16), mat_carbon)
+    b.box(col, "Car_1_WingBlade", (c1_x, c1_y - 2.18, 1.12), (1.75, 0.32, 0.04), mat_carbon)
+    for k in range(4):
+        b.cyl(col, f"Car_1_Exhaust_{k}", (c1_x - 0.18 + k * 0.12, c1_y - 2.22, 0.30), 0.04, 0.12, mat_silver,
+              rot=Matrix.Rotation(math.pi / 2, 3, 'X'), segments=16)
+    for k, (wx, wy, r, w) in enumerate([(-0.96, 1.30, 0.34, 0.26), (0.96, 1.30, 0.34, 0.26),
+                                         (-0.98, -1.30, 0.36, 0.30), (0.98, -1.30, 0.36, 0.30)]):
+        b.cyl(col, f"Car_1_Wheel_{k}", (c1_x + wx, c1_y + wy, r), r, w, mat_rubber, rot=wheel_rot, segments=24)
+        b.cyl(col, f"Car_1_Rim_{k}", (c1_x + wx + (0.01 if wx > 0 else -0.01), c1_y + wy, r), r * 0.82, w + 0.01, mat_black, rot=wheel_rot, segments=20)
+
+    # 3. TATA PUNCH.EV (IMAGE 3: Lime-Yellow/Citron-Green dual-tone electric SUV with full-width LED lightbar)
+    c2_x, c2_y = 38.8, 36.0
+    b.box(col, "Car_2_Body", (c2_x, c2_y, 0.72), (1.74, 3.82, 0.55), mat_lime)
+    b.box(col, "Car_2_LowerCladding", (c2_x, c2_y, 0.38), (1.78, 3.82, 0.36), mat_black)
+    b.box(col, "Car_2_Cabin", (c2_x, c2_y - 0.12, 1.28), (1.54, 2.35, 0.55), mat_glass)
+    b.box(col, "Car_2_Roof", (c2_x, c2_y - 0.12, 1.56), (1.48, 2.20, 0.05), mat_black)
+    b.box(col, "Car_2_Lightbar", (c2_x, c2_y + 1.88, 0.92), (1.50, 0.06, 0.04), mat_led_white)
+    b.box(col, "Car_2_GrilleSlats", (c2_x, c2_y + 1.88, 0.28), (1.10, 0.06, 0.16), mat_black)
+    b.box(col, "Car_2_SkidPlate", (c2_x, c2_y + 1.89, 0.18), (0.85, 0.06, 0.08), mat_silver)
+    b.box(col, "Car_2_PlateFront", (c2_x, c2_y + 1.90, 0.42), (0.45, 0.02, 0.11), mat_ev_green)
+    for s, nm in ((-1, "L"), (1, "R")):
+        b.box(col, f"Car_2_Headlight_{nm}", (c2_x + s * 0.65, c2_y + 1.86, 0.62), (0.24, 0.08, 0.20), mat_led_white)
+        b.box(col, f"Car_2_Taillight_{nm}", (c2_x + s * 0.72, c2_y - 1.88, 0.92), (0.22, 0.06, 0.18), mat_led_red)
+        b.box(col, f"Car_2_RoofRail_{nm}", (c2_x + s * 0.65, c2_y - 0.12, 1.60), (0.05, 1.80, 0.04), mat_silver)
+        b.box(col, f"Car_2_Mirror_{nm}", (c2_x + s * 0.92, c2_y + 0.45, 1.10), (0.18, 0.12, 0.10), mat_black)
+    for k, (wx, wy) in enumerate([(-0.85, 1.25), (0.85, 1.25), (-0.85, -1.25), (0.85, -1.25)]):
+        b.cyl(col, f"Car_2_Wheel_{k}", (c2_x + wx, c2_y + wy, 0.32), 0.32, 0.22, mat_rubber, rot=wheel_rot, segments=22)
+        b.cyl(col, f"Car_2_Rim_{k}", (c2_x + wx + (0.01 if wx > 0 else -0.01), c2_y + wy, 0.32), 0.22, 0.23, mat_silver, rot=wheel_rot, segments=18)
+
+    # 4. JOY E-BIKE BEAST (IMAGE 4: Metallic Green & Black electric sports motorcycle)
+    b3_x, b3_y = 42.0, 36.0
+    b.box(col, "Bike_3_Body", (b3_x, b3_y, 0.65), (0.75, 2.10, 0.75), mat_black)
+    b.box(col, "Bike_3_Battery", (b3_x, b3_y, 0.52), (0.36, 0.82, 0.48), mat_black)
+    b.box(col, "Bike_3_Tank", (b3_x, b3_y + 0.22, 0.85), (0.48, 0.65, 0.38), mat_beast_green)
+    b.box(col, "Bike_3_HeadlightCowl", (b3_x, b3_y + 0.80, 0.95), (0.32, 0.26, 0.30), mat_beast_green)
+    b.box(col, "Bike_3_LED", (b3_x, b3_y + 0.94, 0.95), (0.24, 0.04, 0.16), mat_led_white)
+    b.box(col, "Bike_3_Visor", (b3_x, b3_y + 0.75, 1.14), (0.24, 0.12, 0.14), mat_glass)
+    b.box(col, "Bike_3_SeatRider", (b3_x, b3_y - 0.22, 0.78), (0.32, 0.40, 0.12), mat_black)
+    b.box(col, "Bike_3_SeatPillion", (b3_x, b3_y - 0.52, 0.88), (0.26, 0.30, 0.10), mat_black)
+    b.box(col, "Bike_3_Tail", (b3_x, b3_y - 0.78, 0.90), (0.24, 0.35, 0.16), mat_beast_green)
+    b.box(col, "Bike_3_Taillight", (b3_x, b3_y - 0.96, 0.90), (0.16, 0.04, 0.06), mat_led_red)
+    b.box(col, "Bike_3_Handlebars", (b3_x, b3_y + 0.62, 1.05), (0.72, 0.06, 0.06), mat_black)
+    b.box(col, "Bike_3_Kickstand", (b3_x - 0.18, b3_y - 0.10, 0.15), (0.04, 0.04, 0.30), mat_black)
+    for s, nm in ((-1, "L"), (1, "R")):
+        b.box(col, f"Bike_3_Trellis_{nm}", (b3_x + s * 0.22, b3_y + 0.05, 0.68), (0.04, 0.70, 0.25), mat_beast_green)
+        b.cyl(col, f"Bike_3_Fork_{nm}", (b3_x + s * 0.10, b3_y + 0.76, 0.52), 0.03, 0.55, mat_silver)
+    # Front and rear motorcycle wheels
+    b.cyl(col, "Bike_3_Wheel_F", (b3_x, b3_y + 0.85, 0.30), 0.30, 0.13, mat_rubber, rot=wheel_rot, segments=22)
+    b.cyl(col, "Bike_3_Rim_F", (b3_x, b3_y + 0.85, 0.30), 0.21, 0.14, mat_black, rot=wheel_rot, segments=18)
+    b.cyl(col, "Bike_3_Disc_F", (b3_x + 0.08, b3_y + 0.85, 0.30), 0.15, 0.015, mat_silver, rot=wheel_rot, segments=16)
+    b.cyl(col, "Bike_3_Wheel_R", (b3_x, b3_y - 0.85, 0.30), 0.30, 0.15, mat_rubber, rot=wheel_rot, segments=22)
+    b.cyl(col, "Bike_3_Rim_R", (b3_x, b3_y - 0.85, 0.30), 0.21, 0.16, mat_black, rot=wheel_rot, segments=18)
+
+    # 5. AURORE ELECTRIC SPORTS BIKE (IMAGE 5: Metallic Electric Blue & Black commuter/sports bike)
+    b4_x, b4_y = 43.4, 36.0
+    b.box(col, "Bike_4_Body", (b4_x, b4_y, 0.65), (0.75, 2.10, 0.75), mat_black)
+    b.box(col, "Bike_4_Battery", (b4_x, b4_y, 0.50), (0.35, 0.80, 0.46), mat_black)
+    b.box(col, "Bike_4_CoolingFins", (b4_x, b4_y, 0.50), (0.37, 0.55, 0.32), mat_silver)
+    b.box(col, "Bike_4_Tank", (b4_x, b4_y + 0.20, 0.82), (0.45, 0.62, 0.35), mat_aurore_blue)
+    b.box(col, "Bike_4_FrontFender", (b4_x, b4_y + 0.80, 0.48), (0.18, 0.45, 0.12), mat_aurore_blue)
+    b.box(col, "Bike_4_Headlight", (b4_x, b4_y + 0.78, 0.92), (0.26, 0.24, 0.25), mat_aurore_blue)
+    b.box(col, "Bike_4_LED", (b4_x, b4_y + 0.91, 0.92), (0.20, 0.04, 0.14), mat_led_white)
+    b.box(col, "Bike_4_Seat", (b4_x, b4_y - 0.32, 0.80), (0.30, 0.72, 0.12), mat_black)
+    b.box(col, "Bike_4_GrabRail", (b4_x, b4_y - 0.68, 0.86), (0.32, 0.15, 0.04), mat_silver)
+    b.box(col, "Bike_4_Handlebars", (b4_x, b4_y + 0.60, 1.02), (0.70, 0.05, 0.05), mat_black)
+    b.box(col, "Bike_4_Kickstand", (b4_x - 0.16, b4_y - 0.10, 0.15), (0.04, 0.04, 0.30), mat_black)
+    for s, nm in ((-1, "L"), (1, "R")):
+        b.cyl(col, f"Bike_4_Fork_{nm}", (b4_x + s * 0.09, b4_y + 0.74, 0.50), 0.028, 0.52, mat_silver)
+    b.cyl(col, "Bike_4_Wheel_F", (b4_x, b4_y + 0.82, 0.30), 0.30, 0.13, mat_rubber, rot=wheel_rot, segments=22)
+    b.cyl(col, "Bike_4_Rim_F", (b4_x, b4_y + 0.82, 0.30), 0.21, 0.14, mat_black, rot=wheel_rot, segments=18)
+    b.cyl(col, "Bike_4_Wheel_R", (b4_x, b4_y - 0.82, 0.30), 0.30, 0.15, mat_rubber, rot=wheel_rot, segments=22)
+    b.cyl(col, "Bike_4_Rim_R", (b4_x, b4_y - 0.82, 0.30), 0.21, 0.16, mat_black, rot=wheel_rot, segments=18)
+
+    # 6. EXECUTIVE CAMPUS SEDAN
+    c5_x, c5_y = 46.8, 36.0
+    mat_sedan_silver = materials_pbr.create_car_paint_material("Mat_Car_SedanSilver", (0.84, 0.86, 0.88))
+    b.box(col, "Car_5_Body", (c5_x, c5_y, 0.60), (1.85, 4.40, 0.62), mat_sedan_silver)
+    b.box(col, "Car_5_Cabin", (c5_x, c5_y - 0.15, 1.20), (1.55, 2.30, 0.55), mat_glass)
+    for k, (wx, wy) in enumerate([(-0.95, 1.25), (0.95, 1.25), (-0.95, -1.25), (0.95, -1.25)]):
+        b.cyl(col, f"Car_5_Wheel_{k}", (c5_x + wx, c5_y + wy, 0.32), 0.32, 0.22, mat_rubber, rot=wheel_rot, segments=20)
+        b.cyl(col, f"Car_5_Rim_{k}", (c5_x + wx + (0.01 if wx > 0 else -0.01), c5_y + wy, 0.32), 0.22, 0.23, mat_silver, rot=wheel_rot, segments=16)
 
 
 def build_gate(b):

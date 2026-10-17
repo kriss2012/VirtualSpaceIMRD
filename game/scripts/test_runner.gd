@@ -315,6 +315,43 @@ func test_stair_climb_and_second_floor() -> void:
 	assert_true(c201 != null and c201.position.y >= 4.0, "Classroom 201 door accessible on second floor (Y >= 4.0)")
 	var seminar = campus.find_child("SeminarHallDoor", true, false)
 	assert_true(seminar != null and seminar.position.y >= 4.0, "Seminar Hall door accessible on second floor (Y >= 4.0)")
+	assert_true(abs(seminar.position.z) < 0.1 and seminar.position.x > 12.0, "Seminar Hall door relocated to open hallway partition wall (Z ~ 0, X > 12)")
+	assert_true(not (seminar.position.x < 9.0 and seminar.position.z < -5.0), "Seminar Hall door removed from stair landing wall")
+	
+	# Verify SeminarHall alignment: inside Front East room (Z < 0)
+	var sem_hall = campus.find_child("SeminarHall", true, false)
+	assert_true(sem_hall != null, "SeminarHall node present in campus")
+	assert_true(sem_hall.position.z < -2.0, "SeminarHall correctly located inside 2nd floor room (Z < -2.0)")
+	
+	# Verify absence of stair slope barriers that cause stair malfunction
+	var s_barrier_l = campus.find_child("StairSlopeBarrierLeft", true, false)
+	var s_barrier_r = campus.find_child("StairSlopeBarrierRight", true, false)
+	assert_true(s_barrier_l == null and s_barrier_r == null, "Stair slope barriers removed to ensure smooth stair climbing")
+	
+	# Verify DirectorySign non-mirrored orientation
+	var dir_sign: Label3D = campus.find_child("DirectorySign", true, false) as Label3D
+	assert_true(dir_sign != null and not dir_sign.double_sided, "DirectorySign configured single-sided to prevent mirror glitch")
+	
+	# Verify Classroom 201 furniture exists in campus_furniture
+	var furn = campus.find_child("campus_furniture", true, false)
+	assert_true(furn != null, "campus_furniture present")
+	assert_true(furn.find_child("Class_1_Whiteboard", true, false) != null, "Classroom 201 whiteboard present")
+	assert_true(furn.find_child("Teacher_Table_1", true, false) != null, "Classroom 201 teacher table present")
+	assert_true(furn.find_child("Desk_1_0_0", true, false) != null, "Classroom 201 student desks present")
+	assert_true(furn.find_child("Lab_G_Instructor_Desk", true, false) != null, "Computer Lab 102 instructor desk present")
+	assert_true(furn.find_child("Lab_Desk_G_0_0", true, false) != null, "Computer Lab 102 student workstations present")
+	
+	# Verify authentic parking vehicles from reference images in campus_props
+	var props = campus.find_child("campus_props", true, false)
+	assert_true(props != null, "campus_props present")
+	assert_true(props.find_child("Car_0_Body", true, false) != null, "Tata Nano EV 3D model present in parking")
+	assert_true(props.find_child("Car_0_PlateFront", true, false) != null, "Tata Nano EV green license plate present")
+	assert_true(props.find_child("Car_1_Body", true, false) != null, "Corvette C8 Z06 supercar 3D model present in parking")
+	assert_true(props.find_child("Car_1_WingBlade", true, false) != null, "Corvette C8 Z06 carbon rear wing spoiler present")
+	assert_true(props.find_child("Car_2_Body", true, false) != null, "Tata Punch.ev SUV 3D model present in parking")
+	assert_true(props.find_child("Car_2_Lightbar", true, false) != null, "Tata Punch.ev horizontal LED lightbar present")
+	assert_true(props.find_child("Bike_3_Body", true, false) != null, "Joy e-bike Beast electric sports motorcycle present in parking")
+	assert_true(props.find_child("Bike_4_Body", true, false) != null, "Aurore EV electric sports motorcycle present in parking")
 	
 	remove_child(campus)
 	campus.free()

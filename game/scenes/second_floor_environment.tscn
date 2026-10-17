@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3]
+[gd_scene load_steps=33 format=3]
 
 [sub_resource type="StandardMaterial3D" id="Mat_MetalDark"]
 albedo_color = Color(0.12, 0.14, 0.16, 1)
@@ -42,13 +42,21 @@ albedo_color = Color(0.85, 0.10, 0.10, 1)
 metallic = 0.4
 roughness = 0.3
 
+[sub_resource type="StandardMaterial3D" id="Mat_TableLaminate"]
+albedo_color = Color(0.22, 0.24, 0.28, 1)
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_Whiteboard"]
+albedo_color = Color(0.92, 0.94, 0.96, 1)
+roughness = 0.20
+
 [sub_resource type="BoxMesh" id="Mesh_BalustradeHandrail"]
 material = SubResource("Mat_ChromeRail")
-size = Vector3(0.06, 0.06, 4.90)
+size = Vector3(0.06, 0.06, 4.00)
 
 [sub_resource type="BoxMesh" id="Mesh_BalustradeGlass"]
 material = SubResource("Mat_SafetyGlass")
-size = Vector3(0.02, 0.90, 4.80)
+size = Vector3(0.02, 0.90, 3.90)
 
 [sub_resource type="BoxMesh" id="Mesh_BalustradePost"]
 material = SubResource("Mat_MetalDark")
@@ -96,8 +104,24 @@ top_radius = 0.09
 bottom_radius = 0.09
 height = 0.55
 
+[sub_resource type="BoxMesh" id="Mesh_ConferenceTable"]
+material = SubResource("Mat_TableLaminate")
+size = Vector3(3.6, 0.08, 1.6)
+
+[sub_resource type="BoxMesh" id="Mesh_TableLeg"]
+material = SubResource("Mat_MetalDark")
+size = Vector3(0.08, 0.72, 0.08)
+
+[sub_resource type="BoxMesh" id="Mesh_ChairSeat"]
+material = SubResource("Mat_BenchCushion")
+size = Vector3(0.50, 0.08, 0.45)
+
+[sub_resource type="BoxMesh" id="Mesh_ChairBack"]
+material = SubResource("Mat_BenchCushion")
+size = Vector3(0.48, 0.45, 0.06)
+
 [sub_resource type="BoxShape3D" id="Shape_StairVoidGuard"]
-size = Vector3(0.18, 1.20, 4.90)
+size = Vector3(0.18, 1.20, 4.00)
 
 [sub_resource type="BoxShape3D" id="Shape_BalconyFront"]
 size = Vector3(12.2, 1.20, 0.20)
@@ -110,7 +134,7 @@ size = Vector3(0.20, 1.20, 3.60)
 [node name="SafetyBarricades" type="Node3D" parent="."]
 
 [node name="StairVoidGuardLeft" type="StaticBody3D" parent="SafetyBarricades"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.90, 4.85, -3.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.90, 4.85, -4.00)
 collision_layer = 1
 collision_mask = 2
 
@@ -126,7 +150,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("Mesh_BalustradeGlass")
 
 [node name="Post1" type="MeshInstance3D" parent="SafetyBarricades/StairVoidGuardLeft"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.90)
 mesh = SubResource("Mesh_BalustradePost")
 
 [node name="Post2" type="MeshInstance3D" parent="SafetyBarricades/StairVoidGuardLeft"]
@@ -134,11 +158,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("Mesh_BalustradePost")
 
 [node name="Post3" type="MeshInstance3D" parent="SafetyBarricades/StairVoidGuardLeft"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.90)
 mesh = SubResource("Mesh_BalustradePost")
 
 [node name="StairVoidGuardRight" type="StaticBody3D" parent="SafetyBarricades"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10, 4.85, -3.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.10, 4.85, -4.00)
 collision_layer = 1
 collision_mask = 2
 
@@ -154,7 +178,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("Mesh_BalustradeGlass")
 
 [node name="Post1" type="MeshInstance3D" parent="SafetyBarricades/StairVoidGuardRight"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.90)
 mesh = SubResource("Mesh_BalustradePost")
 
 [node name="Post2" type="MeshInstance3D" parent="SafetyBarricades/StairVoidGuardRight"]
@@ -162,7 +186,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("Mesh_BalustradePost")
 
 [node name="Post3" type="MeshInstance3D" parent="SafetyBarricades/StairVoidGuardRight"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.90)
 mesh = SubResource("Mesh_BalustradePost")
 
 [node name="BalconyGuardFront" type="StaticBody3D" parent="SafetyBarricades"]
@@ -210,26 +234,10 @@ mesh = SubResource("Mesh_BalconySideRail")
 [node name="Glass" type="MeshInstance3D" parent="SafetyBarricades/BalconyGuardRight"]
 mesh = SubResource("Mesh_BalconySideGlass")
 
-[node name="StairSlopeBarrierLeft" type="StaticBody3D" parent="SafetyBarricades"]
-transform = Transform3D(1, 0, 0, 0, 0.852, 0.523, 0, -0.523, 0.852, 4.05, 2.7, -4.5)
-collision_layer = 1
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SafetyBarricades/StairSlopeBarrierLeft"]
-shape = SubResource("Shape_StairVoidGuard")
-
-[node name="StairSlopeBarrierRight" type="StaticBody3D" parent="SafetyBarricades"]
-transform = Transform3D(1, 0, 0, 0, 0.852, 0.523, 0, -0.523, 0.852, 5.95, 2.7, -4.5)
-collision_layer = 1
-collision_mask = 2
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SafetyBarricades/StairSlopeBarrierRight"]
-shape = SubResource("Shape_StairVoidGuard")
-
 [node name="CorridorFurnishings" type="Node3D" parent="."]
 
 [node name="Bench1" type="Node3D" parent="CorridorFurnishings"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 4.30, 8.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0, 4.30, 8.1)
 
 [node name="Body" type="MeshInstance3D" parent="CorridorFurnishings/Bench1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
@@ -240,7 +248,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0)
 mesh = SubResource("Mesh_BenchCushion")
 
 [node name="Bench2" type="Node3D" parent="CorridorFurnishings"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 4.30, 8.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.0, 4.30, 8.1)
 
 [node name="Body" type="MeshInstance3D" parent="CorridorFurnishings/Bench2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
@@ -251,7 +259,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0)
 mesh = SubResource("Mesh_BenchCushion")
 
 [node name="NoticeBoard1" type="Node3D" parent="CorridorFurnishings"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0, 5.80, 8.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0, 5.80, 8.4)
 
 [node name="Frame" type="MeshInstance3D" parent="CorridorFurnishings/NoticeBoard1"]
 mesh = SubResource("Mesh_NoticeBoard")
@@ -262,6 +270,7 @@ mesh = SubResource("Mesh_NoticeFelt")
 
 [node name="HeaderLabel" type="Label3D" parent="CorridorFurnishings/NoticeBoard1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, -0.06)
+double_sided = false
 pixel_size = 0.0025
 text = "DEPARTMENT OF COMPUTER APPLICATIONS (MCA & BCA)\nACADEMIC NOTICES & LECTURE SCHEDULE"
 font_size = 22
@@ -270,6 +279,7 @@ modulate = Color(1, 0.95, 0.85, 1)
 
 [node name="SubLabel" type="Label3D" parent="CorridorFurnishings/NoticeBoard1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.10, -0.06)
+double_sided = false
 pixel_size = 0.0022
 text = "• Internal Semester Examinations begin from 24th Oct 2026\n• Submission of AI & Data Science mini-projects by Friday\n• Campus Placement Training session at Seminar Hall (2:00 PM)"
 font_size = 18
@@ -277,7 +287,7 @@ outline_size = 3
 horizontal_alignment = 0
 
 [node name="NoticeBoard2" type="Node3D" parent="CorridorFurnishings"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 5.80, 8.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.0, 5.80, 8.4)
 
 [node name="Frame" type="MeshInstance3D" parent="CorridorFurnishings/NoticeBoard2"]
 mesh = SubResource("Mesh_NoticeBoard")
@@ -288,6 +298,7 @@ mesh = SubResource("Mesh_NoticeFelt")
 
 [node name="HeaderLabel" type="Label3D" parent="CorridorFurnishings/NoticeBoard2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, -0.06)
+double_sided = false
 pixel_size = 0.0025
 text = "TRAINING & PLACEMENT CELL - IMRD SHIRPUR\nUPCOMING RECRUITMENT DRIVES 2026-27"
 font_size = 22
@@ -296,6 +307,7 @@ modulate = Color(1, 0.95, 0.85, 1)
 
 [node name="SubLabel" type="Label3D" parent="CorridorFurnishings/NoticeBoard2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.10, -0.06)
+double_sided = false
 pixel_size = 0.0022
 text = "• Infosys, TCS & Capgemini pool campus registration open\n• Resume review clinic: Every Tuesday & Thursday (Room 203)\n• Coding Challenge Winners to receive merit trophies"
 font_size = 18
@@ -303,13 +315,78 @@ outline_size = 3
 horizontal_alignment = 0
 
 [node name="DirectorySign" type="Label3D" parent="CorridorFurnishings"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -1.45)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 6.2, -0.15)
+double_sided = false
 pixel_size = 0.0028
 text = "◀ CLASSROOM 201 • LAB 203    |    SEMINAR HALL • HOD CABIN ▶\nRCPET's Institute of Management Research & Development, Shirpur"
 font_size = 26
 outline_size = 5
 outline_color = Color(0.08, 0.12, 0.25, 1)
 modulate = Color(0.95, 0.85, 0.35, 1)
+
+[node name="ResearchTable" type="Node3D" parent="CorridorFurnishings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.30, 4.2)
+
+[node name="TableTop" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+mesh = SubResource("Mesh_ConferenceTable")
+
+[node name="Leg1" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.36, -0.65)
+mesh = SubResource("Mesh_TableLeg")
+
+[node name="Leg2" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.36, -0.65)
+mesh = SubResource("Mesh_TableLeg")
+
+[node name="Leg3" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0.36, 0.65)
+mesh = SubResource("Mesh_TableLeg")
+
+[node name="Leg4" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.36, 0.65)
+mesh = SubResource("Mesh_TableLeg")
+
+[node name="ChairN1" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.25, -1.1)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="ChairN1B" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.50, -1.3)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="ChairN2" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.25, -1.1)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="ChairN2B" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.50, -1.3)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="ChairS1" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.25, 1.1)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="ChairS1B" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 0.50, 1.3)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="ChairS2" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.25, 1.1)
+mesh = SubResource("Mesh_ChairSeat")
+
+[node name="ChairS2B" type="MeshInstance3D" parent="CorridorFurnishings/ResearchTable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 0.50, 1.3)
+mesh = SubResource("Mesh_ChairBack")
+
+[node name="ResearchSign" type="Label3D" parent="CorridorFurnishings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.0, 8.4)
+double_sided = false
+pixel_size = 0.0028
+text = "POST-GRADUATE RESEARCH & INNOVATION FORUM\nSES • IMRD MCA & BCA RESEARCH WING"
+font_size = 24
+outline_size = 4
+modulate = Color(0.90, 0.95, 1.0, 1)
 
 [node name="WaterDispenser" type="Node3D" parent="CorridorFurnishings"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4, 4.30, 2.5)
@@ -320,6 +397,7 @@ mesh = SubResource("Mesh_WaterDispenser")
 
 [node name="Label" type="Label3D" parent="CorridorFurnishings/WaterDispenser"]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0.28, 1.15, 0)
+double_sided = false
 pixel_size = 0.002
 text = "PURIFIED RO DRINKING WATER\nSafe & Cold Water Station"
 font_size = 16
@@ -333,6 +411,7 @@ mesh = SubResource("Mesh_ExtinguisherCanister")
 
 [node name="Sign" type="Label3D" parent="CorridorFurnishings/FireExtinguisher"]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0.12, 0.45, 0)
+double_sided = false
 pixel_size = 0.002
 text = "FIRE EXTINGUISHER (CO2)\nEMERGENCY USE ONLY"
 font_size = 16
