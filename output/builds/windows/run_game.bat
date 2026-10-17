@@ -10,10 +10,10 @@ set GAME_DIR=%~dp0..\..\..\game
 
 if "%1"=="--console" (
     echo Starting in console debug mode...
-    "%CONSOLE_PATH%" --path "%GAME_DIR%"
+    "%CONSOLE_PATH%"
 ) else (
     echo Launching game window...
-    start "" "%EXE_PATH%" --path "%GAME_DIR%"
+    start "" "%EXE_PATH%"
 )
 
 endlocal
