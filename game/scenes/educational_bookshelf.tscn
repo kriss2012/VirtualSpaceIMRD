@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://educational_bookshelf.gd" id="1_shelf"]
+[ext_resource type="Script" path="res://scripts/educational_bookshelf.gd" id="1_shelf"]
 
 [node name="EducationalBookshelf" type="Node3D"]
 script = ExtResource("1_shelf")

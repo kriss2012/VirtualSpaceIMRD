@@ -1,0 +1,23 @@
+============================================================
+  RCPET IMRD Shirpur — 3D Campus Explorer Game
+============================================================
+
+HOW TO PLAY:
+1. Double-click "IMRD_Campus_Explorer.exe" to start the game.
+   (No installation or extra files required!)
+
+CONTROLS:
+- W, A, S, D or Arrow Keys : Move character
+- Mouse Movement           : Rotate camera / look around
+- Left Shift (Hold)        : Sprint
+- Spacebar                 : Jump
+- E                        : Interact (Talk to Prof. Sharma, pick up ID card, open doors)
+- Escape or Q              : Pause Menu / Settings
+
+CAMPUS MISSIONS:
+- Mission 1: Talk to Prof. Sharma at the entrance walkway.
+- Mission 2: Find and pick up the lost Student ID Card near the crossing.
+- Mission 3: Explore Classroom West, Grand Lobby, and Garden Courtyard.
+
+Enjoy exploring the RCPET IMRD campus!
+============================================================
