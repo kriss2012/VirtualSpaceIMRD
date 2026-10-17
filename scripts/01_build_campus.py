@@ -558,21 +558,35 @@ def build_stairs(b):
         b.box(col, f"Stair_Step_{i:02d}", (cfg.STAIR_X, y_front - T / 2, (fz + top) / 2),
               (W, T, top - fz), m["paving"])
 
-    # Handrails: sloped rail + posts on both sides, ending at the top edge
+    # Handrails: sloped rail + posts on both sides, terminating cleanly at the top landing
     slope = R / T
     y_a = cfg.STAIR_Y_START - T / 2
     z_a = fz + R + cfg.STAIR_RAIL_H
+    ym_19 = cfg.STAIR_Y_START - (cfg.STAIR_TREAD_COUNT - 1) * T - T / 2
+    z_19 = fz + cfg.STAIR_TREAD_COUNT * R + cfg.STAIR_RAIL_H
     y_b = cfg.STAIR_Y_TOP
-    z_b = z_a + (y_a - y_b) * slope
+    z_landing = cfg.FLOOR_1_Z + cfg.STAIR_RAIL_H
     for side, nm in ((-1, "L"), (1, "R")):
         x = cfg.STAIR_X + side * (W / 2 + 0.025)
         bm = bmesh.new()
-        beam_into(bm, (x, y_a, z_a), (x, y_b, z_b), 0.05)
+        # Main sloped rail along the steps
+        beam_into(bm, (x, y_a, z_a), (x, ym_19, z_19), 0.05)
+        # Smooth transition into the top landing post
+        beam_into(bm, (x, ym_19, z_19), (x, y_b, z_landing), 0.05)
+        # Intermediate posts along the run
         for i in range(1, cfg.STAIR_TREAD_COUNT + 1, 4):
             ym = cfg.STAIR_Y_START - (i - 1) * T - T / 2
             top = fz + i * R
-            box_into(bm, (x, ym, (top + z_a + (y_a - ym) * slope) / 2),
-                     (0.04, 0.04, (z_a + (y_a - ym) * slope) - top))
+            z_post_top = z_a + (y_a - ym) * slope
+            box_into(bm, (x, ym, (top + z_post_top) / 2),
+                     (0.04, 0.04, z_post_top - top))
+        # Top step post (step 19)
+        top_19 = fz + cfg.STAIR_TREAD_COUNT * R
+        box_into(bm, (x, ym_19, (top_19 + z_19) / 2),
+                 (0.04, 0.04, z_19 - top_19))
+        # Top landing post firmly anchored into the second floor landing slab
+        box_into(bm, (x, y_b, (cfg.FLOOR_1_Z + z_landing) / 2),
+                 (0.04, 0.04, z_landing - cfg.FLOOR_1_Z))
         b._finish(f"Rail_Stair_{nm}", bm, col, m["metal_dark"])
 
     # Guard on the open slab edge at the stair's lower end (upper floor side)
