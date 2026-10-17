@@ -288,7 +288,7 @@ func test_stair_climb_and_second_floor() -> void:
 	assert_true(player != null, "Player found in campus")
 	
 	# Start at bottom of stairs on the lobby plinth
-	player.global_position = Vector3(5.0, 0.40, -7.50)
+	player.global_position = Vector3(5.0, 0.40, -5.75)
 	assert_true(player.global_position.y >= 0.34, "Player starts at ground plinth Y >= 0.34")
 	
 	# Verify convex polygon shape points
@@ -303,12 +303,12 @@ func test_stair_climb_and_second_floor() -> void:
 	var has_bottom_pt = false
 	var has_top_pt = false
 	for p in pts:
-		if p.z <= -7.5 and abs(p.y - 0.34) < 0.1:
+		if p.z <= -5.8 and abs(p.y - 0.34) < 0.1:
 			has_bottom_pt = true
-		if p.z >= -1.5 and abs(p.y - 4.30) < 0.1:
+		if p.z >= -1.2 and abs(p.y - 4.30) < 0.1:
 			has_top_pt = true
-	assert_true(has_bottom_pt, "Stair ramp connects seamlessly to ground plinth (Y=0.34 at Z=-7.6)")
-	assert_true(has_top_pt, "Stair ramp connects seamlessly to second floor landing (Y=4.30 at Z=-1.42)")
+	assert_true(has_bottom_pt, "Stair ramp connects seamlessly to ground plinth (Y=0.34 at Z=-5.85)")
+	assert_true(has_top_pt, "Stair ramp connects seamlessly to second floor landing (Y=4.30 at Z=-1.10)")
 	
 	# Check second floor door accessibility
 	var c201 = campus.find_child("Classroom201Door", true, false)

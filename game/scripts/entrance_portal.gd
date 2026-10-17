@@ -27,12 +27,11 @@ func _process(delta: float) -> void:
 
 
 func apply_rotation(ang: float) -> void:
-	# Left door swings outward to the left (negative Y rotation)
-	# Right door swings outward to the right (positive Y rotation)
+	# Doors swing outward toward the entrance veranda/plaza (-Z) to keep lobby clear
 	if hinge_left:
-		hinge_left.rotation.y = -ang
+		hinge_left.rotation.y = ang
 	if hinge_right:
-		hinge_right.rotation.y = ang
+		hinge_right.rotation.y = -ang
 
 
 func get_interaction_text() -> String:

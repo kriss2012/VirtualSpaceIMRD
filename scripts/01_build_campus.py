@@ -598,6 +598,7 @@ def build_furniture(b):
     b.box(col, "Reception_Counter", (-3.5, 4.0, g + 0.5), (3.0, 1.0, 1.0), m["wood"])
     b.box(col, "Reception_Chair", (-3.5, 3.0, g + 0.4), (0.6, 0.6, 0.8), m["metal_dark"])
 
+    # GROUND FLOOR WEST (Classroom 101):
     b.box(col, "Class_G_Blackboard", (-14.0, y_wall + 0.04, g + 1.9), (4.5, 0.08, 1.4), m["board"])
     b.box(col, "Teacher_Table_G", (-14.0, 1.6, g + 0.4), (2.2, 0.9, 0.8), m["wood"])
     for row in range(3):
@@ -606,11 +607,24 @@ def build_furniture(b):
             b.box(col, f"Desk_G_{row}_{ci}", (x, y, g + 0.35), (1.4, 0.6, 0.7), m["wood"])
             b.box(col, f"Bench_G_{row}_{ci}", (x, y + 0.5, g + 0.225), (1.3, 0.35, 0.45), m["metal_dark"])
 
-    b.box(col, "Class_1_Whiteboard", (14.0, y_wall + 0.04, f1 + 1.9), (4.5, 0.08, 1.4), m["wall_ext"])
-    b.box(col, "Teacher_Table_1", (14.0, 1.6, f1 + 0.4), (2.2, 0.9, 0.8), m["wood"])
+    # GROUND FLOOR EAST (Computer Lab 102):
+    b.box(col, "Lab_G_Screen", (14.0, y_wall + 0.04, g + 1.9), (4.5, 0.08, 1.4), m["wall_ext"])
+    b.box(col, "Lab_G_Instructor_Desk", (14.0, 1.6, g + 0.4), (2.2, 0.9, 0.8), m["wood"])
+    b.box(col, "Lab_G_Instructor_PC", (14.0, 1.6, g + 0.95), (0.6, 0.08, 0.35), m["metal_dark"])
     for row in range(3):
         for ci in range(3):
             x, y = 10.5 + ci * 2.8, 3.2 + row * 1.5
+            b.box(col, f"Lab_Desk_G_{row}_{ci}", (x, y, g + 0.36), (1.4, 0.65, 0.72), m["wood"])
+            b.box(col, f"Lab_Monitor_G_{row}_{ci}", (x, y - 0.06, g + 0.92), (0.52, 0.06, 0.32), m["metal_dark"])
+            b.box(col, f"Lab_CPU_G_{row}_{ci}", (x + 0.52, y, g + 0.22), (0.18, 0.42, 0.40), m["metal_dark"])
+            b.box(col, f"Lab_Chair_G_{row}_{ci}", (x, y + 0.52, g + 0.24), (0.55, 0.50, 0.48), m["metal_dark"])
+
+    # FIRST/SECOND FLOOR WEST (Classroom 201):
+    b.box(col, "Class_1_Whiteboard", (-14.0, y_wall + 0.04, f1 + 1.9), (4.5, 0.08, 1.4), m["board"])
+    b.box(col, "Teacher_Table_1", (-14.0, 1.6, f1 + 0.4), (2.2, 0.9, 0.8), m["wood"])
+    for row in range(3):
+        for ci in range(3):
+            x, y = -17.5 + ci * 2.8, 3.2 + row * 1.5
             b.box(col, f"Desk_1_{row}_{ci}", (x, y, f1 + 0.35), (1.4, 0.6, 0.7), m["wood"])
             b.box(col, f"Bench_1_{row}_{ci}", (x, y + 0.5, f1 + 0.225), (1.3, 0.35, 0.45), m["metal_dark"])
 

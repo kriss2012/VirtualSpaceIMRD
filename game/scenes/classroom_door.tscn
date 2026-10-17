@@ -21,19 +21,19 @@ roughness = 0.3
 
 [sub_resource type="BoxMesh" id="Mesh_FrameTop"]
 material = SubResource("Mat_Frame")
-size = Vector3(1.10, 0.08, 0.22)
+size = Vector3(1.10, 0.08, 0.24)
 
 [sub_resource type="BoxMesh" id="Mesh_FrameSide"]
 material = SubResource("Mat_Frame")
-size = Vector3(0.08, 2.20, 0.22)
+size = Vector3(0.06, 2.20, 0.24)
 
 [sub_resource type="BoxMesh" id="Mesh_Signboard"]
 material = SubResource("Mat_Sign")
-size = Vector3(0.90, 0.22, 0.04)
+size = Vector3(0.90, 0.20, 0.04)
 
 [sub_resource type="BoxMesh" id="Mesh_DoorLeaf"]
 material = SubResource("Mat_Wood")
-size = Vector3(0.96, 2.10, 0.05)
+size = Vector3(0.97, 2.12, 0.05)
 
 [sub_resource type="CylinderMesh" id="Mesh_Doorknob"]
 material = SubResource("Mat_Brass")
@@ -42,10 +42,10 @@ bottom_radius = 0.035
 height = 0.08
 
 [sub_resource type="BoxShape3D" id="Shape_DoorBody"]
-size = Vector3(0.96, 2.10, 0.08)
+size = Vector3(0.97, 2.12, 0.08)
 
 [sub_resource type="BoxShape3D" id="Shape_InteractArea"]
-size = Vector3(1.10, 2.10, 1.20)
+size = Vector3(1.40, 2.10, 1.50)
 
 [node name="ClassroomDoor" type="Node3D"]
 script = ExtResource("1_cdoor")
@@ -53,19 +53,19 @@ script = ExtResource("1_cdoor")
 [node name="Frame" type="Node3D" parent="."]
 
 [node name="FrameTop" type="MeshInstance3D" parent="Frame"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 2.16, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.16, 0)
 mesh = SubResource("Mesh_FrameTop")
 
 [node name="FrameLeft" type="MeshInstance3D" parent="Frame"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 1.10, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 1.10, 0)
 mesh = SubResource("Mesh_FrameSide")
 
 [node name="FrameRight" type="MeshInstance3D" parent="Frame"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.02, 1.10, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07, 1.10, 0)
 mesh = SubResource("Mesh_FrameSide")
 
 [node name="Signboard" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 2.34, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 2.32, 0.02)
 mesh = SubResource("Mesh_Signboard")
 
 [node name="Label3D" type="Label3D" parent="Signboard"]
@@ -76,13 +76,14 @@ font_size = 28
 outline_size = 6
 
 [node name="HingePivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0, 0)
 
 [node name="DoorMesh" type="MeshInstance3D" parent="HingePivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 1.07, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.485, 1.06, 0)
 mesh = SubResource("Mesh_DoorLeaf")
 
 [node name="Doorknob" type="MeshInstance3D" parent="HingePivot"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.90, 1.05, 0.04)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.88, 1.02, 0.04)
 mesh = SubResource("Mesh_Doorknob")
 
 [node name="DoorBody" type="StaticBody3D" parent="HingePivot"]
@@ -90,7 +91,7 @@ collision_layer = 1
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HingePivot/DoorBody"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 1.07, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.485, 1.06, 0)
 shape = SubResource("Shape_DoorBody")
 
 [node name="InteractionArea" type="Area3D" parent="."]
@@ -98,7 +99,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50, 1.10, 0.60)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.05, 0.60)
 shape = SubResource("Shape_InteractArea")
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]

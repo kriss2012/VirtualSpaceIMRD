@@ -148,10 +148,10 @@ mesh = SubResource("Mesh_SignFascia")
 
 [node name="SignLabel" type="Label3D" parent="SignboardFascia"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0.28)
-pixel_size = 0.0038
+pixel_size = 0.0032
 text = "Institute Of Management Research & Development, Shirpur"
-font_size = 46
-outline_size = 8
+font_size = 40
+outline_size = 6
 outline_color = Color(0.95, 0.95, 0.95, 1)
 modulate = Color(0.08, 0.16, 0.35, 1)
 
@@ -189,14 +189,3 @@ mesh = SubResource("Mesh_UpperWindow")
 [node name="Window_Floor2_R" type="MeshInstance3D" parent="UpperFloorsFacade"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 4.8, -2.5)
 mesh = SubResource("Mesh_UpperWindow")
-
-[node name="FoyerDoors" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, -2.5)
-
-[node name="LobbyGlassDoorLeft" type="MeshInstance3D" parent="FoyerDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0, 1.2, 0)
-mesh = SubResource("Mesh_LobbyGlassDoor")
-
-[node name="LobbyGlassDoorRight" type="MeshInstance3D" parent="FoyerDoors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 1.2, 0)
-mesh = SubResource("Mesh_LobbyGlassDoor")

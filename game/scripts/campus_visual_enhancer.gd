@@ -13,18 +13,19 @@ func _ready() -> void:
 func enhance_campus_environment(target_root: Node = null) -> void:
 	var root = target_root if target_root != null else (get_parent() if get_parent() else self)
 		
-	# 1. Calibrate Directional Sunlight
+	# 1. Calibrate Directional Sunlight (Smooth soft shadows, no low-res stepping)
 	var sun: DirectionalLight3D = root.find_child("DirectionalLight3D", true, false) as DirectionalLight3D
 	if sun:
-		sun.light_color = Color(1.0, 0.96, 0.90) # Warm sunny daylight
+		sun.light_color = Color(1.0, 0.97, 0.92) # Warm sunny daylight
 		sun.light_energy = 1.15
 		sun.shadow_enabled = true
-		sun.shadow_bias = 0.03
-		sun.shadow_normal_bias = 1.5
-		sun.directional_shadow_max_distance = 250.0
-		sun.directional_shadow_split_1 = 0.1
-		sun.directional_shadow_split_2 = 0.25
-		sun.directional_shadow_split_3 = 0.55
+		sun.shadow_bias = 0.02
+		sun.shadow_normal_bias = 2.0
+		sun.shadow_blur = 1.8
+		sun.directional_shadow_max_distance = 120.0
+		sun.directional_shadow_split_1 = 0.12
+		sun.directional_shadow_split_2 = 0.28
+		sun.directional_shadow_split_3 = 0.60
 		sun.directional_shadow_blend_splits = true
 		
 	# 2. Calibrate World Environment & Sky
@@ -33,33 +34,33 @@ func enhance_campus_environment(target_root: Node = null) -> void:
 		var env = world_env.environment
 		env.background_mode = Environment.BG_SKY
 		
-		# Procedural Sky setup
+		# Procedural Sky setup - warm neutral ground fill prevents dark green ceiling discoloration
 		var sky_mat = ProceduralSkyMaterial.new()
-		sky_mat.sky_top_color = Color(0.22, 0.46, 0.82) # Rich azure blue sky
-		sky_mat.sky_horizon_color = Color(0.78, 0.84, 0.92) # Atmospheric haze
-		sky_mat.ground_bottom_color = Color(0.18, 0.22, 0.18)
-		sky_mat.ground_horizon_color = Color(0.55, 0.65, 0.58)
+		sky_mat.sky_top_color = Color(0.25, 0.50, 0.86) # Rich azure blue sky
+		sky_mat.sky_horizon_color = Color(0.80, 0.85, 0.92) # Atmospheric haze
+		sky_mat.ground_bottom_color = Color(0.70, 0.72, 0.76) # Clean neutral ambient fill for ceilings
+		sky_mat.ground_horizon_color = Color(0.78, 0.80, 0.84)
 		sky_mat.sun_angle_max = 28.0
 		
 		var sky = Sky.new()
 		sky.sky_material = sky_mat
 		env.sky = sky
 		
-		# Calibrated Ambient Light (eliminates chalky white blowout)
+		# Calibrated Ambient Light (eliminates dark green tint & chalky white blowout)
 		env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
-		env.ambient_light_color = Color(0.60, 0.70, 0.85)
-		env.ambient_light_energy = 0.35
+		env.ambient_light_color = Color(0.75, 0.78, 0.85)
+		env.ambient_light_energy = 0.40
 		
 		# Tonemapping & Post-processing
 		env.tonemap_mode = Environment.TONE_MAPPER_ACES
 		env.tonemap_exposure = 1.05
 		env.tonemap_white = 1.0
 		env.ssao_enabled = true
-		env.ssao_radius = 1.5
-		env.ssao_intensity = 2.0
+		env.ssao_radius = 1.2
+		env.ssao_intensity = 1.5
 		env.glow_enabled = true
-		env.glow_intensity = 0.2
-		env.glow_bloom = 0.05
+		env.glow_intensity = 0.18
+		env.glow_bloom = 0.04
 
 
 func apply_all_campus_materials(target_root: Node = null) -> void:
@@ -89,9 +90,9 @@ func build_material_library() -> Dictionary:
 	lib["Mat_WallExt"] = create_mat(Color(0.88, 0.84, 0.76), 0.75, 0.0) # Academic sandstone facade
 	lib["Mat_WallInt"] = create_mat(Color(0.94, 0.92, 0.88), 0.85, 0.0) # Clean classroom plaster
 	lib["Mat_WallTrim"] = create_mat(Color(0.65, 0.26, 0.16), 0.48, 0.0) # Warm terracotta architectural trim
-	lib["Mat_FloorTile"] = create_mat(Color(0.84, 0.82, 0.78), 0.18, 0.0) # Polished marble lobby tiles
-	lib["Mat_Wood"] = create_mat(Color(0.38, 0.20, 0.10), 0.38, 0.0) # Polished teak doors & window frames
-	lib["Mat_Ceiling"] = create_mat(Color(0.92, 0.91, 0.88), 0.85, 0.0) # Clean off-white ceiling plaster
+	lib["Mat_FloorTile"] = create_mat(Color(0.86, 0.84, 0.80), 0.52, 0.0) # Matte honed marble lobby tiles (no specular blowout)
+	lib["Mat_Wood"] = create_mat(Color(0.38, 0.20, 0.10), 0.45, 0.0) # Polished teak doors & window frames
+	lib["Mat_Ceiling"] = create_mat(Color(0.96, 0.96, 0.96), 0.90, 0.0) # Clean white acoustic ceiling plaster
 	lib["Mat_MetalDark"] = create_mat(Color(0.10, 0.10, 0.12), 0.30, 0.85) # Black iron railings & gate
 	
 	# Architectural Glass (reflective, translucent)
@@ -191,9 +192,9 @@ func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 		return lib["Mat_Soil"]
 	elif "paving" in name_lower or "plaza" in name_lower or "walkway" in name_lower or "step" in name_lower or "plinth" in name_lower or "stair" in name_lower:
 		return lib["Mat_Paving"]
-	elif "flower" in name_lower or "shrub" in name_lower:
-		return lib["Mat_FlowerShrub"]
-	elif "tree" in name_lower or "crown" in name_lower or "leaf" in name_lower or "leaves" in name_lower or "foliage" in name_lower:
+	elif "door" in name_lower or "desk" in name_lower or "podium" in name_lower or "table" in name_lower:
+		return lib["Mat_Wood"]
+	elif "tree" in name_lower or "crown" in name_lower or "foliage" in name_lower or "leaves" in name_lower:
 		return lib["Mat_Leaves"]
 	elif "trunk" in name_lower or "bark" in name_lower:
 		return lib["Mat_Trunk"]
@@ -217,8 +218,6 @@ func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 		if "glow" in name_lower:
 			return lib["Mat_LampGlow"]
 		return lib["Mat_MetalDark"]
-	elif "door" in name_lower or "desk" in name_lower or "podium" in name_lower or "table" in name_lower:
-		return lib["Mat_Wood"]
 	elif "board" in name_lower:
 		return lib["Mat_Board"]
 	elif "torso" in name_lower or "blazer" in name_lower or "body" in name_lower:
