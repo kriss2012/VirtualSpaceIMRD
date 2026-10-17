@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://educational_bookshelf.gd" id="1_shelf"]
+
+[node name="EducationalBookshelf" type="Node3D"]
+script = ExtResource("1_shelf")
+shelf_width = 9.0
+shelf_height = 9.0
+shelf_depth = 1.0
+generate_on_start = true
+random_seed = 42
+add_camera_and_lights = true
+show_spine_text = true
