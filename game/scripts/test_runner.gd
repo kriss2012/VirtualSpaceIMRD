@@ -328,6 +328,12 @@ func test_stair_climb_and_second_floor() -> void:
 	var s_barrier_r = campus.find_child("StairSlopeBarrierRight", true, false)
 	assert_true(s_barrier_l == null and s_barrier_r == null, "Stair slope barriers removed to ensure smooth stair climbing")
 	
+	# Verify stair handrail calibration & alignment
+	var r_l_test = campus.find_child("Rail_Stair_L", true, false)
+	assert_true(r_l_test != null and not r_l_test.visible, "Old glitchy Rail_Stair_L hidden to eliminate mid-air overhang")
+	var g_l_test = campus.find_child("StairVoidGuardLeft", true, false)
+	assert_true(g_l_test != null and abs(g_l_test.position.z - (-3.55)) < 0.1, "StairVoidGuardLeft aligned cleanly to Z = -3.55 covering full stair void")
+	
 	# Verify DirectorySign non-mirrored orientation
 	var dir_sign: Label3D = campus.find_child("DirectorySign", true, false) as Label3D
 	assert_true(dir_sign != null and not dir_sign.double_sided, "DirectorySign configured single-sided to prevent mirror glitch")
