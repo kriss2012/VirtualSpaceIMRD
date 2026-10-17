@@ -29,6 +29,7 @@ func _ready() -> void:
 	test_location_triggers()
 	test_save_load_system()
 	test_stair_climb_and_second_floor()
+	test_library_procedural_bookshelf()
 	
 	print("====================================================")
 	print("TEST RESULTS: %d Passed, %d Failed" % [passed_tests, failed_tests])
@@ -366,4 +367,32 @@ func test_stair_climb_and_second_floor() -> void:
 	
 	remove_child(campus)
 	campus.free()
+
+
+func test_library_procedural_bookshelf() -> void:
+	print("\n--- TEST GROUP 11: Procedural BCA / MCA Library Bookshelf ---")
+	var shelf_script = load("res://scripts/procedural_bookshelf.gd")
+	assert_true(shelf_script != null, "ProceduralBookshelf script resource exists")
+	var shelf = Node3D.new()
+	shelf.set_script(shelf_script)
+	shelf.shelf_width = 5.0
+	shelf.shelf_height = 2.45
+	shelf.shelf_depth = 0.65
+	shelf.add_camera_and_lights = false
+	shelf.add_collision = true
+	add_child(shelf)
+	assert_true(shelf.get_child_count() > 0, "Bookshelf structure and books generated")
+	assert_true(shelf.has_method("count_books"), "Bookshelf has count_books method")
+	var book_count: int = shelf.count_books()
+	assert_true(book_count >= 50, "BCA & MCA syllabus books populated (Count >= 50, got %d)" % book_count)
+	var bca_book = shelf.find_child("Book_BCA_R0_B0", true, false)
+	assert_true(bca_book != null, "BCA Semester 1 book instance present")
+	if bca_book:
+		assert_true(bca_book.has_meta("title"), "Book has readable metadata title: " + str(bca_book.get_meta("title", "")))
+		assert_true(bca_book.has_meta("author"), "Book has author metadata: " + str(bca_book.get_meta("author", "")))
+	var mca_book = shelf.find_child("Book_MCA_R0_B0", true, false)
+	assert_true(mca_book != null, "MCA Semester 1 book instance present")
+	remove_child(shelf)
+	shelf.free()
+
 

@@ -42,22 +42,35 @@ def repack():
         campus_tscn = f.read()
     with open("game/scenes/classroom_door.tscn", "rb") as f:
         classroom_door_tscn = f.read()
+    with open("game/scripts/procedural_bookshelf.gd", "rb") as f:
+        procedural_bookshelf_gd = f.read()
+    with open("game/scenes/procedural_bookshelf.tscn", "rb") as f:
+        procedural_bookshelf_tscn = f.read()
         
     # Store or update in files_data
     files_data["scripts/campus_visual_enhancer.gd"] = enhancer_gd
     files_data["scripts/test_runner.gd"] = test_runner_gd
     files_data["scenes/campus.tscn"] = campus_tscn
     files_data["scenes/classroom_door.tscn"] = classroom_door_tscn
+    files_data["scripts/procedural_bookshelf.gd"] = procedural_bookshelf_gd
+    files_data["scenes/procedural_bookshelf.tscn"] = procedural_bookshelf_tscn
     
     # Update remap entries
     files_data["scripts/campus_visual_enhancer.gd.remap"] = b'[remap]\n\npath="res://scripts/campus_visual_enhancer.gd"\n'
     files_data["scripts/test_runner.gd.remap"] = b'[remap]\n\npath="res://scripts/test_runner.gd"\n'
     files_data["scenes/campus.tscn.remap"] = b'[remap]\n\npath="res://scenes/campus.tscn"\n'
     files_data["scenes/classroom_door.tscn.remap"] = b'[remap]\n\npath="res://scenes/classroom_door.tscn"\n'
+    files_data["scripts/procedural_bookshelf.gd.remap"] = b'[remap]\n\npath="res://scripts/procedural_bookshelf.gd"\n'
+    files_data["scenes/procedural_bookshelf.tscn.remap"] = b'[remap]\n\npath="res://scenes/procedural_bookshelf.tscn"\n'
     
     # Ensure entry list contains all keys
     entry_keys = {e["path"] for e in entries}
-    for new_key in ["scripts/campus_visual_enhancer.gd", "scripts/test_runner.gd", "scenes/campus.tscn", "scenes/classroom_door.tscn"]:
+    for new_key in [
+        "scripts/campus_visual_enhancer.gd", "scripts/test_runner.gd",
+        "scenes/campus.tscn", "scenes/classroom_door.tscn",
+        "scripts/procedural_bookshelf.gd", "scenes/procedural_bookshelf.tscn",
+        "scripts/procedural_bookshelf.gd.remap", "scenes/procedural_bookshelf.tscn.remap"
+    ]:
         if new_key not in entry_keys:
             entries.append({"path": new_key, "offset": 0, "size": len(files_data[new_key]), "flags": 0, "md5": b"\x00"*16})
 

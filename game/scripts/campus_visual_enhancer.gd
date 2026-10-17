@@ -9,6 +9,7 @@ func _ready() -> void:
 	apply_all_campus_materials()
 	calibrate_stair_railings()
 	calibrate_classroom_doors()
+	populate_library_bookshelves()
 	print("[VisualEnhancer] Realistic PBR materials & lighting successfully calibrated.")
 
 
@@ -366,5 +367,44 @@ func _ensure_wall_collision(parent: Node, node_name: String, pos: Vector3, size:
 		col.shape = box
 		body.add_child(col)
 		parent.add_child(body)
+
+
+func populate_library_bookshelves(target_root: Node = null) -> void:
+	var root = target_root if target_root != null else (get_parent() if get_parent() else self)
+	var library = root.find_child("LibrarySection", true, false)
+	if not library:
+		return
+		
+	var stacks_west = library.find_child("BookStacksWest", true, false)
+	if not stacks_west:
+		return
+		
+	var shelf_script = load("res://scripts/procedural_bookshelf.gd")
+	if not shelf_script:
+		return
+		
+	var stack_names = ["Stack_CS", "Stack_MGMT", "Stack_ENG", "Stack_SCI", "Stack_JOURNALS"]
+	for i in range(stack_names.size()):
+		var stack_node = stacks_west.find_child(stack_names[i], true, false)
+		if stack_node is Node3D:
+			# Hide old low-poly placeholder box rows
+			var tiers = stack_node.find_child("Tiers", true, false)
+			if tiers:
+				tiers.visible = false
+				
+			var existing_gen = stack_node.find_child("ProceduralBookshelf", true, false)
+			if not existing_gen:
+				var shelf = Node3D.new()
+				shelf.name = "ProceduralBookshelf"
+				shelf.set_script(shelf_script)
+				shelf.shelf_width = 5.0
+				shelf.shelf_height = 2.25
+				shelf.shelf_depth = 0.60
+				shelf.random_seed = 42 + i * 17
+				shelf.add_camera_and_lights = false
+				shelf.add_collision = false # stack_node already has CollisionShape3D
+				# Stack_CS runs along Z, so rotating 90 deg aligns shelf_width with Z
+				shelf.rotation.y = PI / 2.0
+				stack_node.add_child(shelf)
 
 
