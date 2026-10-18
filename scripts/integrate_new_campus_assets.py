@@ -86,21 +86,15 @@ def cleanup_old_assets():
                 bpy.data.objects.remove(obj, do_unlink=True)
             bpy.data.collections.remove(c)
 
-    # Remove old colored trees
-    veg = bpy.data.collections.get("Vegetation")
-    if veg:
-        old_trees = [o for o in veg.objects if o.name.startswith("ShadeTree_") or "neem" in o.name.lower() or "rear_tree" in o.name.lower()]
-        for o in old_trees:
-            bpy.data.objects.remove(o, do_unlink=True)
-
-    # Remove old placeholder cars & bikes
-    props = bpy.data.collections.get("Props_Vehicles")
-    if props:
-        old_cars = [o for o in props.objects if any(o.name.startswith(p) for p in [
-            "Car_0_", "Car_1_", "Car_2_", "Car_5_", "Bike_3_", "Bike_4_",
-            "Student_Bike_", "Bike_Canopy_", "Bike_Rack_Stand_", "Bike_Station_Pad"
-        ])]
-        for o in old_cars:
+    # Remove any existing procedural assets from previous runs to ensure idempotency
+    prefixes_to_clean = [
+        "Oak_Tree", "Corvette_Z06", "Car_Parking_Shade", "Bike_Parking_Shade",
+        "Mountain_Bike", "SH_", "Lib_", "BC_", "Park_Bench",
+        "ShadeTree_", "Car_0_", "Car_1_", "Car_2_", "Car_5_", "Bike_3_", "Bike_4_",
+        "Student_Bike_", "Bike_Canopy_", "Bike_Rack_Stand_", "Bike_Station_Pad"
+    ]
+    for o in list(bpy.data.objects):
+        if any(o.name.startswith(p) for p in prefixes_to_clean):
             bpy.data.objects.remove(o, do_unlink=True)
 
     # Clean orphaned datablocks
@@ -914,10 +908,10 @@ def main():
         ((22.0, 60.0, 0.0), 1.00, 31),
         ((32.0, 62.0, 0.0), 1.10, 37),
         ((42.0, 54.0, 0.0), 0.95, 41),
-        # Rear Greenway (Y <= -16.0, well clear of building wall at Y = -8.5!)
-        ((-14.0, -17.0, 0.0), 1.00, 43),
-        ((0.0, -18.0, 0.0), 1.05, 47),
-        ((14.0, -17.0, 0.0), 1.00, 53),
+        # Rear Greenway (Y = -22.0 ensures 13.5m clearance from building wall at Y = -8.5!)
+        ((-14.0, -22.0, 0.0), 1.00, 43),
+        ((0.0, -22.0, 0.0), 1.05, 47),
+        ((14.0, -22.0, 0.0), 1.00, 53),
         # Flank Lawns
         ((-34.0, -4.0, 0.0), 1.00, 59),
         ((34.0, -4.0, 0.0), 1.00, 61),
