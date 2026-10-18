@@ -43,6 +43,13 @@ check_collision = player_mod.check_collision
 ui_mod = importlib.import_module("05_game_ui")
 GameHUD = ui_mod.GameHUD
 
+# [INTRO INTEGRATION 1/4] optional cinematic intro (scripts/06_intro_cinematic.py)
+try:
+    intro_mod = importlib.import_module("06_intro_cinematic")
+except Exception as _intro_exc:          # the game still runs without the intro
+    intro_mod = None
+    print(f"[Run Game] Intro cinematic unavailable: {_intro_exc!r}")
+
 OUTPUT_DIR = PROJECT_ROOT / "output"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 BLEND_FILE = OUTPUT_DIR / "imrd_campus.blend"
@@ -63,6 +70,7 @@ class IMRD_OT_StartGame(bpy.types.Operator):
 
     _timer = None
     last_time = 0.0
+    _running = False   # [INTRO INTEGRATION 2/4] only one game loop / HUD at a time
 
     # Controls state
     keys = {
@@ -251,6 +259,14 @@ class IMRD_OT_StartGame(bpy.types.Operator):
             context.area.tag_redraw()
 
     def execute(self, context):
+        # [INTRO INTEGRATION 3/4] never start a second loop (double HUD / double input)
+        if IMRD_OT_StartGame._running:
+            self.report({'WARNING'}, "[IMRD Game] Already running.")
+            return {'CANCELLED'}
+        IMRD_OT_StartGame._running = True
+        # a previous session may have ended with keys still marked pressed
+        for _k in self.keys:
+            self.keys[_k] = False
         self.last_time = time.time()
         g_hud.register()
         self._timer = context.window_manager.event_timer_add(0.016, window=context.window)
@@ -259,6 +275,7 @@ class IMRD_OT_StartGame(bpy.types.Operator):
         return {'RUNNING_MODAL'}
 
     def cancel(self, context):
+        IMRD_OT_StartGame._running = False
         g_hud.unregister()
         if self._timer:
             context.window_manager.event_timer_remove(self._timer)
@@ -313,8 +330,12 @@ classes = (
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
+    if intro_mod:
+        intro_mod.register()
 
 def unregister():
+    if intro_mod:
+        intro_mod.unregister()
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
 
@@ -352,3 +373,7 @@ if __name__ == "__main__":
     print("[Run Game] To play interactively in Blender, run:")
     print(f'  blender "{BLEND_FILE}" --python "{SCRIPT_DIR / "run_game.py"}"')
     print("  Then press 'N' in the 3D Viewport -> 'IMRD Game' tab -> 'Start Game' (or press Spacebar / Operator search).\n")
+
+    # [INTRO INTEGRATION 4/4] play the cinematic intro in the interactive UI (skip with: -- --no-intro)
+    if intro_mod and not bpy.app.background and "--no-intro" not in sys.argv:
+        intro_mod.request_play(1.0)

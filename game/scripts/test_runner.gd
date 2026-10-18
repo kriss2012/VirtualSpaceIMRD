@@ -353,17 +353,18 @@ func test_stair_climb_and_second_floor() -> void:
 	assert_true(furn.find_child("Lab_G_Instructor_Desk", true, false) != null, "Computer Lab 102 instructor desk present")
 	assert_true(furn.find_child("Lab_Desk_G_0_0", true, false) != null, "Computer Lab 102 student workstations present")
 	
-	# Verify authentic parking vehicles from reference images in campus_props
+	# Verify authentic parking vehicles and amenities from updated Blender environment
 	var props = campus.find_child("campus_props", true, false)
 	assert_true(props != null, "campus_props present")
-	assert_true(props.find_child("Car_0_Body", true, false) != null, "Tata Nano EV 3D model present in parking")
-	assert_true(props.find_child("Car_0_PlateFront", true, false) != null, "Tata Nano EV green license plate present")
-	assert_true(props.find_child("Car_1_Body", true, false) != null, "Corvette C8 Z06 supercar 3D model present in parking")
-	assert_true(props.find_child("Car_1_WingBlade", true, false) != null, "Corvette C8 Z06 carbon rear wing spoiler present")
-	assert_true(props.find_child("Car_2_Body", true, false) != null, "Tata Punch.ev SUV 3D model present in parking")
-	assert_true(props.find_child("Car_2_Lightbar", true, false) != null, "Tata Punch.ev horizontal LED lightbar present")
-	assert_true(props.find_child("Bike_3_Body", true, false) != null, "Joy e-bike Beast electric sports motorcycle present in parking")
-	assert_true(props.find_child("Bike_4_Body", true, false) != null, "Aurore EV electric sports motorcycle present in parking")
+	assert_true(props.find_child("Car_Parking_Shade", true, false) != null, "Tensile Car Parking Shade canopy present")
+	assert_true(props.find_child("Bike_Parking_Shade", true, false) != null, "Tensile Bike Parking Shade canopy present")
+	assert_true(props.find_child("Corvette_Z06_TorchRed", true, false) != null, "Corvette Z06 Torch Red supercar 3D model present")
+	assert_true(props.find_child("Corvette_Z06_VelocityYellow", true, false) != null, "Corvette Z06 Velocity Yellow supercar present")
+	assert_true(props.find_child("Corvette_Z06_CeramicWhite", true, false) != null, "Corvette Z06 Ceramic White supercar present")
+	assert_true(props.find_child("Corvette_Z06_ElkhartBlue", true, false) != null, "Corvette Z06 Elkhart Blue supercar present")
+	assert_true(props.find_child("Mountain_Bike_1", true, false) != null, "Mountain Bike 1 present in station")
+	assert_true(props.find_child("Badminton_Court", true, false) != null, "Badminton Court present in Sports Complex")
+	assert_true(props.find_child("Park_Bench_1", true, false) != null, "Park Bench 1 present along promenade")
 	
 	remove_child(campus)
 	campus.free()

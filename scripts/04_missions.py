@@ -55,6 +55,10 @@ class MissionManager:
             "First_Floor": {"pos": Vector((0, 2, 4.3)), "radius": 6.0, "visited": False},
             "Campus_Garden": {"pos": Vector((-40, 48.5, 0)), "radius": 9.0, "visited": False},
             "Parking_Lot": {"pos": Vector((44, 43, 0)), "radius": 12.0, "visited": False},
+            "Seminar_Hall": {"pos": Vector((14.2, 4.2, 4.3)), "radius": 6.0, "visited": False},
+            "Academic_Library": {"pos": Vector((0.0, -4.2, 4.3)), "radius": 6.0, "visited": False},
+            "Badminton_Court": {"pos": Vector((38.0, 5.0, 0.0)), "radius": 7.0, "visited": False},
+            "Bike_Station": {"pos": Vector((24.0, 49.0, 0.0)), "radius": 5.0, "visited": False},
         }
 
         # Data-driven missions

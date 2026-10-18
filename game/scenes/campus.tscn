@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3]
+[gd_scene load_steps=43 format=3]
 
 [ext_resource type="Script" path="res://scripts/campus_visual_enhancer.gd" id="1_enhancer"]
 [ext_resource type="PackedScene" path="res://assets/models/campus_terrain.glb" id="2_terrain"]
@@ -87,6 +87,18 @@ size = Vector3(14, 4, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_loc_courtyard"]
 size = Vector3(24, 4, 24)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_loc_seminar"]
+size = Vector3(12, 4, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_loc_library"]
+size = Vector3(16, 4, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_loc_sports"]
+size = Vector3(16, 4, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_loc_parking"]
+size = Vector3(22, 4, 14)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_car"]
 size = Vector3(1.9, 1.5, 4.2)
@@ -456,7 +468,7 @@ shape = SubResource("BoxShape3D_pillar")
 [node name="Vehicles" type="Node3D" parent="Collisions"]
 
 [node name="Car0" type="StaticBody3D" parent="Collisions/Vehicles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0.75, -36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.25, 0.75, -36.5)
 collision_layer = 1
 collision_mask = 2
 
@@ -464,7 +476,7 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_car")
 
 [node name="Car1" type="StaticBody3D" parent="Collisions/Vehicles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.4, 0.75, -36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.75, 0.75, -36.5)
 collision_layer = 1
 collision_mask = 2
 
@@ -472,7 +484,7 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_car")
 
 [node name="Car2" type="StaticBody3D" parent="Collisions/Vehicles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8, 0.75, -36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.25, 0.75, -36.5)
 collision_layer = 1
 collision_mask = 2
 
@@ -480,7 +492,7 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_car")
 
 [node name="Car3" type="StaticBody3D" parent="Collisions/Vehicles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.2, 0.75, -36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.75, 0.75, -36.5)
 collision_layer = 1
 collision_mask = 2
 
@@ -488,7 +500,7 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_car")
 
 [node name="Car4" type="StaticBody3D" parent="Collisions/Vehicles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.6, 0.75, -36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.5, 0.75, -48.0)
 collision_layer = 1
 collision_mask = 2
 
@@ -496,7 +508,7 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_car")
 
 [node name="Car5" type="StaticBody3D" parent="Collisions/Vehicles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49, 0.75, -36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5, 0.75, -48.0)
 collision_layer = 1
 collision_mask = 2
 
@@ -569,6 +581,46 @@ location_id = "courtyard"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/CourtyardTrigger"]
 shape = SubResource("BoxShape3D_loc_courtyard")
+
+[node name="SeminarTrigger" type="Area3D" parent="LocationTriggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.25, 5.5, -4.25)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("15_loc_trigger")
+location_id = "seminar"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/SeminarTrigger"]
+shape = SubResource("BoxShape3D_loc_seminar")
+
+[node name="LibraryTrigger" type="Area3D" parent="LocationTriggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 4.25)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("15_loc_trigger")
+location_id = "library"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/LibraryTrigger"]
+shape = SubResource("BoxShape3D_loc_library")
+
+[node name="SportsTrigger" type="Area3D" parent="LocationTriggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.0, 1.5, -5.0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("15_loc_trigger")
+location_id = "sports"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/SportsTrigger"]
+shape = SubResource("BoxShape3D_loc_sports")
+
+[node name="ParkingTrigger" type="Area3D" parent="LocationTriggers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.0, 1.5, -38.0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("15_loc_trigger")
+location_id = "parking"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LocationTriggers/ParkingTrigger"]
+shape = SubResource("BoxShape3D_loc_parking")
 
 [node name="InteriorLighting" type="Node3D" parent="."]
 

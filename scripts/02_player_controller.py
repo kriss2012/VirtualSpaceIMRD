@@ -43,8 +43,14 @@ CAMPUS_COLLIDERS = [
     (5.8, 44.0, 74.8, 75.2, 0.0, 2.5),
     # Security cabin
     (6.4, 9.2, 72.1, 74.9, 0.0, 3.5),
-    # Parking cars zone
+    # Parking cars zone (Corvette Z06 bays)
     (30.0, 52.0, 33.0, 39.0, 0.0, 2.0),
+    # Two-Wheeler / Bike station
+    (21.5, 29.5, 47.0, 52.0, 0.0, 2.2),
+    # Badminton court net and posts
+    (37.7, 38.3, 1.9, 8.1, 0.0, 1.6),
+    # First Floor Seminar Hall stage platform
+    (11.5, 17.5, 1.0, 2.8, 4.3, 5.2),
 ]
 
 def check_collision(new_pos, radius=0.45):

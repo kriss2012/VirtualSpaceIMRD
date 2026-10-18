@@ -174,6 +174,102 @@ func build_material_library() -> Dictionary:
 	lib["Mat_StudentPants"] = create_mat(Color(0.20, 0.22, 0.25), 0.65, 0.0) # Charcoal trousers
 	lib["Mat_StudentShoes"] = create_mat(Color(0.08, 0.08, 0.08), 0.30, 0.0) # Polished black shoes
 	lib["Mat_GuideJacket"] = create_mat(Color(0.25, 0.28, 0.32), 0.55, 0.0) # Prof. Sharma blazer
+
+	# 6. Updated Blender Environment Assets (Oak Trees, Supercars, Bikes, Seminar, Library, Badminton, Canopies)
+	lib["Bark_Oak"] = create_mat(Color(0.18, 0.11, 0.06), 0.92, 0.0)
+	lib["Leaves_Oak"] = create_mat(Color(0.12, 0.38, 0.08), 0.60, 0.0)
+
+	# Tensile Canopies
+	lib["Steel_White"] = create_mat(Color(0.92, 0.92, 0.94), 0.30, 0.15)
+	var canopy = StandardMaterial3D.new()
+	canopy.albedo_color = Color(0.92, 0.89, 0.82)
+	canopy.roughness = 0.75
+	canopy.emission_enabled = true
+	canopy.emission = Color(0.85, 0.80, 0.65)
+	canopy.emission_energy_multiplier = 0.12
+	lib["Fabric_Canopy"] = canopy
+	lib["Concrete_Base"] = create_mat(Color(0.58, 0.58, 0.55), 0.90, 0.0)
+
+	# Corvette Z06 Supercars
+	lib["Corvette_Z06_TorchRed_Paint"] = create_mat(Color(0.82, 0.02, 0.03), 0.18, 0.55)
+	lib["Corvette_Z06_VelocityYellow_Paint"] = create_mat(Color(0.95, 0.76, 0.02), 0.18, 0.55)
+	lib["Corvette_Z06_CeramicWhite_Paint"] = create_mat(Color(0.94, 0.95, 0.97), 0.18, 0.55)
+	lib["Corvette_Z06_ElkhartBlue_Paint"] = create_mat(Color(0.01, 0.22, 0.72), 0.18, 0.55)
+	lib["Car_Glass"] = car_glass
+	lib["Car_Black"] = create_mat(Color(0.02, 0.02, 0.022), 0.45, 0.0)
+	lib["Car_Carbon"] = create_mat(Color(0.02, 0.02, 0.025), 0.25, 0.30)
+	lib["Car_Rubber"] = create_mat(Color(0.025, 0.025, 0.025), 0.85, 0.0)
+	lib["Car_RimDark"] = create_mat(Color(0.07, 0.07, 0.08), 0.30, 0.90)
+	lib["Car_RimSpoke"] = create_mat(Color(0.85, 0.85, 0.88), 0.20, 1.0)
+	lib["Car_Chrome"] = create_mat(Color(0.88, 0.88, 0.90), 0.15, 1.0)
+	var car_tail = StandardMaterial3D.new()
+	car_tail.albedo_color = Color(0.95, 0.02, 0.02)
+	car_tail.roughness = 0.20
+	car_tail.emission_enabled = true
+	car_tail.emission = Color(1.0, 0.0, 0.0)
+	car_tail.emission_energy_multiplier = 3.0
+	lib["Car_Taillight"] = car_tail
+	var car_head = StandardMaterial3D.new()
+	car_head.albedo_color = Color(0.95, 0.98, 1.0)
+	car_head.roughness = 0.10
+	car_head.emission_enabled = true
+	car_head.emission = Color(0.95, 0.98, 1.0)
+	car_head.emission_energy_multiplier = 3.0
+	lib["Car_Headlight"] = car_head
+
+	# Mountain Bikes
+	lib["Mountain_Bike_1_Frame"] = create_mat(Color(1.0, 0.32, 0.02), 0.25, 0.60)
+	lib["Mountain_Bike_2_Frame"] = create_mat(Color(0.0, 0.72, 0.85), 0.25, 0.60)
+	lib["Mountain_Bike_3_Frame"] = create_mat(Color(0.90, 0.05, 0.05), 0.25, 0.60)
+	lib["Mountain_Bike_4_Frame"] = create_mat(Color(0.03, 0.03, 0.035), 0.25, 0.60)
+	lib["Mountain_Bike_5_Frame"] = create_mat(Color(0.28, 0.85, 0.08), 0.25, 0.60)
+	lib["Mountain_Bike_6_Frame"] = create_mat(Color(0.98, 0.80, 0.05), 0.25, 0.60)
+	lib["Bike_BlackSteel"] = create_mat(Color(0.02, 0.02, 0.025), 0.40, 0.50)
+	lib["Bike_Rubber"] = create_mat(Color(0.02, 0.02, 0.02), 0.85, 0.0)
+	lib["Bike_Steel"] = create_mat(Color(0.85, 0.85, 0.88), 0.20, 1.0)
+
+	# Seminar Hall & Auditorium
+	lib["SH_WoodLight"] = create_mat(Color(0.78, 0.58, 0.36), 0.50, 0.0)
+	lib["SH_WoodDark"] = create_mat(Color(0.42, 0.24, 0.12), 0.55, 0.0)
+	lib["SH_SeatRed"] = create_mat(Color(0.85, 0.04, 0.05), 0.80, 0.0)
+	lib["SH_StageFloor"] = create_mat(Color(0.82, 0.68, 0.52), 0.55, 0.0)
+	var sh_screen = StandardMaterial3D.new()
+	sh_screen.albedo_color = Color(0.96, 0.98, 1.0)
+	sh_screen.roughness = 0.25
+	sh_screen.emission_enabled = true
+	sh_screen.emission = Color(0.96, 0.98, 1.0)
+	sh_screen.emission_energy_multiplier = 2.5
+	lib["SH_Screen"] = sh_screen
+	lib["SH_BannerRed"] = create_mat(Color(0.72, 0.03, 0.04), 0.70, 0.0)
+	lib["SH_Frame"] = create_mat(Color(0.02, 0.02, 0.03), 0.40, 0.0)
+	lib["SH_DarkPlastic"] = create_mat(Color(0.03, 0.03, 0.035), 0.50, 0.0)
+	lib["SH_Chrome"] = create_mat(Color(0.92, 0.92, 0.94), 0.15, 1.0)
+	lib["SH_PodiumWood"] = create_mat(Color(0.72, 0.52, 0.32), 0.45, 0.0)
+
+	# Academic Library
+	lib["Lib_Oak"] = create_mat(Color(0.48, 0.28, 0.12), 0.45, 0.0)
+	lib["Lib_OakDark"] = create_mat(Color(0.26, 0.14, 0.06), 0.55, 0.0)
+	lib["Lib_TableWood"] = create_mat(Color(0.72, 0.52, 0.32), 0.40, 0.0)
+	lib["Lib_Steel"] = create_mat(Color(0.04, 0.04, 0.05), 0.40, 0.50)
+	lib["Lib_ChairCushion"] = create_mat(Color(0.08, 0.18, 0.36), 0.65, 0.0)
+	var lib_screen = StandardMaterial3D.new()
+	lib_screen.albedo_color = Color(0.08, 0.38, 0.92)
+	lib_screen.roughness = 0.20
+	lib_screen.emission_enabled = true
+	lib_screen.emission = Color(0.08, 0.38, 0.92)
+	lib_screen.emission_energy_multiplier = 2.2
+	lib["Lib_PanelScreen"] = lib_screen
+
+	# Badminton Court
+	lib["BC_WoodPlank"] = create_mat(Color(0.76, 0.50, 0.26), 0.38, 0.0)
+	lib["BC_CourtGreen"] = create_mat(Color(0.04, 0.40, 0.12), 0.50, 0.0)
+	lib["BC_LineWhite"] = create_mat(Color(0.98, 0.98, 0.98), 0.35, 0.0)
+	lib["BC_PostYellow"] = create_mat(Color(0.96, 0.82, 0.06), 0.30, 0.20)
+	lib["BC_NetWhite"] = create_mat(Color(0.92, 0.92, 0.94), 0.70, 0.0)
+
+	# Park Benches
+	lib["Bench_CastIron"] = create_mat(Color(0.025, 0.025, 0.03), 0.40, 0.70)
+	lib["Bench_WoodSlat"] = create_mat(Color(0.58, 0.22, 0.08), 0.45, 0.0)
 	
 	return lib
 
@@ -209,7 +305,65 @@ func apply_recursive(node: Node, lib: Dictionary) -> void:
 
 func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 	var name_lower = n.to_lower()
-	if "grass" in name_lower or "lawn" in name_lower:
+	if "corvette" in name_lower:
+		if "torchred" in name_lower or "red" in name_lower:
+			return lib["Corvette_Z06_TorchRed_Paint"]
+		elif "yellow" in name_lower:
+			return lib["Corvette_Z06_VelocityYellow_Paint"]
+		elif "white" in name_lower:
+			return lib["Corvette_Z06_CeramicWhite_Paint"]
+		elif "blue" in name_lower:
+			return lib["Corvette_Z06_ElkhartBlue_Paint"]
+		elif "tire" in name_lower:
+			return lib["Car_Rubber"]
+		elif "rim" in name_lower or "spoke" in name_lower:
+			return lib["Car_RimSpoke"]
+		elif "tail" in name_lower:
+			return lib["Car_Taillight"]
+		elif "head" in name_lower:
+			return lib["Car_Headlight"]
+		elif "wing" in name_lower or "diffuser" in name_lower or "splitter" in name_lower:
+			return lib["Car_Carbon"]
+		elif "glass" in name_lower or "cabin" in name_lower:
+			return lib["Car_Glass"]
+		return lib["Car_Black"]
+	elif "mountain_bike" in name_lower or "bike_" in name_lower:
+		if "_1" in name_lower:
+			return lib["Mountain_Bike_1_Frame"]
+		elif "_2" in name_lower:
+			return lib["Mountain_Bike_2_Frame"]
+		elif "_3" in name_lower:
+			return lib["Mountain_Bike_3_Frame"]
+		elif "_4" in name_lower:
+			return lib["Mountain_Bike_4_Frame"]
+		elif "_5" in name_lower:
+			return lib["Mountain_Bike_5_Frame"]
+		elif "_6" in name_lower:
+			return lib["Mountain_Bike_6_Frame"]
+		elif "tire" in name_lower or "rubber" in name_lower:
+			return lib["Bike_Rubber"]
+		elif "rim" in name_lower or "spoke" in name_lower or "hub" in name_lower:
+			return lib["Bike_Steel"]
+		return lib["Bike_BlackSteel"]
+	elif "court" in name_lower or "badminton" in name_lower:
+		if "net" in name_lower:
+			return lib["BC_NetWhite"]
+		elif "post" in name_lower:
+			return lib["BC_PostYellow"]
+		elif "line" in name_lower:
+			return lib["BC_LineWhite"]
+		return lib["BC_CourtGreen"]
+	elif "park_bench" in name_lower or "bench" in name_lower:
+		if "iron" in name_lower or "leg" in name_lower or "arm" in name_lower:
+			return lib["Bench_CastIron"]
+		return lib["Bench_WoodSlat"]
+	elif "shade" in name_lower or "canopy" in name_lower:
+		if "fabric" in name_lower:
+			return lib["Fabric_Canopy"]
+		elif "footing" in name_lower or "conc" in name_lower:
+			return lib["Concrete_Base"]
+		return lib["Steel_White"]
+	elif "grass" in name_lower or "lawn" in name_lower:
 		return lib["Mat_Grass"]
 	elif "road" in name_lower or "asphalt" in name_lower:
 		if "dash" in name_lower or "line" in name_lower:
@@ -223,12 +377,14 @@ func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 		return lib["Mat_Soil"]
 	elif "paving" in name_lower or "plaza" in name_lower or "walkway" in name_lower or "step" in name_lower or "plinth" in name_lower or "stair" in name_lower:
 		return lib["Mat_Paving"]
-	elif "door" in name_lower or "desk" in name_lower or "podium" in name_lower or "table" in name_lower:
+	elif "door" in name_lower or "desk" in name_lower:
 		return lib["Mat_Wood"]
-	elif "tree" in name_lower or "crown" in name_lower or "foliage" in name_lower or "leaves" in name_lower:
-		return lib["Mat_Leaves"]
+	elif "oak_tree" in name_lower or "tree" in name_lower:
+		if "branch" in name_lower or "trunk" in name_lower:
+			return lib["Bark_Oak"]
+		return lib["Leaves_Oak"]
 	elif "trunk" in name_lower or "bark" in name_lower:
-		return lib["Mat_Trunk"]
+		return lib["Bark_Oak"]
 	elif "parking" in name_lower:
 		if "line" in name_lower:
 			return lib["Mat_ParkLines"]
@@ -236,7 +392,7 @@ func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 	elif "wall" in name_lower:
 		if "int" in name_lower or "class" in name_lower:
 			return lib["Mat_WallInt"]
-		elif "trim" in name_lower or "canopy" in name_lower or "sign" in name_lower:
+		elif "trim" in name_lower or "sign" in name_lower:
 			return lib["Mat_WallTrim"]
 		return lib["Mat_WallExt"]
 	elif "floor" in name_lower or "slab" in name_lower:
@@ -249,6 +405,24 @@ func resolve_by_node_name(n: String, lib: Dictionary) -> StandardMaterial3D:
 		if "glow" in name_lower:
 			return lib["Mat_LampGlow"]
 		return lib["Mat_MetalDark"]
+	elif "stage" in name_lower:
+		return lib["SH_StageFloor"]
+	elif "podium" in name_lower:
+		return lib["SH_PodiumWood"]
+	elif "screen" in name_lower or "display" in name_lower or "kiosk" in name_lower:
+		return lib["SH_Screen"]
+	elif "sh_" in name_lower or "seminar" in name_lower:
+		if "seat" in name_lower or "chair" in name_lower:
+			return lib["SH_SeatRed"]
+		elif "banner" in name_lower:
+			return lib["SH_BannerRed"]
+		return lib["SH_WoodLight"]
+	elif "lib_" in name_lower or "library" in name_lower:
+		if "table" in name_lower:
+			return lib["Lib_TableWood"]
+		elif "chair" in name_lower:
+			return lib["Lib_ChairCushion"]
+		return lib["Lib_Oak"]
 	elif "board" in name_lower:
 		return lib["Mat_Board"]
 	elif "torso" in name_lower or "blazer" in name_lower or "body" in name_lower:

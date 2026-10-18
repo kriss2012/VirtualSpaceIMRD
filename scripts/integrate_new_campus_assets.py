@@ -1,17 +1,16 @@
 """
 integrate_new_campus_assets.py
 ------------------------------
-Integrates new procedural assets into the IMRD Campus Blender scene:
-1. Removes any remaining old/glitched assets, old bubble/colored trees, and old placeholder vehicles.
-2. Procedural Oak Trees (from oak_tree_blender.py) - broad-crowned realistic trees with proper clearances.
-3. Procedural Supercars (from corvette_z06_blender.py) - Corvette Z06 in parking bays with multi-color palette.
-4. Tensile Parking Shade (from parking_shade_blender.py) - over parking lot and bike station.
-5. Mountain Bikes (from mountain_bike_blender.py) - parked in two-wheeler station.
-6. Seminar Hall (from seminar_hall_blender.py) - First Floor Seminar Hall with stage, screen, podium, and curved audience seating.
-7. Academic Library (from bookshelf_wall_blender.py & school_desk_blender.py) - First Floor Library with oak bookshelves, books, and study tables.
-8. Badminton Court (from badminton_court_blender.py) - in sports recreation zone.
-9. Park Benches (from park_bench_blender.py) - along pedestrian walkways and plaza.
-10. Interactive Information Panel (from interactive_panel_blender.py) - at library and entrance.
+Integrates new procedural assets into the IMRD Campus Blender scene with
+rich, accurate, and vivid PBR colors and viewport diffuse settings:
+1. Procedural Oak Trees (realistic broad-crowned trees with lush green foliage and bark brown trunks).
+2. Procedural Supercars (Corvette Z06 in Torch Red, Velocity Yellow, Ceramic White, Elkhart Blue with carbon aero and chrome exhausts).
+3. Tensile Parking Shades (architectural white steel tubes, off-white translucent membrane fabric, concrete footings).
+4. Mountain Bikes (vibrant frame colors: Orange, Cyan, Crimson, Stealth Black, Lime Green, Sunburst Gold).
+5. Seminar Hall (velvet crimson audience seats, two-tone acoustic wood paneling, hardwood stage, glowing screen, red banners).
+6. Academic Library (golden honey oak bookshelves, multi-colored book bindings, beech study tables, navy cushions, digital kiosk).
+7. Badminton Court (BWF tournament emerald green PU court, parquet wood surround, crisp white lines, yellow posts, white net).
+8. Park Benches (Victorian black cast iron frames, warm mahogany wood slats).
 """
 
 import math
@@ -56,6 +55,10 @@ def make_pbr_mat(name, color, metallic=0.0, rough=0.5, coat=0.0, emit=None, emit
     if not m:
         m = bpy.data.materials.new(name)
     m.use_nodes = True
+    m.diffuse_color = (*color[:3], 1.0)
+    m.roughness = rough
+    m.metallic = metallic
+
     b = m.node_tree.nodes.get("Principled BSDF")
     if not b:
         b = m.node_tree.nodes.new("ShaderNodeBsdfPrincipled")
@@ -120,19 +123,29 @@ def build_oak_tree(target_col, location, scale=1.0, seed=7, name_prefix="Oak_Tre
     LEAF_BLOBS_PER_TIP = (3, 4)
     LEAF_SIZE = (0.9 * scale, 1.4 * scale)
 
-    # Materials
-    bark_mat = make_pbr_mat("Bark_Oak", (0.075, 0.05, 0.035), rough=0.92)
+    # Rich bark material (warm organic woody brown)
+    bark_mat = make_pbr_mat("Bark_Oak", (0.18, 0.11, 0.06), rough=0.92)
+
+    # Lush forest canopy green leaves with vertex color modulation & fallback
     leaf_mat = bpy.data.materials.get("Leaves_Oak")
     if not leaf_mat:
         leaf_mat = bpy.data.materials.new("Leaves_Oak")
-        leaf_mat.use_nodes = True
-        nt = leaf_mat.node_tree
-        lb = nt.nodes.get("Principled BSDF")
-        set_in(lb, ["Roughness"], 0.6)
-        set_in(lb, ["Subsurface Weight", "Subsurface"], 0.15)
-        vcol = nt.nodes.new("ShaderNodeVertexColor")
-        vcol.layer_name = "Col"
-        nt.links.new(vcol.outputs["Color"], lb.inputs["Base Color"])
+    leaf_mat.use_nodes = True
+    leaf_mat.diffuse_color = (0.12, 0.40, 0.08, 1.0)
+    leaf_mat.roughness = 0.6
+    nt = leaf_mat.node_tree
+    lb = nt.nodes.get("Principled BSDF")
+    if not lb:
+        lb = nt.nodes.new("ShaderNodeBsdfPrincipled")
+    set_in(lb, ["Base Color"], (0.12, 0.38, 0.08, 1.0))
+    set_in(lb, ["Roughness"], 0.6)
+    set_in(lb, ["Subsurface Weight", "Subsurface"], 0.15)
+    attr_node = nt.nodes.get("Attribute_Col")
+    if not attr_node:
+        attr_node = nt.nodes.new("ShaderNodeAttribute")
+        attr_node.name = "Attribute_Col"
+        attr_node.attribute_name = "Col"
+        nt.links.new(attr_node.outputs["Color"], lb.inputs["Base Color"])
 
     # Curve Branches
     curve = bpy.data.curves.new(f"{name_prefix}_Branches_Curve", 'CURVE')
@@ -227,9 +240,9 @@ def build_oak_tree(target_col, location, scale=1.0, seed=7, name_prefix="Oak_Tre
         r = random.uniform(*LEAF_SIZE)
         res = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=1.0)
         t = random.random()
-        col = (0.04 + 0.18 * t, 0.18 + 0.32 * t, 0.02 + 0.04 * t, 1.0)
+        col = (0.04 + 0.18 * t, 0.22 + 0.36 * t, 0.02 + 0.04 * t, 1.0)
         if random.random() < 0.10:
-            col = (0.28, 0.42, 0.04, 1.0)
+            col = (0.32, 0.48, 0.05, 1.0)
         for v in res["verts"]:
             v.co = c + v.co * r * random.uniform(0.8, 1.2)
             v.co.z = c.z + (v.co.z - c.z) * 0.85
@@ -270,20 +283,20 @@ def build_oak_tree(target_col, location, scale=1.0, seed=7, name_prefix="Oak_Tre
 # ----------------------------------------------------------------------------
 # 3. CORVETTE Z06 SUPERCAR BUILDER
 # ----------------------------------------------------------------------------
-def build_corvette_z06(target_col, location, rot_z=0.0, paint_color=(0.65, 0.02, 0.02), name="Corvette_Z06"):
+def build_corvette_z06(target_col, location, rot_z=0.0, paint_color=(0.82, 0.02, 0.03), name="Corvette_Z06"):
     root = bpy.data.objects.new(name, None)
     link_only_to(root, target_col)
 
-    paint_mat = make_pbr_mat(f"{name}_Paint", paint_color, metallic=0.5, rough=0.20, coat=1.0)
-    glass_mat = make_pbr_mat("Car_Glass", (0.01, 0.012, 0.015), metallic=0.0, rough=0.04, coat=0.5)
-    black_mat = make_pbr_mat("Car_Black", (0.015, 0.015, 0.017), rough=0.45)
-    carbon_mat = make_pbr_mat("Car_Carbon", (0.01, 0.01, 0.012), metallic=0.3, rough=0.25, coat=1.0)
-    rubber_mat = make_pbr_mat("Car_Rubber", (0.02, 0.02, 0.02), rough=0.85)
-    rim_dark = make_pbr_mat("Car_RimDark", (0.03, 0.03, 0.035), metallic=0.9, rough=0.3)
-    rim_spoke = make_pbr_mat("Car_RimSpoke", (0.2, 0.2, 0.22), metallic=1.0, rough=0.25)
-    chrome_mat = make_pbr_mat("Car_Chrome", (0.75, 0.75, 0.78), metallic=1.0, rough=0.2)
-    tail_mat = make_pbr_mat("Car_Taillight", (0.8, 0.0, 0.0), rough=0.2, emit=(1.0, 0.0, 0.0), emit_strength=3.0)
-    head_mat = make_pbr_mat("Car_Headlight", (0.9, 0.9, 1.0), rough=0.1, emit=(0.9, 0.95, 1.0), emit_strength=2.0)
+    paint_mat = make_pbr_mat(f"{name}_Paint", paint_color, metallic=0.55, rough=0.18, coat=1.0)
+    glass_mat = make_pbr_mat("Car_Glass", (0.04, 0.06, 0.08), metallic=0.0, rough=0.05, coat=0.6)
+    black_mat = make_pbr_mat("Car_Black", (0.02, 0.02, 0.022), rough=0.45)
+    carbon_mat = make_pbr_mat("Car_Carbon", (0.02, 0.02, 0.025), metallic=0.3, rough=0.25, coat=1.0)
+    rubber_mat = make_pbr_mat("Car_Rubber", (0.025, 0.025, 0.025), rough=0.85)
+    rim_dark = make_pbr_mat("Car_RimDark", (0.07, 0.07, 0.08), metallic=0.9, rough=0.3)
+    rim_spoke = make_pbr_mat("Car_RimSpoke", (0.85, 0.85, 0.88), metallic=1.0, rough=0.20)
+    chrome_mat = make_pbr_mat("Car_Chrome", (0.88, 0.88, 0.90), metallic=1.0, rough=0.15)
+    tail_mat = make_pbr_mat("Car_Taillight", (0.95, 0.02, 0.02), rough=0.2, emit=(1.0, 0.0, 0.0), emit_strength=3.0)
+    head_mat = make_pbr_mat("Car_Headlight", (0.95, 0.98, 1.0), rough=0.1, emit=(0.95, 0.98, 1.0), emit_strength=3.0)
 
     def parent_obj(o):
         o.parent = root
@@ -422,9 +435,9 @@ def build_parking_shade(target_col, location, rot_z=0.0, bays=4, bay_span=4.5, n
     root = bpy.data.objects.new(name, None)
     link_only_to(root, target_col)
 
-    white_mat = make_pbr_mat("Steel_White", (0.9, 0.9, 0.9), metallic=0.1, rough=0.32)
-    fabric_mat = make_pbr_mat("Fabric_Canopy", (0.85, 0.82, 0.74), rough=0.8, emit=(0.8, 0.72, 0.55), emit_strength=0.1)
-    conc_mat = make_pbr_mat("Concrete_Base", (0.55, 0.55, 0.52), rough=0.9)
+    white_mat = make_pbr_mat("Steel_White", (0.92, 0.92, 0.94), metallic=0.15, rough=0.30)
+    fabric_mat = make_pbr_mat("Fabric_Canopy", (0.92, 0.89, 0.82), rough=0.75, emit=(0.85, 0.80, 0.65), emit_strength=0.12)
+    conc_mat = make_pbr_mat("Concrete_Base", (0.58, 0.58, 0.55), rough=0.90)
 
     Z_PEAK = 4.2
     S_BACK = -1.5
@@ -526,14 +539,14 @@ def build_parking_shade(target_col, location, rot_z=0.0, bays=4, bay_span=4.5, n
 # ----------------------------------------------------------------------------
 # 5. MOUNTAIN BIKE BUILDER
 # ----------------------------------------------------------------------------
-def build_mountain_bike(target_col, location, rot_z=0.0, frame_color=(0.95, 0.25, 0.02), name="Mountain_Bike"):
+def build_mountain_bike(target_col, location, rot_z=0.0, frame_color=(1.0, 0.32, 0.02), name="Mountain_Bike"):
     root = bpy.data.objects.new(name, None)
     link_only_to(root, target_col)
 
     frame_mat = make_pbr_mat(f"{name}_Frame", frame_color, metallic=0.6, rough=0.25)
-    black_mat = make_pbr_mat("Bike_BlackSteel", (0.015, 0.015, 0.017), metallic=0.5, rough=0.4)
+    black_mat = make_pbr_mat("Bike_BlackSteel", (0.02, 0.02, 0.025), metallic=0.5, rough=0.4)
     rubber_mat = make_pbr_mat("Bike_Rubber", (0.02, 0.02, 0.02), rough=0.85)
-    steel_mat = make_pbr_mat("Bike_Steel", (0.75, 0.75, 0.78), metallic=1.0, rough=0.25)
+    steel_mat = make_pbr_mat("Bike_Steel", (0.85, 0.85, 0.88), metallic=1.0, rough=0.20)
 
     def adopt(o, mat=None):
         if mat:
@@ -611,17 +624,19 @@ def build_mountain_bike(target_col, location, rot_z=0.0, frame_color=(0.95, 0.25
 # 6. SEMINAR HALL INTERIOR BUILDER
 # ----------------------------------------------------------------------------
 def build_seminar_hall(target_col, origin=(14.2, 4.2, 4.30)):
-    print("--- Building Seminar Hall Interior on First Floor ---")
+    print("--- Building Seminar Hall Interior on First Floor with Vivid Colors ---")
     x0, y0, z0 = origin
 
-    wood_l = make_pbr_mat("SH_WoodLight", (0.72, 0.55, 0.36), rough=0.55)
-    wood_d = make_pbr_mat("SH_WoodDark", (0.50, 0.35, 0.22), rough=0.55)
-    red_mat = make_pbr_mat("SH_SeatRed", (0.75, 0.04, 0.05), rough=0.85)
-    stage_mat = make_pbr_mat("SH_StageFloor", (0.78, 0.84, 0.92), rough=0.6)
-    screen_mat = make_pbr_mat("SH_Screen", (0.95, 0.97, 1.0), rough=0.3, emit=(0.95, 0.97, 1.0), emit_strength=2.2)
-    frame_mat = make_pbr_mat("SH_Frame", (0.02, 0.02, 0.03), rough=0.4)
-    dark_mat = make_pbr_mat("SH_DarkPlastic", (0.04, 0.04, 0.05), rough=0.5)
-    chrome_mat = make_pbr_mat("SH_Chrome", (0.9, 0.9, 0.92), metallic=1.0, rough=0.15)
+    wood_l = make_pbr_mat("SH_WoodLight", (0.78, 0.58, 0.36), rough=0.50)
+    wood_d = make_pbr_mat("SH_WoodDark", (0.42, 0.24, 0.12), rough=0.55)
+    red_mat = make_pbr_mat("SH_SeatRed", (0.85, 0.04, 0.05), rough=0.80)
+    stage_mat = make_pbr_mat("SH_StageFloor", (0.82, 0.68, 0.52), rough=0.55)
+    screen_mat = make_pbr_mat("SH_Screen", (0.96, 0.98, 1.0), rough=0.25, emit=(0.96, 0.98, 1.0), emit_strength=2.5)
+    banner_mat = make_pbr_mat("SH_BannerRed", (0.72, 0.03, 0.04), rough=0.70)
+    frame_mat = make_pbr_mat("SH_Frame", (0.02, 0.02, 0.03), rough=0.40)
+    dark_mat = make_pbr_mat("SH_DarkPlastic", (0.03, 0.03, 0.035), rough=0.50)
+    chrome_mat = make_pbr_mat("SH_Chrome", (0.92, 0.92, 0.94), metallic=1.0, rough=0.15)
+    podium_mat = make_pbr_mat("SH_PodiumWood", (0.72, 0.52, 0.32), rough=0.45)
 
     def add_box(b_name, loc, size, mat):
         bpy.ops.mesh.primitive_cube_add(size=1, location=loc)
@@ -633,33 +648,32 @@ def build_seminar_hall(target_col, origin=(14.2, 4.2, 4.30)):
         link_only_to(o, target_col)
         return o
 
-    # 1. Stage platform at North side (Y = y0 + 2.8)
+    # 1. Stage platform at North side
     STAGE_W = 8.5
     STAGE_D = 2.2
     STAGE_H = 0.38
     stage_y = y0 + 2.7
     add_box("SH_Stage_Platform", (x0, stage_y, z0 + STAGE_H / 2), (STAGE_W, STAGE_D, STAGE_H), stage_mat)
-    # Front Step
     add_box("SH_Stage_Step", (x0, stage_y - STAGE_D / 2 - 0.25, z0 + STAGE_H / 4), (STAGE_W, 0.50, STAGE_H / 2), stage_mat)
 
-    # 2. Projector Screen & Red Banners on North Wall (Y = y0 + 3.9)
+    # 2. Projector Screen & Red Banners on North Wall
     SCREEN_W = 5.2
     SCREEN_H = 2.4
     screen_y = y0 + 3.85
     add_box("SH_Screen_Frame", (x0, screen_y, z0 + 2.4), (SCREEN_W + 0.2, 0.06, SCREEN_H + 0.2), frame_mat)
     add_box("SH_Screen_Surface", (x0, screen_y - 0.02, z0 + 2.4), (SCREEN_W, 0.03, SCREEN_H), screen_mat)
     for s in (-1, 1):
-        add_box(f"SH_Banner_{s}", (x0 + s * (SCREEN_W / 2 + 0.65), screen_y - 0.01, z0 + 2.4), (0.9, 0.04, SCREEN_H), red_mat)
+        add_box(f"SH_Banner_{s}", (x0 + s * (SCREEN_W / 2 + 0.65), screen_y - 0.01, z0 + 2.4), (0.9, 0.04, SCREEN_H), banner_mat)
 
     # 3. Speaker Podium on Stage
     pod_x = x0 - 2.8
     pod_y = stage_y - 0.3
     pod_z = z0 + STAGE_H
-    add_box("SH_Podium_Base", (pod_x, pod_y, pod_z + 0.03), (0.65, 0.48, 0.06), wood_l)
-    add_box("SH_Podium_Col", (pod_x, pod_y, pod_z + 0.55), (0.40, 0.30, 0.98), wood_l)
-    add_box("SH_Podium_Top", (pod_x, pod_y, pod_z + 1.06), (0.75, 0.55, 0.06), wood_l)
+    add_box("SH_Podium_Base", (pod_x, pod_y, pod_z + 0.03), (0.65, 0.48, 0.06), podium_mat)
+    add_box("SH_Podium_Col", (pod_x, pod_y, pod_z + 0.55), (0.40, 0.30, 0.98), podium_mat)
+    add_box("SH_Podium_Top", (pod_x, pod_y, pod_z + 1.06), (0.75, 0.55, 0.06), podium_mat)
 
-    # 4. Guest Chairs on Stage (5 chairs behind stage table/screen)
+    # 4. Guest Chairs on Stage (5 chairs)
     for gi in range(5):
         gx = x0 - 1.8 + gi * 0.90
         gy = stage_y + 0.45
@@ -668,20 +682,18 @@ def build_seminar_hall(target_col, origin=(14.2, 4.2, 4.30)):
         add_box(f"SH_GuestChair_Back_{gi}", (gx, gy + 0.21, gz + 0.55), (0.46, 0.05, 0.54), frame_mat)
         add_box(f"SH_GuestChair_Leg_{gi}", (gx, gy, gz + 0.12), (0.44, 0.42, 0.24), chrome_mat)
 
-    # 5. Curved Rows of Audience Seating (Red Auditorium Seats)
+    # 5. Concentric Rows of Red Auditorium Seats
     ROWS = 4
     for r in range(ROWS):
         row_y = y0 + 0.6 - r * 1.05
-        # Seats on Left Wing
         for s_idx, sx in enumerate([-4.2, -3.5, -2.8, -2.1, -1.4]):
             add_box(f"SH_Seat_{r}_L_{s_idx}", (x0 + sx, row_y, z0 + 0.22), (0.50, 0.45, 0.44), red_mat)
             add_box(f"SH_SeatBack_{r}_L_{s_idx}", (x0 + sx, row_y - 0.20, z0 + 0.56), (0.50, 0.08, 0.48), red_mat)
-        # Seats on Right Wing
         for s_idx, sx in enumerate([1.4, 2.1, 2.8, 3.5, 4.2]):
             add_box(f"SH_Seat_{r}_R_{s_idx}", (x0 + sx, row_y, z0 + 0.22), (0.50, 0.45, 0.44), red_mat)
             add_box(f"SH_SeatBack_{r}_R_{s_idx}", (x0 + sx, row_y - 0.20, z0 + 0.56), (0.50, 0.08, 0.48), red_mat)
 
-    # 6. Acoustic Wood Panelling along East & West room walls
+    # 6. Acoustic Wood Panelling along East & West walls
     for pi in range(5):
         py = y0 - 2.5 + pi * 1.3
         mat_p = wood_l if pi % 2 == 0 else wood_d
@@ -695,14 +707,14 @@ def build_seminar_hall(target_col, origin=(14.2, 4.2, 4.30)):
 # 7. ACADEMIC LIBRARY INTERIOR BUILDER
 # ----------------------------------------------------------------------------
 def build_library(target_col, origin=(-0.0, -4.5, 4.30)):
-    print("--- Building Academic Library on First Floor ---")
+    print("--- Building Academic Library on First Floor with Vivid Colors ---")
     x0, y0, z0 = origin
 
-    oak_mat = make_pbr_mat("Lib_Oak", (0.35, 0.20, 0.10), rough=0.45)
-    oak_dark = make_pbr_mat("Lib_OakDark", (0.20, 0.10, 0.05), rough=0.55)
-    table_mat = make_pbr_mat("Lib_TableWood", (0.55, 0.38, 0.22), rough=0.4)
-    steel_mat = make_pbr_mat("Lib_Steel", (0.02, 0.02, 0.02), metallic=0.5, rough=0.4)
-    chair_mat = make_pbr_mat("Lib_ChairCushion", (0.15, 0.25, 0.35), rough=0.7)
+    oak_mat = make_pbr_mat("Lib_Oak", (0.48, 0.28, 0.12), rough=0.45)
+    oak_dark = make_pbr_mat("Lib_OakDark", (0.26, 0.14, 0.06), rough=0.55)
+    table_mat = make_pbr_mat("Lib_TableWood", (0.72, 0.52, 0.32), rough=0.40)
+    steel_mat = make_pbr_mat("Lib_Steel", (0.04, 0.04, 0.05), metallic=0.5, rough=0.4)
+    chair_mat = make_pbr_mat("Lib_ChairCushion", (0.08, 0.18, 0.36), rough=0.65)
 
     def add_box(b_name, loc, size, mat):
         bpy.ops.mesh.primitive_cube_add(size=1, location=loc)
@@ -714,7 +726,20 @@ def build_library(target_col, origin=(-0.0, -4.5, 4.30)):
         link_only_to(o, target_col)
         return o
 
-    # 1. Grand Bookshelf Walls along rear wall (Y = y0 - 3.4)
+    # 1. Grand Bookshelf Walls along rear wall
+    BOOK_PALETTE = [
+        (0.75, 0.08, 0.08),  # Crimson Red
+        (0.08, 0.22, 0.62),  # Royal Navy Blue
+        (0.06, 0.42, 0.14),  # Forest Emerald
+        (0.85, 0.58, 0.10),  # Golden Amber
+        (0.48, 0.22, 0.10),  # Saddle Leather Brown
+        (0.88, 0.85, 0.76),  # Antique Cream
+        (0.05, 0.45, 0.48),  # Deep Teal
+        (0.45, 0.08, 0.28),  # Burgundy Plum
+        (0.20, 0.20, 0.22),  # Charcoal Cloth
+        (0.92, 0.40, 0.08),  # Burnt Orange
+    ]
+
     for wing, wx in (("West", -11.0), ("East", 11.0)):
         N_BAYS = 4
         BAY_W = 1.2
@@ -733,18 +758,13 @@ def build_library(target_col, origin=(-0.0, -4.5, 4.30)):
             px = wx - UNIT_W / 2 + k * (BAY_W + PILASTER_W) + PILASTER_W / 2
             add_box(f"Lib_Pilaster_{wing}_{k}", (px, by + 0.18, z0 + UNIT_H / 2), (PILASTER_W, 0.42, UNIT_H), oak_mat)
 
-        # Shelf Boards & Books per bay
-        PALETTE = [
-            (0.25, 0.10, 0.04), (0.40, 0.20, 0.08), (0.10, 0.05, 0.03), (0.35, 0.04, 0.03),
-            (0.05, 0.15, 0.07), (0.10, 0.25, 0.12), (0.05, 0.10, 0.25), (0.10, 0.20, 0.40),
-            (0.70, 0.62, 0.45), (0.50, 0.45, 0.35), (0.80, 0.78, 0.70), (0.03, 0.03, 0.03),
-        ]
+        # Shelf Boards & Colorful Hardcover Books
         for b_idx in range(N_BAYS):
             bx = wx - UNIT_W / 2 + b_idx * (BAY_W + PILASTER_W) + PILASTER_W + BAY_W / 2
             for s_idx in range(5):
                 sz = z0 + 0.44 + s_idx * 0.52
                 add_box(f"Lib_Shelf_{wing}_{b_idx}_{s_idx}", (bx, by + 0.18, sz), (BAY_W, 0.36, 0.03), oak_mat)
-                mat_book = make_pbr_mat(f"Lib_BookMat_{wing}_{b_idx}_{s_idx}", random.choice(PALETTE), rough=0.6)
+                mat_book = make_pbr_mat(f"Lib_BookMat_{wing}_{b_idx}_{s_idx}", BOOK_PALETTE[(b_idx * 5 + s_idx) % len(BOOK_PALETTE)], rough=0.55)
                 add_box(f"Lib_Books_{wing}_{b_idx}_{s_idx}", (bx, by + 0.18, sz + 0.18), (BAY_W * 0.88, 0.22, 0.32), mat_book)
 
     # 2. Reading Study Tables in Central & Side Bays
@@ -754,7 +774,7 @@ def build_library(target_col, origin=(-0.0, -4.5, 4.30)):
         (8.0, y0), (8.0, y0 + 1.8)
     ]
     for tid, (tx, ty) in enumerate(study_table_positions):
-        # Table (2.4m x 1.1m)
+        # Table
         add_box(f"Lib_Table_{tid}", (tx, ty, z0 + 0.73), (2.4, 1.1, 0.04), table_mat)
         for lx in (-1.05, 1.05):
             for ly in (-0.45, 0.45):
@@ -766,7 +786,7 @@ def build_library(target_col, origin=(-0.0, -4.5, 4.30)):
             add_box(f"Lib_Chair_Leg_{tid}_{cid}", (tx + cx, ty + cy, z0 + 0.22), (0.38, 0.38, 0.44), steel_mat)
 
     # 3. Interactive Information Display Panel at Library entrance
-    panel_mat = make_pbr_mat("Lib_PanelScreen", (0.1, 0.3, 0.85), rough=0.2, emit=(0.1, 0.3, 0.85), emit_strength=2.0)
+    panel_mat = make_pbr_mat("Lib_PanelScreen", (0.08, 0.38, 0.92), rough=0.20, emit=(0.08, 0.38, 0.92), emit_strength=2.2)
     add_box("Lib_Display_Kiosk_Base", (x0, y0 + 3.2, z0 + 0.05), (0.8, 0.6, 0.10), steel_mat)
     add_box("Lib_Display_Kiosk_Stand", (x0, y0 + 3.2, z0 + 0.60), (0.12, 0.12, 1.10), steel_mat)
     add_box("Lib_Display_Kiosk_Screen", (x0, y0 + 3.2, z0 + 1.45), (1.30, 0.08, 0.75), panel_mat)
@@ -790,11 +810,11 @@ def build_badminton_court(target_col, location=(38.0, 5.0, 0.02), rot_z=0.0):
     LINE_W = 0.04
     GREEN_MARGIN = 1.0
 
-    wood_mat = make_pbr_mat("BC_WoodPlank", (0.70, 0.45, 0.20), rough=0.4)
-    green_mat = make_pbr_mat("BC_CourtGreen", (0.02, 0.32, 0.10), rough=0.5)
-    line_mat = make_pbr_mat("BC_LineWhite", (0.95, 0.95, 0.95), rough=0.4)
-    post_mat = make_pbr_mat("BC_PostYellow", (0.95, 0.75, 0.05), metallic=0.2, rough=0.35)
-    net_mat = make_pbr_mat("BC_NetWhite", (0.92, 0.92, 0.92), rough=0.7)
+    wood_mat = make_pbr_mat("BC_WoodPlank", (0.76, 0.50, 0.26), rough=0.38)
+    green_mat = make_pbr_mat("BC_CourtGreen", (0.04, 0.40, 0.12), rough=0.50)
+    line_mat = make_pbr_mat("BC_LineWhite", (0.98, 0.98, 0.98), rough=0.35)
+    post_mat = make_pbr_mat("BC_PostYellow", (0.96, 0.82, 0.06), metallic=0.2, rough=0.30)
+    net_mat = make_pbr_mat("BC_NetWhite", (0.92, 0.92, 0.94), rough=0.70)
 
     def adopt(o, mat=None):
         if mat:
@@ -845,8 +865,8 @@ def build_park_bench(target_col, location, rot_z=0.0, name="Park_Bench"):
     root = bpy.data.objects.new(name, None)
     link_only_to(root, target_col)
 
-    iron_mat = make_pbr_mat("Bench_CastIron", (0.02, 0.02, 0.025), metallic=0.7, rough=0.4)
-    wood_mat = make_pbr_mat("Bench_WoodSlat", (0.45, 0.18, 0.08), rough=0.45)
+    iron_mat = make_pbr_mat("Bench_CastIron", (0.025, 0.025, 0.03), metallic=0.7, rough=0.4)
+    wood_mat = make_pbr_mat("Bench_WoodSlat", (0.58, 0.22, 0.08), rough=0.45)
 
     def adopt(o, mat=None):
         if mat:
@@ -885,7 +905,7 @@ def build_park_bench(target_col, location, rot_z=0.0, name="Park_Bench"):
 # ----------------------------------------------------------------------------
 def main():
     print("==================================================")
-    print("STARTING INTEGRATION OF NEW CAMPUS ASSETS")
+    print("STARTING INTEGRATION OF NEW CAMPUS ASSETS (VIVID COLORS)")
     print("==================================================")
 
     # 1. Cleanup
@@ -922,32 +942,30 @@ def main():
 
     # 3. Build Tensile Parking Shades (for Cars & Two-Wheelers)
     print("--- Building Tensile Parking Shades ---")
-    # Car Parking Canopy (4 bays along X = 31.0 to 49.0, columns at Y = 40.0)
     build_parking_shade(col_props, location=(31.0, 40.0, 0.04), rot_z=0.0, bays=4, bay_span=4.5, name="Car_Parking_Shade")
-    # Two-Wheeler / Bike Station Canopy (2 bays at X = 22.0, Y = 51.0)
     build_parking_shade(col_props, location=(22.0, 51.0, 0.04), rot_z=0.0, bays=2, bay_span=3.5, name="Bike_Parking_Shade")
 
-    # 4. Build Procedural Corvette Z06 Supercars
+    # 4. Build Procedural Corvette Z06 Supercars with Vivid Factory Paint
     print("--- Generating Corvette Z06 Supercars in Parking Bays ---")
     car_specs = [
-        ((33.25, 36.5, 0.04), pi / 2, (0.65, 0.02, 0.02), "Corvette_Z06_TorchRed"),
-        ((37.75, 36.5, 0.04), pi / 2, (0.75, 0.65, 0.02), "Corvette_Z06_VelocityYellow"),
-        ((42.25, 36.5, 0.04), pi / 2, (0.85, 0.85, 0.88), "Corvette_Z06_CeramicWhite"),
-        ((46.75, 36.5, 0.04), pi / 2, (0.02, 0.25, 0.65), "Corvette_Z06_ElkhartBlue"),
+        ((33.25, 36.5, 0.04), pi / 2, (0.82, 0.02, 0.03), "Corvette_Z06_TorchRed"),
+        ((37.75, 36.5, 0.04), pi / 2, (0.95, 0.76, 0.02), "Corvette_Z06_VelocityYellow"),
+        ((42.25, 36.5, 0.04), pi / 2, (0.94, 0.95, 0.97), "Corvette_Z06_CeramicWhite"),
+        ((46.75, 36.5, 0.04), pi / 2, (0.01, 0.22, 0.72), "Corvette_Z06_ElkhartBlue"),
     ]
     for loc, rz, colr, cname in car_specs:
         build_corvette_z06(col_props, location=loc, rot_z=rz, paint_color=colr, name=cname)
         print(f"  Parked {cname} at {loc}")
 
-    # 5. Build Mountain Bikes in Two-Wheeler Station
+    # 5. Build Mountain Bikes in Two-Wheeler Station with Vibrant Frame Finishes
     print("--- Generating Mountain Bikes in Bike Station ---")
     bike_colors = [
-        (0.95, 0.25, 0.02),  # Orange
-        (0.02, 0.65, 0.75),  # Cyan
-        (0.85, 0.02, 0.02),  # Fire Red
-        (0.15, 0.15, 0.17),  # Stealth Black
-        (0.10, 0.70, 0.25),  # Acid Green
-        (0.90, 0.75, 0.05),  # Gold Yellow
+        (1.0, 0.32, 0.02),   # High-vis Neon Orange
+        (0.0, 0.72, 0.85),   # Electric Cyan Turquoise
+        (0.90, 0.05, 0.05),  # Racing Crimson Red
+        (0.03, 0.03, 0.035), # Stealth Satin Black
+        (0.28, 0.85, 0.08),  # Acid Lime Green
+        (0.98, 0.80, 0.05),  # Sunburst Gold Yellow
     ]
     for bi in range(6):
         bx = 23.2 + bi * 0.95
@@ -977,12 +995,20 @@ def main():
     for bi, (bloc, brz) in enumerate(bench_positions):
         build_park_bench(col_props, location=bloc, rot_z=brz, name=f"Park_Bench_{bi+1}")
 
-    # 10. Save Blend File
+    # 10. Configure 3D Viewport Shading for Full Material Display
+    for window in bpy.context.window_manager.windows:
+        for area in window.screen.areas:
+            if area.type == 'VIEW_3D':
+                for space in area.spaces:
+                    if space.type == 'VIEW_3D':
+                        space.shading.type = 'MATERIAL'
+
+    # 11. Save Blend File
     blend_path = bpy.data.filepath
     if not blend_path:
         blend_path = r"c:\Users\krish\.gemini\antigravity-ide\scratch\IMRD-Blender-Game\output\imrd_campus.blend"
     bpy.ops.wm.save_as_mainfile(filepath=blend_path)
-    print(f"SUCCESS! Campus scene saved cleanly to {blend_path}")
+    print(f"SUCCESS! Campus scene with vivid colors saved cleanly to {blend_path}")
 
 
 if __name__ == "__main__":

@@ -29,6 +29,17 @@ var missions: Dictionary = {
 		"visited_courtyard": false,
 		"completed": false,
 		"xp": 300
+	},
+	"campus_facilities": {
+		"id": "campus_facilities",
+		"title": "Explore New Campus Facilities",
+		"description": "Discover the 1st Floor Seminar Hall & Auditorium, Central Academic Library, Sports Complex Badminton Court, and Supercar Showcase.",
+		"visited_seminar": false,
+		"visited_library": false,
+		"visited_sports": false,
+		"visited_parking": false,
+		"completed": false,
+		"xp": 450
 	}
 }
 
@@ -66,6 +77,17 @@ func get_current_objective_text() -> String:
 		if not missions["campus_explorer"]["visited_courtyard"]:
 			places.append("Garden Courtyard")
 		return "Explore: Visit " + ", ".join(places)
+	elif not missions["campus_facilities"]["completed"]:
+		var places: Array[String] = []
+		if not missions["campus_facilities"]["visited_seminar"]:
+			places.append("1st Fl Seminar Hall")
+		if not missions["campus_facilities"]["visited_library"]:
+			places.append("Academic Library")
+		if not missions["campus_facilities"]["visited_sports"]:
+			places.append("Badminton Court")
+		if not missions["campus_facilities"]["visited_parking"]:
+			places.append("Supercars & Bikes")
+		return "New Facilities: Visit " + ", ".join(places)
 	else:
 		return "Campus Orientation Complete! Enjoy exploring RCPET's IMRD."
 
@@ -99,27 +121,54 @@ func on_pickup_id_card() -> Array[String]:
 
 func on_visit_location(loc_name: String) -> void:
 	var m = missions["campus_explorer"]
-	if m["completed"]:
-		return
+	if not m["completed"]:
+		var updated: bool = false
+		if loc_name == "classroom" and not m["visited_classroom"]:
+			m["visited_classroom"] = true
+			updated = true
+			GameManager.post_notification("[Explored] Ground Floor Classroom West")
+		elif loc_name == "lobby" and not m["visited_lobby"]:
+			m["visited_lobby"] = true
+			updated = true
+			GameManager.post_notification("[Explored] Grand Central Lobby & Staircase")
+		elif loc_name == "courtyard" and not m["visited_courtyard"]:
+			m["visited_courtyard"] = true
+			updated = true
+			GameManager.post_notification("[Explored] Garden Courtyard & Plaza")
 
-	var updated: bool = false
-	if loc_name == "classroom" and not m["visited_classroom"]:
-		m["visited_classroom"] = true
-		updated = true
-		GameManager.post_notification("[Explored] Ground Floor Classroom West")
-	elif loc_name == "lobby" and not m["visited_lobby"]:
-		m["visited_lobby"] = true
-		updated = true
-		GameManager.post_notification("[Explored] Grand Central Lobby & Staircase")
-	elif loc_name == "courtyard" and not m["visited_courtyard"]:
-		m["visited_courtyard"] = true
-		updated = true
-		GameManager.post_notification("[Explored] Garden Courtyard & Plaza")
+		if updated:
+			if m["visited_classroom"] and m["visited_lobby"] and m["visited_courtyard"]:
+				m["completed"] = true
+				add_xp(m["xp"])
+				GameManager.post_notification("[XP +300] All Campus Explorer locations discovered!")
+				SaveManager.save_game()
+			GameManager.emit_signal("objective_updated", get_current_objective_text())
 
-	if updated:
-		if m["visited_classroom"] and m["visited_lobby"] and m["visited_courtyard"]:
-			m["completed"] = true
-			add_xp(m["xp"])
-			GameManager.post_notification("[XP +300] All Campus Explorer locations discovered!")
-			SaveManager.save_game()
-		GameManager.emit_signal("objective_updated", get_current_objective_text())
+	# New Campus Facilities Mission
+	var mf = missions["campus_facilities"]
+	if not mf["completed"]:
+		var fac_updated: bool = false
+		if loc_name == "seminar" and not mf["visited_seminar"]:
+			mf["visited_seminar"] = true
+			fac_updated = true
+			GameManager.post_notification("[Discovered] 1st Floor Seminar Hall & Auditorium")
+		elif loc_name == "library" and not mf["visited_library"]:
+			mf["visited_library"] = true
+			fac_updated = true
+			GameManager.post_notification("[Discovered] Central Academic Library & Digital Display")
+		elif loc_name == "sports" and not mf["visited_sports"]:
+			mf["visited_sports"] = true
+			fac_updated = true
+			GameManager.post_notification("[Discovered] Sports Complex & Badminton Court")
+		elif (loc_name == "parking" or loc_name == "bikestation") and not mf["visited_parking"]:
+			mf["visited_parking"] = true
+			fac_updated = true
+			GameManager.post_notification("[Discovered] Tensile Parking Canopy & Supercar Showcase")
+
+		if fac_updated:
+			if mf["visited_seminar"] and mf["visited_library"] and mf["visited_sports"] and mf["visited_parking"]:
+				mf["completed"] = true
+				add_xp(mf["xp"])
+				GameManager.post_notification("[XP +450] All New Campus Facilities Discovered!")
+				SaveManager.save_game()
+			GameManager.emit_signal("objective_updated", get_current_objective_text())
