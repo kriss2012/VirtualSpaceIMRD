@@ -9,7 +9,6 @@ func _ready() -> void:
 	apply_all_campus_materials()
 	calibrate_stair_railings()
 	calibrate_classroom_doors()
-	populate_library_bookshelves()
 	print("[VisualEnhancer] Realistic PBR materials & lighting successfully calibrated.")
 
 
@@ -293,8 +292,8 @@ func apply_recursive(node: Node, lib: Dictionary) -> void:
 			# Check direct material name match
 			if lib.has(mat_name):
 				node.set_surface_override_material(s, lib[mat_name])
-			else:
-				# Smart fallback by node/mesh naming
+			elif existing_mat == null or mat_name == "":
+				# Fallback only when mesh has no material assigned
 				var assigned = resolve_by_node_name(node.name, lib)
 				if assigned:
 					node.set_surface_override_material(s, assigned)

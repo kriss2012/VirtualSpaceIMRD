@@ -1,11 +1,11 @@
 [gd_scene load_steps=43 format=3]
 
 [ext_resource type="Script" path="res://scripts/campus_visual_enhancer.gd" id="1_enhancer"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_terrain.glb" id="2_terrain"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_architecture.glb" id="3_architecture"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_props.glb" id="4_props"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_furniture.glb" id="5_furniture"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_vegetation.glb" id="6_vegetation"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_terrain.tscn" id="2_terrain"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_architecture.tscn" id="3_architecture"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_props.tscn" id="4_props"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_furniture.tscn" id="5_furniture"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_vegetation.tscn" id="6_vegetation"]
 [ext_resource type="PackedScene" path="res://scenes/imrd_entrance_portico.tscn" id="7_portico"]
 [ext_resource type="PackedScene" path="res://scenes/library_section.tscn" id="8_library"]
 [ext_resource type="PackedScene" path="res://scenes/seminar_hall.tscn" id="9_seminar"]
@@ -163,15 +163,19 @@ directional_shadow_max_distance = 250.0
 
 [node name="IMRDEntrancePortico" parent="VisualEnvironment" instance=ExtResource("7_portico")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -8.5)
+visible = false
 
 [node name="LibrarySection" parent="VisualEnvironment" instance=ExtResource("8_library")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 4.225)
+visible = false
 
 [node name="SeminarHall" parent="VisualEnvironment" instance=ExtResource("9_seminar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.25, 4.30, -4.25)
+visible = false
 
 [node name="SecondFloorEnvironment" parent="VisualEnvironment" instance=ExtResource("17_floor2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
 
 [node name="Collisions" type="Node3D" parent="."]
 

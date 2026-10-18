@@ -1,0 +1,308 @@
+[gd_scene format=4]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_caf1b"]
+resource_name = "Mat_InteractiveDoor"
+cull_mode = 2
+roughness = 0.42
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_nqhol"]
+resource_name = "campus_doors_Door_1_Back_L"
+_surfaces = [{
+"aabb": AABB(-4.4703484e-07, -2.3841858e-07, -0.0225, 0.96000004, 2.1, 0.045),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_kp6ko"]
+resource_name = "campus_doors_Door_1_Balcony"
+_surfaces = [{
+"aabb": AABB(0, -2.3841858e-07, -0.0225, 0.96, 2.1, 0.045),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_nfl81"]
+resource_name = "campus_doors_Door_1_Class_L"
+_surfaces = [{
+"aabb": AABB(-0.0225, -2.3841858e-07, -0.96000004, 0.045, 2.1, 0.96000004),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_atscg"]
+resource_name = "campus_doors_Door_1_Seminar_Hall"
+_surfaces = [{
+"aabb": AABB(-4.4703484e-07, -2.3841858e-07, -0.0225, 0.96000004, 2.1, 0.045),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_va3sh"]
+resource_name = "campus_doors_Door_Entrance_B"
+_surfaces = [{
+"aabb": AABB(-1.7, 0, -0.025, 1.7, 2.45, 0.05),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_yye2h"]
+resource_name = "campus_doors_Door_G_Back_L"
+_surfaces = [{
+"aabb": AABB(-4.4703484e-07, 0, -0.0225, 0.96000004, 2.1, 0.045),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tsj0p"]
+resource_name = "campus_doors_Door_G_Back_R"
+_surfaces = [{
+"aabb": AABB(-0.95999956, 0, -0.0225, 0.96000004, 2.1, 0.045),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_uwgdg"]
+resource_name = "campus_doors_Door_G_Class_L"
+_surfaces = [{
+"aabb": AABB(-0.0225, 0, -0.96000004, 0.045, 2.1, 0.96000004),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_r4ki3"]
+resource_name = "campus_doors_Door_G_Class_R"
+_surfaces = [{
+"aabb": AABB(-0.0225, 0, -0.96000004, 0.045, 2.1, 0.96000004),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_k32ny"]
+resource_name = "campus_doors_Interactive_Entrance_Door"
+_surfaces = [{
+"aabb": AABB(0, 0, -0.025, 1.7, 2.45, 0.05),
+"format": 34896613383,
+"index_count": 36,
+"index_data": PackedByteArray("AgALAAUAAgAIAAsABgAVAAkABgASABUAFAARABcAFAAOABEADAADAA8ADAAAAAMABwANABMABwABAA0AFgAEAAoAFgAQAAQA"),
+"material": SubResource("StandardMaterial3D_caf1b"),
+"name": "Mat_InteractiveDoor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA/////wAAAAD///+/AAD//////78AAP///////wAA//////+/AAAAAAAA//8AAAAAAAD//wAAAAAAAP+/AAD//wAA//8AAP//AAD//wAA//8AAP+///8AAP///7///wAA////////AAD//////////////7////////////////////////8AAAAA/////wAAAAD/////AAAAAP///////wAA////////AAD///////8AAP///3//f/9//z//f////3//f/9//7//f////z//v/9//z//f////z//v/9//7//f////3//f/9//z//v/9//3//f/9//7//v/9//z//v/9//z//v/9//z//v/9//7//v/9/")
+}]
+blend_shape_mode = 0
+
+[node name="campus_doors" type="Node3D" unique_id=789821714]
+
+[node name="Door_1_Back_L" type="MeshInstance3D" parent="." unique_id=805081596]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.4725, 4.31, 0)
+mesh = SubResource("ArrayMesh_nqhol")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_1_back_l",
+"imrd_hinge": [-19.4725, 0.0, 4.31],
+"imrd_leaf_size": [0.96, 0.045, 2.1],
+"imrd_open_rot_z_deg": 90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_1_Partition"
+}
+
+[node name="Door_1_Balcony" type="MeshInstance3D" parent="." unique_id=286221569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4725, 4.31, -8.5)
+mesh = SubResource("ArrayMesh_kp6ko")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_1_balcony",
+"imrd_hinge": [-0.4725, 8.5, 4.31],
+"imrd_leaf_size": [0.96, 0.045, 2.1],
+"imrd_open_rot_z_deg": -90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_1_Front"
+}
+
+[node name="Door_1_Class_L" type="MeshInstance3D" parent="." unique_id=509132143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 4.31, -5.0275)
+mesh = SubResource("ArrayMesh_nfl81")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_1_class_l",
+"imrd_hinge": [-8.0, 5.0275, 4.31],
+"imrd_leaf_size": [0.96, 0.045, 2.1],
+"imrd_open_rot_z_deg": 90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_1_Class_L"
+}
+
+[node name="Door_1_Seminar_Hall" type="MeshInstance3D" parent="." unique_id=535523076]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0275, 4.31, 0)
+mesh = SubResource("ArrayMesh_atscg")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_1_seminar",
+"imrd_hinge": [13.0275, 0.0, 4.31],
+"imrd_leaf_size": [0.96, 0.045, 2.1],
+"imrd_open_rot_z_deg": 90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_1_Partition"
+}
+
+[node name="Door_Entrance_B" type="MeshInstance3D" parent="." unique_id=1641542700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.71, 0.35, -8.5)
+mesh = SubResource("ArrayMesh_va3sh")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_main",
+"imrd_hinge": [1.7100000381469729, 8.5, 0.35],
+"imrd_leaf_size": [1.7, 0.05, 2.45],
+"imrd_open_rot_z_deg": -90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_G_Front"
+}
+
+[node name="Door_G_Back_L" type="MeshInstance3D" parent="." unique_id=1692039144]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.4725, 0.35, 0)
+mesh = SubResource("ArrayMesh_yye2h")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_g_back_l",
+"imrd_hinge": [-19.4725, 0.0, 0.35],
+"imrd_leaf_size": [0.96, 0.045, 2.1],
+"imrd_open_rot_z_deg": 90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_G_Partition"
+}
+
+[node name="Door_G_Back_R" type="MeshInstance3D" parent="." unique_id=1543228611]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.4725, 0.35, 0)
+mesh = SubResource("ArrayMesh_tsj0p")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_g_back_r",
+"imrd_hinge": [19.4725, 0.0, 0.35],
+"imrd_leaf_size": [0.96, 0.045, 2.1],
+"imrd_open_rot_z_deg": -90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_G_Partition"
+}
+
+[node name="Door_G_Class_L" type="MeshInstance3D" parent="." unique_id=1312874272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.35, -5.0275)
+mesh = SubResource("ArrayMesh_uwgdg")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_g_class_l",
+"imrd_hinge": [-8.0, 5.0275, 0.35],
+"imrd_leaf_size": [0.96, 0.045, 2.1],
+"imrd_open_rot_z_deg": 90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_G_Class_L"
+}
+
+[node name="Door_G_Class_R" type="MeshInstance3D" parent="." unique_id=976835104]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.35, -5.0275)
+mesh = SubResource("ArrayMesh_r4ki3")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_g_class_r",
+"imrd_hinge": [8.0, 5.0275, 0.35],
+"imrd_leaf_size": [0.96, 0.045, 2.1],
+"imrd_open_rot_z_deg": -90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_G_Class_R"
+}
+
+[node name="Interactive_Entrance_Door" type="MeshInstance3D" parent="." unique_id=309751155]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.71, 0.35, -8.5)
+mesh = SubResource("ArrayMesh_k32ny")
+metadata/extras = {
+"imrd_closed_rot_z_deg": 0.0,
+"imrd_door_id": "door_main",
+"imrd_hinge": [-1.7100000381469729, 8.5, 0.35],
+"imrd_leaf_size": [1.7, 0.05, 2.45],
+"imrd_open_rot_z_deg": 90.0,
+"imrd_owner": "campus_builder",
+"imrd_state": "CLOSED",
+"imrd_wall": "Wall_G_Front"
+}

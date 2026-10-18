@@ -1,10 +1,10 @@
 [gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_terrain.glb" id="2_terrain"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_architecture.glb" id="3_architecture"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_props.glb" id="4_props"]
-[ext_resource type="PackedScene" path="res://assets/models/campus_vegetation.glb" id="5_vegetation"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_terrain.tscn" id="2_terrain"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_architecture.tscn" id="3_architecture"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_props.tscn" id="4_props"]
+[ext_resource type="PackedScene" path="res://scenes/models/campus_vegetation.tscn" id="5_vegetation"]
 [ext_resource type="PackedScene" path="res://scenes/imrd_entrance_portico.tscn" id="6_portico"]
 [ext_resource type="PackedScene" path="res://scenes/library_section.tscn" id="7_library"]
 [ext_resource type="PackedScene" path="res://scenes/seminar_hall.tscn" id="8_seminar"]
@@ -167,12 +167,15 @@ directional_shadow_max_distance = 250.0
 
 [node name="IMRDEntrancePortico" parent="VisualEnvironment" instance=ExtResource("6_portico")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.5)
+visible = false
 
 [node name="LibrarySection" parent="VisualEnvironment" instance=ExtResource("7_library")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.34, 0)
+visible = false
 
 [node name="SeminarHall" parent="VisualEnvironment" instance=ExtResource("8_seminar")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.30, 2)
+visible = false
 
 [node name="IntroCamera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 15.5, -90)
