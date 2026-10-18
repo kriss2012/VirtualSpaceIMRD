@@ -751,6 +751,83 @@ def create_ceiling_material(name="Mat_Ceiling", base_color=(0.74, 0.72, 0.68), r
     return mat
 
 
+def create_water_material(name="Mat_FountainWater"):
+    """Sparkling architectural water with physical transmission, IOR 1.333 and gentle ripples."""
+    mat = _get_or_create_material(name)
+    nodes, links = _clean_node_tree(mat)
+
+    tex_coord = nodes.new("ShaderNodeTexCoord")
+    tex_coord.location = (-800, 0)
+    mapping = nodes.new("ShaderNodeMapping")
+    mapping.location = (-600, 0)
+    links.new(tex_coord.outputs["Object"], mapping.inputs["Vector"])
+
+    noise = nodes.new("ShaderNodeTexNoise")
+    noise.location = (-400, 100)
+    noise.inputs["Scale"].default_value = 18.0
+    noise.inputs["Detail"].default_value = 3.0
+    noise.inputs["Roughness"].default_value = 0.5
+    links.new(mapping.outputs["Vector"], noise.inputs["Vector"])
+
+    bump = nodes.new("ShaderNodeBump")
+    bump.location = (-200, -100)
+    bump.inputs["Strength"].default_value = 0.08
+    bump.inputs["Distance"].default_value = 0.02
+    links.new(noise.outputs["Fac"], bump.inputs["Height"])
+
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.location = (100, 0)
+    links.new(bump.outputs["Normal"], _get_bsdf_input(bsdf, "Normal"))
+
+    c_sock = _get_bsdf_input(bsdf, "Base Color")
+    if c_sock:
+        c_sock.default_value = (0.05, 0.52, 0.65, 1.0)
+    r_sock = _get_bsdf_input(bsdf, "Roughness")
+    if r_sock:
+        r_sock.default_value = 0.05
+    t_sock = _get_bsdf_input(bsdf, "Transmission Weight", "Transmission")
+    if t_sock:
+        t_sock.default_value = 0.92
+    ior_sock = _get_bsdf_input(bsdf, "IOR")
+    if ior_sock:
+        ior_sock.default_value = 1.333
+
+    output = nodes.new("ShaderNodeOutputMaterial")
+    output.location = (400, 0)
+    links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
+    mat.diffuse_color = (0.05, 0.55, 0.70, 0.8)
+    return mat
+
+
+def create_solar_panel_material(name="Mat_SolarPanel"):
+    """Monocrystalline silicon photovoltaic panel with glossy dark blue reflection."""
+    mat = _get_or_create_material(name)
+    nodes, links = _clean_node_tree(mat)
+
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.location = (100, 0)
+    c_sock = _get_bsdf_input(bsdf, "Base Color")
+    if c_sock:
+        c_sock.default_value = (0.015, 0.035, 0.085, 1.0)
+    r_sock = _get_bsdf_input(bsdf, "Roughness")
+    if r_sock:
+        r_sock.default_value = 0.12
+    m_sock = _get_bsdf_input(bsdf, "Metallic")
+    if m_sock:
+        m_sock.default_value = 0.25
+
+    output = nodes.new("ShaderNodeOutputMaterial")
+    output.location = (400, 0)
+    links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
+    mat.diffuse_color = (0.02, 0.04, 0.10, 1.0)
+    return mat
+
+
+def create_brass_gold_material(name="Mat_BrassGold"):
+    """Embossed polished brass / gold metallic material for campus signage and crest."""
+    return create_metal_material(name, base_color=(0.88, 0.72, 0.22), roughness=0.22, metallic=0.96)
+
+
 def build_full_pbr_palette():
     """Builds and returns the complete dictionary of PBR materials for IMRD campus."""
     palette = {}
@@ -778,10 +855,29 @@ def build_full_pbr_palette():
     palette["metal_dark"] = create_metal_material("Mat_MetalDark", base_color=(0.04, 0.04, 0.045), roughness=0.32, metallic=0.88)
     palette["board"] = create_metal_material("Mat_Board", base_color=(0.03, 0.10, 0.05), roughness=0.35, metallic=0.0)
     palette["lamp_glow"] = create_lamp_glow_material("Mat_LampGlow", color=(1.0, 0.94, 0.75), strength=8.0)
+    palette["brass"] = create_brass_gold_material("Mat_BrassGold")
+    palette["water"] = create_water_material("Mat_FountainWater")
+    palette["solar"] = create_solar_panel_material("Mat_SolarPanel")
+    palette["solar_frame"] = create_metal_material("Mat_SolarFrame", base_color=(0.78, 0.80, 0.82), roughness=0.28, metallic=0.92)
+
+    # Sports Court & Amenities
+    palette["court_blue"] = create_concrete_material("Mat_CourtBlue", base_color=(0.04, 0.22, 0.55), roughness=0.55, bump_strength=0.05)
+    palette["court_green"] = create_concrete_material("Mat_CourtGreen", base_color=(0.06, 0.32, 0.16), roughness=0.55, bump_strength=0.05)
+    palette["court_lines"] = create_concrete_material("Mat_CourtLines", base_color=(0.95, 0.95, 0.95), roughness=0.30, bump_strength=0.02)
+    palette["chainlink"] = create_metal_material("Mat_Chainlink", base_color=(0.48, 0.50, 0.52), roughness=0.45, metallic=0.85)
+    palette["fabric_red"] = create_concrete_material("Mat_FabricRed", base_color=(0.82, 0.18, 0.12), roughness=0.75)
+    palette["fabric_blue"] = create_concrete_material("Mat_FabricBlue", base_color=(0.10, 0.32, 0.72), roughness=0.75)
+    palette["flag_orange"] = create_concrete_material("Mat_FlagOrange", base_color=(0.95, 0.42, 0.05), roughness=0.70)
+    palette["flag_green"] = create_concrete_material("Mat_FlagGreen", base_color=(0.05, 0.55, 0.15), roughness=0.70)
+    palette["rubber_orange"] = create_metal_material("Mat_BasketballOrange", base_color=(0.88, 0.38, 0.05), roughness=0.65, metallic=0.0)
 
     # Vegetation
     palette["leaves"] = create_foliage_material("Mat_Leaves", base_color=(0.042, 0.125, 0.026), roughness=0.62)
+    palette["palm_frond"] = create_foliage_material("Mat_PalmFrond", base_color=(0.055, 0.22, 0.038), roughness=0.48)
     palette["flower_shrub"] = create_flowering_shrub_material("Mat_FlowerShrub", roughness=0.68)
+    palette["flower_red"] = create_flowering_shrub_material("Mat_FlowerRed", flower_color=(0.92, 0.08, 0.12), roughness=0.65)
+    palette["flower_yellow"] = create_flowering_shrub_material("Mat_FlowerYellow", flower_color=(0.95, 0.78, 0.08), roughness=0.65)
     palette["trunk"] = create_wood_material("Mat_Trunk", base_color=(0.12, 0.08, 0.04), roughness=0.85, bump_strength=0.20)
 
     return palette
+

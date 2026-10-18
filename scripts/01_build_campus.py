@@ -264,6 +264,44 @@ class Builder:
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
         return self._finish(name, bm, col, mat, origin=center)
 
+    def palm_crown(self, col, name, center, frond_count=12, frond_len=3.8, mat=None):
+        """Creates an organic, radiating tropical palm crown with drooping curved fronds."""
+        bm = bmesh.new()
+        # Central crown bud
+        res_bud = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=0.45)
+        for f in bm.faces:
+            f.smooth = True
+
+        for i in range(frond_count):
+            ang = i * (2.0 * math.pi / frond_count) + (0.1 if i % 2 else 0.0)
+            segments = 6
+            curve_drop = 0.85 + (0.25 if i % 2 else 0.0)
+            dx, dy = math.cos(ang), math.sin(ang)
+
+            prev_verts = None
+            for s in range(segments + 1):
+                t = s / segments
+                dist = frond_len * t
+                # Parabolic droop
+                drop = -curve_drop * (t ** 2)
+                width = 0.42 * (1.0 - 0.7 * t) if s > 0 else 0.12
+                # Perpendicular in XY
+                px, py = -dy * width * 0.5, dx * width * 0.5
+                cx, cy, cz = dx * dist, dy * dist, drop
+
+                v1 = bm.verts.new(Vector((cx + px, cy + py, cz)))
+                v2 = bm.verts.new(Vector((cx - px, cy - py, cz)))
+
+                if prev_verts:
+                    f = bm.faces.new((prev_verts[0], v1, v2, prev_verts[1]))
+                    f.smooth = True
+                prev_verts = (v1, v2)
+
+        bmesh.ops.translate(bm, vec=Vector(center))
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        return self._finish(name, bm, col, mat, origin=center)
+
+
 
 # ----------------------------------------------------------------------
 # Wall-axis helpers
@@ -430,8 +468,54 @@ def build_shell(b):
     b.box(col, "Parapet_Back", (0, -8.75, pz), (42.0, 0.3, cfg.PARAPET_H), m["wall_trim"])
     b.box(col, "Parapet_Left", (-20.85, 0, pz), (0.3, 17.6, cfg.PARAPET_H), m["wall_trim"])
     b.box(col, "Parapet_Right", (20.85, 0, pz), (0.3, 17.6, cfg.PARAPET_H), m["wall_trim"])
-    # Signboard now mounted on the parapet (previously collided with the balcony)
-    b.box(col, "Building_Sign_Panel", (0, 8.96, pz), (11.0, 0.12, 0.8), m["wall_trim"])
+    # Signboard now mounted on the parapet with 3D brass lettering & emblem
+    b.box(col, "Building_Sign_Panel", (0, 8.96, pz), (16.0, 0.12, 1.1), m["wall_trim"])
+    b.box(col, "Building_Sign_Border", (0, 8.98, pz), (16.2, 0.08, 1.15), m["brass"])
+    # 3D Institutional Emblem Medallion
+    b.cyl(col, "Building_Crest_Emblem", (0, 9.04, pz + 0.15), 0.42, 0.06, m["brass"], rot=Matrix.Rotation(math.pi / 2, 3, 'X'), segments=24)
+    # 3D Brass Lettering Blocks (Primary and Secondary Facade Lettering)
+    b.box(col, "Sign_Text_Trust", (0, 9.03, pz + 0.32), (12.5, 0.04, 0.18), m["brass"])
+    b.box(col, "Sign_Text_College", (0, 9.03, pz - 0.18), (14.2, 0.04, 0.32), m["brass"])
+
+    # ------------------------------------------------------------------
+    # Rooftop Infrastructure (Z = 8.60 m)
+    # ------------------------------------------------------------------
+    rz = cfg.ROOF_TOP_Z
+    # 1. Rooftop Stair Penthouse / Elevator Machine Room
+    b.box(col, "Roof_Penthouse", (5.0, 2.0, rz + 1.4), (4.8, 5.2, 2.8), m["wall_ext"])
+    b.box(col, "Roof_Penthouse_Slab", (5.0, 2.0, rz + 2.85), (5.2, 5.6, 0.2), m["wall_trim"])
+    b.box(col, "Roof_Penthouse_Door", (5.0, 4.65, rz + 1.05), (1.1, 0.08, 2.1), m["metal_dark"])
+
+    # 2. Solar Photovoltaic Array (2 rows of 7 panels angled 22° facing south +Y)
+    solar_rot = Matrix.Rotation(math.radians(-22.0), 3, 'X')
+    for row_idx, ry_pos in enumerate((-2.5, -5.8)):
+        # Aluminum support rails
+        b.box(col, f"Solar_Rack_Rail_L_{row_idx}", (-15.5, ry_pos, rz + 0.35), (0.08, 2.2, 0.70), m["solar_frame"])
+        b.box(col, f"Solar_Rack_Rail_R_{row_idx}", (-3.5, ry_pos, rz + 0.35), (0.08, 2.2, 0.70), m["solar_frame"])
+        for pi in range(7):
+            px = -15.0 + pi * 1.85
+            # Solar panel frame & silicon PV face
+            b.box(col, f"Solar_Panel_Frame_{row_idx}_{pi}", (px, ry_pos, rz + 0.55), (1.75, 1.15, 0.05), m["solar_frame"], rot=solar_rot)
+            b.box(col, f"Solar_Panel_Cell_{row_idx}_{pi}", (px, ry_pos, rz + 0.56), (1.68, 1.08, 0.04), m["solar"], rot=solar_rot)
+
+    # 3. Commercial HVAC Rooftop Chillers / Air Handling Units
+    for hi, hx in enumerate((11.5, 14.5, 17.5)):
+        b.box(col, f"Roof_HVAC_Unit_{hi}", (hx, -3.5, rz + 0.75), (1.8, 2.4, 1.5), m["metal_dark"])
+        # Top exhaust fans
+        b.cyl(col, f"Roof_HVAC_FanA_{hi}", (hx - 0.4, -3.5, rz + 1.52), 0.35, 0.06, m["solar_frame"], segments=16)
+        b.cyl(col, f"Roof_HVAC_FanB_{hi}", (hx + 0.4, -3.5, rz + 1.52), 0.35, 0.06, m["solar_frame"], segments=16)
+        # Side louver grille
+        b.box(col, f"Roof_HVAC_Grille_{hi}", (hx, -2.28, rz + 0.75), (1.5, 0.05, 1.1), m["solar_frame"])
+
+    # 4. Elevated Water Storage Tanks & Skid
+    b.box(col, "Roof_WaterTank_Skid", (14.5, 4.0, rz + 0.4), (4.5, 2.8, 0.8), m["metal_dark"])
+    for ti, tx in enumerate((13.2, 15.8)):
+        b.cyl(col, f"Roof_WaterTank_{ti}", (tx, 4.0, rz + 1.7), 0.85, 1.8, m["metal_dark"], segments=24)
+        b.cyl(col, f"Roof_WaterTank_Cap_{ti}", (tx, 4.0, rz + 2.65), 0.35, 0.12, m["metal_dark"], segments=16)
+
+    # 5. Rooftop Telecom Mast & Lightning Rod
+    b.cyl(col, "Roof_Lightning_Rod", (5.0, 2.0, rz + 4.5), 0.03, 3.2, m["solar_frame"], segments=8)
+    b.cyl(col, "Roof_Antenna_Mast", (-18.0, -6.0, rz + 2.5), 0.04, 5.0, m["solar_frame"], segments=8)
 
     # Entrance canopy == first-floor balcony. Starts at the slab edge (no coplanar overlap).
     cy0, cy1 = cfg.SLAB_1_HALF[1], 12.5
