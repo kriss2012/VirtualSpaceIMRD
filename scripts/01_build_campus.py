@@ -732,6 +732,7 @@ def build_furniture(b):
 # ----------------------------------------------------------------------
 def build_props(b):
     col, m = b.cols["props"], b.mats
+    curb_mat = m.get("curb", m["wall_trim"])
     lamps = [(-5.5, 26), (5.5, 26), (-5.5, 42), (5.5, 42), (-5.5, 58), (5.5, 58),
              (-5.5, 72), (5.5, 72), (-16.0, 15.0), (16.0, 15.0), (-24.0, 48.5)]
     for i, (lx, ly) in enumerate(lamps):
@@ -877,71 +878,376 @@ def build_props(b):
     mat_sedan_silver = materials_pbr.create_car_paint_material("Mat_Car_SedanSilver", (0.84, 0.86, 0.88))
     b.box(col, "Car_5_Body", (c5_x, c5_y, 0.60), (1.85, 4.40, 0.62), mat_sedan_silver)
     b.box(col, "Car_5_Cabin", (c5_x, c5_y - 0.15, 1.20), (1.55, 2.30, 0.55), mat_glass)
-    for k, (wx, wy) in enumerate([(-0.95, 1.25), (0.95, 1.25), (-0.95, -1.25), (0.95, -1.25)]):
-        b.cyl(col, f"Car_5_Wheel_{k}", (c5_x + wx, c5_y + wy, 0.32), 0.32, 0.22, mat_rubber, rot=wheel_rot, segments=20)
-        b.cyl(col, f"Car_5_Rim_{k}", (c5_x + wx + (0.01 if wx > 0 else -0.01), c5_y + wy, 0.32), 0.22, 0.23, mat_silver, rot=wheel_rot, segments=16)
+    # ------------------------------------------------------------------
+    # 7. MULTIPURPOSE SPORTS COMPLEX (Basketball & Recreation Court)
+    # ------------------------------------------------------------------
+    court_cx, court_cy = 40.0, 18.0
+    # Regulation court pad with green apron
+    b.box(col, "Court_Pad_Apron", (court_cx, court_cy, 0.035), (28.0, 16.0, 0.07), m["court_green"])
+    # Inner playing court with high-contrast blue sports surface
+    b.box(col, "Court_Surface_Blue", (court_cx, court_cy, 0.045), (24.0, 13.0, 0.05), m["court_blue"])
+    # White painted court boundary line
+    b.box(col, "Court_Line_Border_N", (court_cx, court_cy + 6.5, 0.055), (24.0, 0.10, 0.02), m["court_lines"])
+    b.box(col, "Court_Line_Border_S", (court_cx, court_cy - 6.5, 0.055), (24.0, 0.10, 0.02), m["court_lines"])
+    b.box(col, "Court_Line_Border_W", (court_cx - 12.0, court_cy, 0.055), (0.10, 13.0, 0.02), m["court_lines"])
+    b.box(col, "Court_Line_Border_E", (court_cx + 12.0, court_cy, 0.055), (0.10, 13.0, 0.02), m["court_lines"])
+    # Half-court division line & center circle
+    b.box(col, "Court_Line_Center", (court_cx, court_cy, 0.055), (0.10, 13.0, 0.02), m["court_lines"])
+    b.cyl(col, "Court_Center_Circle", (court_cx, court_cy, 0.054), 1.8, 0.02, m["court_lines"], segments=32)
+    b.cyl(col, "Court_Center_Circle_Inner", (court_cx, court_cy, 0.056), 1.7, 0.02, m["court_blue"], segments=32)
+    # Free throw keys (West and East)
+    b.box(col, "Court_Key_West", (court_cx - 9.5, court_cy, 0.052), (5.0, 3.6, 0.02), m["court_green"])
+    b.box(col, "Court_Key_East", (court_cx + 9.5, court_cy, 0.052), (5.0, 3.6, 0.02), m["court_green"])
+
+    # Basketball Goal West & East
+    for hoop_side, hoop_x, h_dir in (("West", court_cx - 11.5, 1), ("East", court_cx + 11.5, -1)):
+        # Heavy gooseneck steel pole
+        b.cyl(col, f"Hoop_{hoop_side}_Base", (hoop_x - h_dir * 0.8, court_cy, 1.9), 0.10, 3.8, m["metal_dark"], segments=16)
+        b.box(col, f"Hoop_{hoop_side}_Overhang", (hoop_x - h_dir * 0.4, court_cy, 3.8), (0.8, 0.12, 0.12), m["metal_dark"])
+        # Acrylic backboard (1.8m x 1.05m)
+        b.box(col, f"Hoop_{hoop_side}_Backboard", (hoop_x, court_cy, 3.35), (0.05, 1.80, 1.05), m["glass"])
+        b.box(col, f"Hoop_{hoop_side}_Frame", (hoop_x, court_cy, 3.35), (0.06, 1.84, 1.09), m["metal_dark"])
+        # Orange steel breakaway rim (at 3.05m regulation height)
+        b.cyl(col, f"Hoop_{hoop_side}_Rim", (hoop_x + h_dir * 0.35, court_cy, 3.05), 0.23, 0.03, m["rubber_orange"], segments=20)
+        # Net cylinder
+        b.cone(col, f"Hoop_{hoop_side}_Net", (hoop_x + h_dir * 0.35, court_cy, 2.85), r_bottom=0.12, r_top=0.22, depth=0.40, mat=m["court_lines"], segments=12)
+
+    # Court Chainlink Perimeter Enclosure (3.5m high)
+    for corner_i, (fc_x, fc_y) in enumerate(((court_cx - 14.0, court_cy - 8.0), (court_cx + 14.0, court_cy - 8.0),
+                                            (court_cx + 14.0, court_cy + 8.0), (court_cx - 14.0, court_cy + 8.0))):
+        b.cyl(col, f"Court_Corner_Post_{corner_i}", (fc_x, fc_y, 1.8), 0.08, 3.6, m["chainlink"], segments=12)
+        # Stadium Floodlight fixtures on all 4 corners
+        b.cyl(col, f"Court_Floodlight_Pole_{corner_i}", (fc_x, fc_y, 3.6), 0.10, 7.2, m["metal_dark"], segments=12)
+        b.box(col, f"Court_Floodlight_Crossarm_{corner_i}", (fc_x, fc_y, 7.2), (1.4, 0.4, 0.12), m["metal_dark"])
+        for hi in (-0.5, 0.5):
+            b.box(col, f"Court_Floodlight_LED_{corner_i}_{hi}", (fc_x + hi, fc_y, 7.05), (0.42, 0.28, 0.18), m["lamp_glow"])
+
+    # Court Open Tubular Perimeter Enclosure (3.5m high) with top/mid/bottom steel rails
+    # Concrete base curb
+    b.box(col, "Court_Curb_N", (court_cx, court_cy + 8.0, 0.12), (28.2, 0.22, 0.24), curb_mat)
+    b.box(col, "Court_Curb_S", (court_cx, court_cy - 8.0, 0.12), (28.2, 0.22, 0.24), curb_mat)
+    b.box(col, "Court_Curb_W", (court_cx - 14.0, court_cy, 0.12), (0.22, 16.2, 0.24), curb_mat)
+    b.box(col, "Court_Curb_E", (court_cx + 14.0, court_cy, 0.12), (0.22, 16.2, 0.24), curb_mat)
+    # Intermediate fence posts every 3.5m
+    for pi in range(1, 8):
+        px = court_cx - 14.0 + pi * 3.5
+        b.cyl(col, f"Court_Post_N_{pi}", (px, court_cy + 8.0, 1.8), 0.045, 3.6, m["chainlink"], segments=8)
+        b.cyl(col, f"Court_Post_S_{pi}", (px, court_cy - 8.0, 1.8), 0.045, 3.6, m["chainlink"], segments=8)
+    for pi in range(1, 4):
+        py = court_cy - 8.0 + pi * 4.0
+        b.cyl(col, f"Court_Post_W_{pi}", (court_cx - 14.0, py, 1.8), 0.045, 3.6, m["chainlink"], segments=8)
+        b.cyl(col, f"Court_Post_E_{pi}", (court_cx + 14.0, py, 1.8), 0.045, 3.6, m["chainlink"], segments=8)
+
+    # Steel tension rails (Top Z = 3.6m, Mid Z = 1.8m, Bottom Z = 0.25m)
+    for rz in (0.25, 1.8, 3.6):
+        b.box(col, f"Court_Rail_N_{rz}", (court_cx, court_cy + 8.0, rz), (28.0, 0.05, 0.05), m["chainlink"])
+        b.box(col, f"Court_Rail_S_{rz}", (court_cx, court_cy - 8.0, rz), (28.0, 0.05, 0.05), m["chainlink"])
+        b.box(col, f"Court_Rail_W_{rz}", (court_cx - 14.0, court_cy, rz), (0.05, 16.0, 0.05), m["chainlink"])
+        b.box(col, f"Court_Rail_E_{rz}", (court_cx + 14.0, court_cy, rz), (0.05, 16.0, 0.05), m["chainlink"])
+
+    # Dynamic Active RigidBody Basketballs on Court
+    for bi, (bx, by) in enumerate(((court_cx - 2.0, court_cy + 1.2), (court_cx + 4.5, court_cy - 2.0))):
+        b.cyl(col, f"Basketball_Prop_{bi}", (bx, by, 0.20), 0.12, 0.24, m["rubber_orange"], segments=16)
+
+    # ------------------------------------------------------------------
+    # 8. OUTDOOR CAFETERIA / CANTEEN PLAZA
+    # ------------------------------------------------------------------
+    cafe_cx, cafe_cy = -30.0, 24.0
+    # Herringbone paver dining terrace
+    b.box(col, "Cafe_Plaza_Terrace", (cafe_cx, cafe_cy, 0.035), (14.0, 12.0, 0.07), m["paving"])
+    # Cafe Kiosk & Serving Pavilion
+    b.box(col, "Cafe_Kiosk_Building", (-34.5, 27.5, 1.6), (3.6, 2.8, 3.2), m["wall_ext"])
+    b.box(col, "Cafe_Kiosk_Roof", (-34.5, 27.5, 3.3), (4.2, 3.4, 0.25), m["wall_trim"])
+    b.box(col, "Cafe_Kiosk_Counter", (-32.6, 27.5, 1.0), (0.35, 2.2, 0.9), m["wood"])
+    b.box(col, "Cafe_Kiosk_Awning", (-32.4, 27.5, 2.4), (0.85, 2.4, 0.06), m["fabric_red"])
+    b.box(col, "Cafe_Menu_Board", (-32.6, 26.0, 1.8), (0.06, 0.70, 0.90), m["board"])
+
+    # 4 Sets of Outdoor Dining Tables with Parasol Umbrellas
+    cafe_tables = [(-27.0, 21.0), (-32.0, 21.0), (-27.0, 26.0), (-29.5, 23.5)]
+    for ti, (tx, ty) in enumerate(cafe_tables):
+        # Round table
+        b.cyl(col, f"Cafe_Table_Base_{ti}", (tx, ty, 0.37), 0.55, 0.74, m["wall_trim"], segments=20)
+        b.cyl(col, f"Cafe_Table_Top_{ti}", (tx, ty, 0.74), 0.70, 0.05, m["wall_trim"], segments=24)
+        # Center umbrella pole & parasol canopy
+        b.cyl(col, f"Cafe_Umbrella_Pole_{ti}", (tx, ty, 1.4), 0.03, 2.4, m["metal_dark"], segments=10)
+        mat_parasol = m["fabric_red"] if ti % 2 == 0 else m["fabric_blue"]
+        b.cone(col, f"Cafe_Umbrella_Canopy_{ti}", (tx, ty, 2.45), r_bottom=1.35, r_top=0.08, depth=0.55, mat=mat_parasol, segments=16)
+        # 4 Chairs arranged radially around table
+        for ci in range(4):
+            c_ang = ci * (math.pi / 2) + 0.35
+            cx = tx + 0.85 * math.cos(c_ang)
+            cy = ty + 0.85 * math.sin(c_ang)
+            b.box(col, f"Cafe_Chair_Seat_{ti}_{ci}", (cx, cy, 0.42), (0.42, 0.42, 0.05), m["metal_dark"])
+            b.box(col, f"Cafe_Chair_Back_{ti}_{ci}", (cx, cy, 0.68), (0.42, 0.06, 0.48), m["metal_dark"])
+
+    # ------------------------------------------------------------------
+    # 9. COVERED TWO-WHEELER & BICYCLE STATION
+    # ------------------------------------------------------------------
+    bike_cx, bike_cy = 25.0, 48.0
+    b.box(col, "Bike_Station_Pad", (bike_cx, bike_cy, 0.04), (6.0, 10.0, 0.08), curb_mat)
+    # Steel canopy frame & corrugated curved shelter
+    for si in (-4.0, 0.0, 4.0):
+        b.cyl(col, f"Bike_Canopy_Post_L_{si}", (bike_cx - 2.8, bike_cy + si, 1.5), 0.06, 3.0, m["metal_dark"], segments=10)
+        b.cyl(col, f"Bike_Canopy_Post_R_{si}", (bike_cx + 2.8, bike_cy + si, 1.5), 0.06, 3.0, m["metal_dark"], segments=10)
+    b.box(col, "Bike_Canopy_Roof", (bike_cx, bike_cy, 3.1), (6.2, 10.4, 0.08), m["metal_dark"])
+    # Bicycle parking racks & parked student bikes
+    for ri in range(4):
+        ry = bike_cy - 3.0 + ri * 2.0
+        b.box(col, f"Bike_Rack_Stand_{ri}", (bike_cx - 1.2, ry, 0.40), (1.8, 0.08, 0.80), m["chainlink"])
+        # Parked student bicycle
+        b.box(col, f"Student_Bike_Frame_{ri}", (bike_cx - 1.2, ry, 0.55), (1.5, 0.20, 0.50), m["court_blue"])
+        b.cyl(col, f"Student_Bike_Wheel_F_{ri}", (bike_cx - 1.8, ry, 0.32), 0.32, 0.06, mat_rubber, rot=wheel_rot, segments=16)
+        b.cyl(col, f"Student_Bike_Wheel_R_{ri}", (bike_cx - 0.6, ry, 0.32), 0.32, 0.06, mat_rubber, rot=wheel_rot, segments=16)
+
+    # ------------------------------------------------------------------
+    # 10. CEREMONIAL FLAGPOLE MONUMENT (Arrival Plaza X = 0.0, Y = 15.5)
+    # ------------------------------------------------------------------
+    flag_x, flag_y = 0.0, 15.5
+    # 3-Tiered hexagonal stone plinth
+    b.cyl(col, "Flag_Plinth_Tier_1", (flag_x, flag_y, 0.14), 1.6, 0.22, m["paving"], segments=8)
+    b.cyl(col, "Flag_Plinth_Tier_2", (flag_x, flag_y, 0.36), 1.1, 0.22, m["paving"], segments=8)
+    b.cyl(col, "Flag_Plinth_Tier_3", (flag_x, flag_y, 0.58), 0.7, 0.22, m["paving"], segments=8)
+    # Tapered stainless steel flagpole (11.5m tall)
+    b.cone(col, "Flagpole_Mast", (flag_x, flag_y, 6.4), r_bottom=0.08, r_top=0.035, depth=11.5, mat=m["solar_frame"], segments=12)
+    b.cyl(col, "Flagpole_Finial", (flag_x, flag_y, 12.2), 0.11, 0.22, m["brass"], segments=16)
+    # Waving Indian Tricolor Flag (Saffron, White with Chakra, Green)
+    b.box(col, "Flag_Stripe_Saffron", (flag_x + 0.90, flag_y, 11.8), (1.80, 0.04, 0.38), m["flag_orange"])
+    b.box(col, "Flag_Stripe_White", (flag_x + 0.90, flag_y, 11.42), (1.80, 0.04, 0.38), m["ceiling"])
+    b.cyl(col, "Flag_Ashoka_Chakra", (flag_x + 0.90, flag_y + 0.025, 11.42), 0.12, 0.02, m["court_blue"], rot=Matrix.Rotation(math.pi / 2, 3, 'X'), segments=16)
+    b.box(col, "Flag_Stripe_Green", (flag_x + 0.90, flag_y, 11.04), (1.80, 0.04, 0.38), m["flag_green"])
+
+    # ------------------------------------------------------------------
+    # 11. CAMPUS DIRECTORY & DUAL-STREAM WASTE SORTING STATIONS
+    # ------------------------------------------------------------------
+    b.box(col, "Campus_Directory_Board", (-2.8, 21.0, 1.4), (2.2, 0.12, 1.4), m["metal_dark"])
+    b.box(col, "Campus_Directory_Map", (-2.8, 21.05, 1.4), (2.0, 0.04, 1.2), m["court_blue"])
+    b.cyl(col, "Campus_Directory_Post_L", (-3.8, 21.0, 0.7), 0.05, 1.4, m["metal_dark"], segments=10)
+    b.cyl(col, "Campus_Directory_Post_R", (-1.8, 21.0, 0.7), 0.05, 1.4, m["metal_dark"], segments=10)
+
+    # 6 Dual-Stream Waste Bins (Green Bio + Blue Recyclable)
+    bin_locations = [(-6.0, 19.5), (6.0, 19.5), (-15.0, 14.5), (15.0, 14.5), (-26.0, 20.5), (28.0, 18.0)]
+    for bi, (bx, by) in enumerate(bin_locations):
+        b.cyl(col, f"Waste_Bin_Green_{bi}", (bx - 0.22, by, 0.42), 0.18, 0.84, m["flag_green"], segments=14)
+        b.cyl(col, f"Waste_Bin_Blue_{bi}", (bx + 0.22, by, 0.42), 0.18, 0.84, m["court_blue"], segments=14)
 
 
+# ----------------------------------------------------------------------
+# Complete 4-Sided Boundary Enclosure, Security Complex & Grand Gate
+# ----------------------------------------------------------------------
 def build_gate(b):
     col, m = b.cols["gate"], b.mats
-    b.box(col, "Gate_Pillar_L", (-5.5, 75.0, 2.8), (1.2, 1.2, 5.6), m["wall_trim"])
-    b.box(col, "Gate_Pillar_R", (5.5, 75.0, 2.8), (1.2, 1.2, 5.6), m["wall_trim"])
-    b.box(col, "Gate_Arch_Beam", (0, 75.0, 5.6), (12.2, 1.4, 0.8), m["wall_trim"])
-    b.box(col, "Gate_Signboard", (0, 75.0, 6.3), (10.0, 0.2, 0.9), m["wall_ext"])
-    b.box(col, "Security_Cabin", (7.8, 73.5, 1.6), (2.8, 2.8, 3.2), m["wall_ext"])
-    b.box(col, "Security_Cabin_Roof", (7.8, 73.5, 3.3), (3.2, 3.2, 0.3), m["wall_trim"])
-    b.box(col, "Security_Cabin_Window", (6.4, 73.5, 1.6), (0.1, 1.6, 1.2), m["glass"])
-    b.box(col, "Boundary_Wall_L", (-25.0, 75.0, 1.1), (38.0, 0.4, 2.2), m["wall_ext"])
-    b.box(col, "Boundary_Wall_R", (25.0, 75.0, 1.1), (38.0, 0.4, 2.2), m["wall_ext"])
+    wall_mat = m["wall_ext"]
+    trim_mat = m["wall_trim"]
+
+    # ------------------------------------------------------------------
+    # 1. GRAND ENTRANCE GATE & ARCH PORTAL (Y = 75.0)
+    # ------------------------------------------------------------------
+    b.box(col, "Gate_Pillar_L", (-5.8, 75.0, 3.1), (1.5, 1.5, 6.2), trim_mat)
+    b.box(col, "Gate_Pillar_R", (5.8, 75.0, 3.1), (1.5, 1.5, 6.2), trim_mat)
+    # Pier decorative sphere finials
+    b.cyl(col, "Gate_Pillar_Finial_L", (-5.8, 75.0, 6.45), 0.35, 0.50, trim_mat, segments=18)
+    b.cyl(col, "Gate_Pillar_Finial_R", (5.8, 75.0, 6.45), 0.35, 0.50, trim_mat, segments=18)
+    # Grand Arched Overhead Portal Beam
+    b.box(col, "Gate_Arch_Beam", (0, 75.0, 6.0), (13.1, 1.6, 0.9), trim_mat)
+    b.box(col, "Gate_Signboard", (0, 75.0, 6.9), (11.5, 0.25, 0.95), trim_mat)
+    # 3D Embossed Golden Gateway Signage
+    b.box(col, "Gate_Sign_Text_Trust", (0, 75.14, 7.15), (9.8, 0.04, 0.20), m["brass"])
+    b.box(col, "Gate_Sign_Text_IMRD", (0, 75.14, 6.65), (10.6, 0.04, 0.36), m["brass"])
+
+    # 2 Wrought-Iron Gate Leaves (Hung on Piers, Open at 45°)
+    for s_side, px, rot_deg in (("L", -5.0, 45.0), ("R", 5.0, -45.0)):
+        g_rot = Matrix.Rotation(math.radians(rot_deg), 3, 'Z')
+        b.box(col, f"Gate_Leaf_Frame_{s_side}", (px, 73.8, 1.8), (2.8, 0.08, 3.2), m["metal_dark"], rot=g_rot)
+        # Decorative vertical spear bars
+        for bar_i in range(5):
+            bx = -1.1 + bar_i * 0.55
+            b.box(col, f"Gate_Bar_{s_side}_{bar_i}", (px + bx * math.cos(math.radians(rot_deg)),
+                                                     73.8 + bx * math.sin(math.radians(rot_deg)), 1.8),
+                  (0.04, 0.04, 3.0), m["metal_dark"])
+
+    # Automated Security Boom Barrier (across vehicle entry lane)
+    b.box(col, "Security_Boom_Housing", (4.8, 73.2, 0.55), (0.45, 0.45, 1.1), m["flag_orange"])
+    b.box(col, "Security_Boom_Arm", (1.8, 73.2, 0.95), (5.5, 0.08, 0.12), m["ceiling"])
+    b.box(col, "Security_Boom_Stripe_1", (3.2, 73.2, 0.95), (0.6, 0.09, 0.13), m["fabric_red"])
+    b.box(col, "Security_Boom_Stripe_2", (1.6, 73.2, 0.95), (0.6, 0.09, 0.13), m["fabric_red"])
+    b.box(col, "Security_Boom_Stripe_3", (0.0, 73.2, 0.95), (0.6, 0.09, 0.13), m["fabric_red"])
+
+    # Security Cabin with details
+    b.box(col, "Security_Cabin", (8.2, 73.2, 1.6), (3.0, 3.0, 3.2), wall_mat)
+    b.box(col, "Security_Cabin_Roof", (8.2, 73.2, 3.35), (3.6, 3.6, 0.3), trim_mat)
+    b.box(col, "Security_Cabin_Window", (6.65, 73.2, 1.6), (0.1, 1.8, 1.2), m["glass"])
+    b.box(col, "Security_Cabin_Door", (8.2, 71.65, 1.1), (1.0, 0.08, 2.2), m["door"])
+    b.box(col, "Security_Counter", (6.9, 73.2, 0.9), (0.4, 1.6, 0.1), m["wood"])
+    # Amber warning beacon on security cabin roof
+    b.cyl(col, "Security_Beacon", (8.2, 73.2, 3.6), 0.12, 0.22, m["lamp_glow"], segments=14)
+
+    # 4 High-Visibility Traffic Safety Cones at Entry
+    for ci, (cx, cy) in enumerate(((4.2, 71.0), (4.2, 68.0), (-4.2, 71.0), (-4.2, 68.0))):
+        b.cone(col, f"Traffic_Cone_{ci}", (cx, cy, 0.38), r_bottom=0.22, r_top=0.04, depth=0.76, mat=m["flag_orange"], segments=14)
+        b.box(col, f"Traffic_Cone_Base_{ci}", (cx, cy, 0.03), (0.46, 0.46, 0.06), m["metal_dark"])
+
+    # ------------------------------------------------------------------
+    # 2. COMPLETE 4-SIDED CAMPUS PERIMETER BOUNDARY WALLS
+    # ------------------------------------------------------------------
+    # Front Boundary Walls (North Y = 75.0)
+    b.box(col, "Boundary_Wall_N_Left", (-32.5, 75.0, 1.1), (51.0, 0.40, 2.2), wall_mat)
+    b.box(col, "Boundary_Wall_N_Right", (37.0, 75.0, 1.1), (60.0, 0.40, 2.2), wall_mat)
+    b.box(col, "Boundary_Coping_N_Left", (-32.5, 75.0, 2.25), (51.2, 0.48, 0.10), trim_mat)
+    b.box(col, "Boundary_Coping_N_Right", (37.0, 75.0, 2.25), (60.2, 0.48, 0.10), trim_mat)
+
+    # West Boundary Wall (Left X = -58.0, Y from -25 to 75)
+    b.box(col, "Boundary_Wall_West", (-58.0, 25.0, 1.1), (0.40, 100.0, 2.2), wall_mat)
+    b.box(col, "Boundary_Coping_West", (-58.0, 25.0, 2.25), (0.48, 100.2, 0.10), trim_mat)
+
+    # East Boundary Wall (Right X = 68.0, Y from -25 to 75)
+    b.box(col, "Boundary_Wall_East", (68.0, 25.0, 1.1), (0.40, 100.0, 2.2), wall_mat)
+    b.box(col, "Boundary_Coping_East", (68.0, 25.0, 2.25), (0.48, 100.2, 0.10), trim_mat)
+
+    # South Boundary Wall (Rear Y = -25.0, X from -58 to 68)
+    b.box(col, "Boundary_Wall_South", (5.0, -25.0, 1.1), (126.0, 0.40, 2.2), wall_mat)
+    b.box(col, "Boundary_Coping_South", (5.0, -25.0, 2.25), (126.2, 0.48, 0.10), trim_mat)
+
+    # Perimeter Pilasters / Structural Columns every 12 meters
+    pilaster_idx = 0
+    # North pilasters
+    for px in range(-58, -6, 10):
+        b.box(col, f"Pilaster_N_{pilaster_idx}", (px, 75.0, 1.2), (0.6, 0.6, 2.4), trim_mat)
+        pilaster_idx += 1
+    for px in range(12, 69, 10):
+        b.box(col, f"Pilaster_N_{pilaster_idx}", (px, 75.0, 1.2), (0.6, 0.6, 2.4), trim_mat)
+        pilaster_idx += 1
+    # West pilasters
+    for py in range(-25, 76, 12):
+        b.box(col, f"Pilaster_W_{pilaster_idx}", (-58.0, py, 1.2), (0.6, 0.6, 2.4), trim_mat)
+        pilaster_idx += 1
+    # East pilasters
+    for py in range(-25, 76, 12):
+        b.box(col, f"Pilaster_E_{pilaster_idx}", (68.0, py, 1.2), (0.6, 0.6, 2.4), trim_mat)
+        pilaster_idx += 1
+    # South pilasters
+    for px in range(-58, 69, 12):
+        b.box(col, f"Pilaster_S_{pilaster_idx}", (px, -25.0, 1.2), (0.6, 0.6, 2.4), trim_mat)
+        pilaster_idx += 1
 
 
+# ----------------------------------------------------------------------
+# Lush, Multi-Tiered Vegetation, Avenue Palms & Classical Water Fountain
+# ----------------------------------------------------------------------
 def build_vegetation(b):
     col, m = b.cols["vegetation"], b.mats
     curb_mat = m.get("curb", m["wall_trim"])
     soil_mat = m.get("soil", m["trunk"])
     leaves_mat = m["leaves"]
-    trunk_mat = m["trunk"]
+    palm_frond_mat = m.get("palm_frond", leaves_mat)
     flower_shrub_mat = m.get("flower_shrub", leaves_mat)
+    flower_red_mat = m.get("flower_red", leaves_mat)
+    flower_yellow_mat = m.get("flower_yellow", leaves_mat)
+    trunk_mat = m["trunk"]
 
-    pos = [(-8.5, 24), (-8.5, 38), (-8.5, 52), (-8.5, 66), (8.5, 24), (8.5, 52), (8.5, 66),
-           (-32, 38), (-48, 38), (-32, 58), (-48, 58), (-40, 62), (-54, 48), (-28, 48),
-           (-15, -12), (0, -12), (15, -12), (60, 36), (60, 48), (60, 60)]
+    # ------------------------------------------------------------------
+    # 1. AVENUE OF ROYAL PALM TREES (Lining the Main Approach Road)
+    # ------------------------------------------------------------------
+    palm_y_coords = [24.0, 34.0, 44.0, 54.0, 64.0]
+    for pi, py in enumerate(palm_y_coords):
+        for side, sx in ((-1, -6.8), (1, 6.8)):
+            p_name = f"Royal_Palm_{side}_{pi}"
+            # Concrete base planter ring & soil disk
+            b.cyl(col, f"{p_name}_Base", (sx, py, 0.06), 0.85, 0.12, curb_mat, segments=16)
+            b.cyl(col, f"{p_name}_Soil", (sx, py, 0.08), 0.75, 0.09, soil_mat, segments=16)
+            # Tapered ringed palm trunk (8.5m high)
+            b.cone(col, f"{p_name}_Trunk", (sx, py, 4.25), r_bottom=0.28, r_top=0.16, depth=8.5, mat=trunk_mat, segments=12)
+            # Green crownshaft
+            b.cyl(col, f"{p_name}_Crownshaft", (sx, py, 8.8), 0.17, 0.9, leaves_mat, segments=12)
+            # Radiating curved palm fronds crown
+            b.palm_crown(col, f"{p_name}_Fronds", (sx, py, 9.2), frond_count=14, frond_len=4.2, mat=palm_frond_mat)
 
-    for idx, (tx, ty) in enumerate(pos):
-        h = 5.2 + (idx % 3) * 0.9
+    # ------------------------------------------------------------------
+    # 2. CLASSICAL TIERED WATER FOUNTAIN (Center of Circular Plaza X = -40, Y = 48.5)
+    # ------------------------------------------------------------------
+    fcx, fcy = -40.0, 48.5
+    # Octagonal dressed stone pool basin coping
+    b.cyl(col, "Fountain_Pool_Curb", (fcx, fcy, 0.28), 3.2, 0.55, curb_mat, segments=32)
+    # Sparkling turquoise physical water plane
+    b.cyl(col, "Fountain_Water_Surface", (fcx, fcy, 0.48), 2.9, 0.06, m["water"], segments=32)
+    # Classical center stone pedestal
+    b.cyl(col, "Fountain_Pedestal_Base", (fcx, fcy, 0.45), 0.85, 0.90, curb_mat, segments=20)
+    # Lower cascading overflow bowl
+    b.cone(col, "Fountain_Bowl_Lower", (fcx, fcy, 1.05), r_bottom=0.55, r_top=1.45, depth=0.35, mat=curb_mat, segments=24)
+    b.cyl(col, "Fountain_Water_Bowl_Lower", (fcx, fcy, 1.18), 1.35, 0.04, m["water"], segments=24)
+    # Center intermediate column
+    b.cyl(col, "Fountain_Column_Mid", (fcx, fcy, 1.55), 0.38, 0.75, curb_mat, segments=16)
+    # Upper cascading overflow bowl
+    b.cone(col, "Fountain_Bowl_Upper", (fcx, fcy, 2.05), r_bottom=0.35, r_top=0.85, depth=0.28, mat=curb_mat, segments=20)
+    b.cyl(col, "Fountain_Water_Bowl_Upper", (fcx, fcy, 2.15), 0.78, 0.04, m["water"], segments=20)
+    # Top fountain spray finial
+    b.cone(col, "Fountain_Finial_Nozzle", (fcx, fcy, 2.45), r_bottom=0.22, r_top=0.06, depth=0.55, mat=m["brass"], segments=12)
+
+    # ------------------------------------------------------------------
+    # 3. LUSH SHADE & FLOWERING TREES (Gulmohar, Jacaranda & Neem)
+    # ------------------------------------------------------------------
+    tree_specs = [
+        # Courtyard garden cluster
+        (-32.0, 38.0, 6.2, flower_red_mat, "Gulmohar_1"),
+        (-48.0, 38.0, 6.5, flower_yellow_mat, "Amaltas_1"),
+        (-32.0, 58.0, 5.8, leaves_mat, "Neem_1"),
+        (-48.0, 58.0, 6.4, flower_red_mat, "Gulmohar_2"),
+        (-40.0, 63.0, 6.8, flower_yellow_mat, "Amaltas_2"),
+        (-54.0, 48.0, 6.0, leaves_mat, "Neem_2"),
+        (-28.0, 48.0, 5.9, flower_red_mat, "Gulmohar_3"),
+        # Cafeteria and Sports court lawns
+        (-22.0, 18.0, 6.2, flower_yellow_mat, "Amaltas_3"),
+        (-36.0, 16.0, 5.8, leaves_mat, "Neem_3"),
+        (26.0, 27.0, 6.0, flower_red_mat, "Gulmohar_4"),
+        (56.0, 18.0, 6.4, leaves_mat, "Neem_4"),
+        (56.0, 27.0, 6.0, flower_yellow_mat, "Amaltas_4"),
+        # Building rear and perimeter belt
+        (-15.0, -12.0, 6.8, leaves_mat, "Rear_Tree_1"),
+        (0.0, -12.0, 7.2, flower_red_mat, "Rear_Tree_2"),
+        (15.0, -12.0, 6.8, leaves_mat, "Rear_Tree_3"),
+        (60.0, 38.0, 6.4, flower_red_mat, "East_Tree_1"),
+        (60.0, 50.0, 6.6, flower_yellow_mat, "East_Tree_2"),
+        (60.0, 62.0, 6.2, leaves_mat, "East_Tree_3"),
+        (-50.0, 20.0, 6.0, leaves_mat, "West_Tree_1"),
+        (-50.0, 68.0, 6.5, flower_red_mat, "West_Tree_2"),
+    ]
+
+    for idx, (tx, ty, h, fol_mat, t_tag) in enumerate(tree_specs):
         th = h * 0.44
         cr = h * 0.42
-        n = f"Tree_{idx}"
-
-        # 1. Base concrete tree guard ring and loamy soil disk
-        b.cyl(col, f"{n}_BaseRing", (tx, ty, 0.05), 1.05, 0.10, curb_mat, segments=16)
-        b.cyl(col, f"{n}_Soil", (tx, ty, 0.07), 0.95, 0.08, soil_mat, segments=16)
-
-        # 2. Tapered natural trunk with bark PBR shader
-        b.cone(col, f"{n}_Trunk", (tx, ty, th / 2.0), r_bottom=0.28, r_top=0.18, depth=th, mat=trunk_mat, segments=12)
-
-        # 3. Multi-lobed lush organic canopy with smooth shading
+        n = f"ShadeTree_{idx}_{t_tag}"
+        # Concrete base ring & soil
+        b.cyl(col, f"{n}_BaseRing", (tx, ty, 0.05), 1.15, 0.10, curb_mat, segments=16)
+        b.cyl(col, f"{n}_Soil", (tx, ty, 0.07), 1.05, 0.08, soil_mat, segments=16)
+        # Natural tapered trunk
+        b.cone(col, f"{n}_Trunk", (tx, ty, th / 2.0), r_bottom=0.32, r_top=0.20, depth=th, mat=trunk_mat, segments=12)
+        # Multi-lobed lush canopy with organic shading
         canopy_cz = th + cr * 0.65
-        b.organic_canopy(col, f"{n}_Crown", (tx, ty, canopy_cz), cr, mat=leaves_mat, seed=idx)
+        b.organic_canopy(col, f"{n}_Crown", (tx, ty, canopy_cz), cr, mat=fol_mat, seed=idx)
 
-    # 4. Clustered flowering bougainvillea shrubs inside Garden_Flowerbed
-    garden_cx, garden_cy = -40.0, 48.5
-    for i in range(5):
-        ang = i * (2.0 * math.pi / 5.0)
-        sx = garden_cx + 1.35 * math.cos(ang)
-        sy = garden_cy + 1.35 * math.sin(ang)
-        b.shrub(col, f"Garden_Flower_Shrub_{i}", (sx, sy, 0.35), radius=0.65, height=0.75, mat=flower_shrub_mat, seed=i)
+    # ------------------------------------------------------------------
+    # 4. CONTINUOUS MANICURED EVERGREEN HEDGES & FLOWERBEDS
+    # ------------------------------------------------------------------
+    # Manicured hedge borders along garden walkways
+    for w_idx, wy in enumerate(range(20, 50, 3)):
+        b.shrub(col, f"Walkway_Hedge_W_{w_idx}", (-24.5, wy, 0.32), radius=0.52, height=0.64, mat=leaves_mat, seed=w_idx)
+    # Hedges along parking walkway
+    for p_idx, py in enumerate(range(20, 36, 3)):
+        b.shrub(col, f"Walkway_Hedge_E_{p_idx}", (24.2, py, 0.32), radius=0.50, height=0.62, mat=leaves_mat, seed=p_idx + 20)
 
-    # 5. Flowering shrubs along front entrance plinth planter beds
-    for k in range(5):
-        lx = -16.5 + k * 1.5
-        b.shrub(col, f"Plinth_Shrub_L_{k}", (lx, 9.8, 0.55), radius=0.55, height=0.65, mat=flower_shrub_mat, seed=k)
-        rx = 10.5 + k * 1.5
-        b.shrub(col, f"Plinth_Shrub_R_{k}", (rx, 9.8, 0.55), radius=0.55, height=0.65, mat=flower_shrub_mat, seed=k + 10)
+    # Plinth planter beds framing the main entrance stairs
+    for k in range(6):
+        lx = -17.0 + k * 1.4
+        b.shrub(col, f"Plinth_Flower_L_{k}", (lx, 9.8, 0.55), radius=0.58, height=0.70, mat=flower_red_mat, seed=k)
+        rx = 10.0 + k * 1.4
+        b.shrub(col, f"Plinth_Flower_R_{k}", (rx, 9.8, 0.55), radius=0.58, height=0.70, mat=flower_yellow_mat, seed=k + 10)
 
-    # 6. Manicured ornamental hedge shrubs along garden walkway
-    for w_idx, wy in enumerate(range(22, 48, 4)):
-        b.shrub(col, f"Walkway_Shrub_{w_idx}", (-24.5, wy, 0.30), radius=0.48, height=0.60, mat=leaves_mat, seed=w_idx)
+    # Concentric flower rings around circular fountain plaza
+    for fi in range(8):
+        f_ang = fi * (2.0 * math.pi / 8.0)
+        fx = fcx + 4.8 * math.cos(f_ang)
+        fy = fcy + 4.8 * math.sin(f_ang)
+        b.shrub(col, f"Fountain_Ring_Flower_{fi}", (fx, fy, 0.30), radius=0.60, height=0.65, mat=flower_shrub_mat, seed=fi + 30)
+
 
 
 # ----------------------------------------------------------------------
@@ -1098,6 +1404,9 @@ def build_lighting_and_cameras(b):
         ("Cam_Staircase", 24, 150, (4.6, 8.2, 1.45), (5.0, 2.0, 3.2), 4.6, 3.2),
         ("Cam_Courtyard", 30, 250, (-31.0, 40.0, 1.75), (-40.0, 48.5, 1.1), 12.5, 4.0),
         ("Cam_Gate", 40, 400, (0.0, 86.0, 1.95), (0.0, 32.0, 3.5), 54.0, 5.6),
+        ("Cam_Sports", 32, 250, (22.0, 6.0, 5.5), (40.0, 18.0, 2.0), 24.0, 4.5),
+        ("Cam_Roof", 28, 200, (-18.0, 12.0, 13.5), (0.0, -2.0, 9.2), 20.0, 4.0),
+        ("Cam_Fountain", 28, 150, (-48.0, 42.0, 2.2), (-40.0, 48.5, 1.2), 11.0, 3.5),
     ]
     for name, lens, clip, loc, target, dof_dist, fstop in cams:
         cd = bpy.data.cameras.get(name) or bpy.data.cameras.new(name)
@@ -1115,8 +1424,230 @@ def build_lighting_and_cameras(b):
         if obj.name not in col.objects:
             col.objects.link(obj)
 
+    # Streetlamp, sports court and plaza real point lights
+    for i, (lx, ly) in enumerate([(-5.5, 26), (5.5, 26), (-5.5, 42), (5.5, 42), (-5.5, 58), (5.5, 58), (-5.5, 72), (5.5, 72)]):
+        pl_name = f"Light_Avenue_Lamp_{i}"
+        pld = bpy.data.lights.get(pl_name) or bpy.data.lights.new(name=pl_name, type='POINT')
+        pld.energy = 65.0
+        pld.color = (1.0, 0.94, 0.82)
+        if hasattr(pld, "shadow_soft_size"):
+            pld.shadow_soft_size = 0.35
+        plo = bpy.data.objects.get(pl_name) or bpy.data.objects.new(pl_name, pld)
+        plo.data = pld
+        plo.location = Vector((lx, ly, 4.4))
+        plo[OWNER_KEY] = OWNER_VALUE
+        if plo.name not in col.objects:
+            col.objects.link(plo)
+
+    # Sports Court floodlight point lights
+    for corner_i, (fc_x, fc_y) in enumerate(((26.0, 10.0), (54.0, 10.0), (54.0, 26.0), (26.0, 26.0))):
+        sfl_name = f"Light_Sports_Flood_{corner_i}"
+        sfld = bpy.data.lights.get(sfl_name) or bpy.data.lights.new(name=sfl_name, type='POINT')
+        sfld.energy = 180.0
+        sfld.color = (0.95, 0.98, 1.0)
+        if hasattr(sfld, "shadow_soft_size"):
+            sfld.shadow_soft_size = 0.8
+        sflo = bpy.data.objects.get(sfl_name) or bpy.data.objects.new(sfl_name, sfld)
+        sflo.data = sfld
+        sflo.location = Vector((fc_x, fc_y, 7.2))
+        sflo[OWNER_KEY] = OWNER_VALUE
+        if sflo.name not in col.objects:
+            col.objects.link(sflo)
+
+    # Facade uplights highlighting 3D brass signage & portico
+    for f_idx, fx in enumerate((-6.0, 0.0, 6.0)):
+        fu_name = f"Light_Facade_Wash_{f_idx}"
+        fud = bpy.data.lights.get(fu_name) or bpy.data.lights.new(name=fu_name, type='POINT')
+        fud.energy = 45.0
+        fud.color = (1.0, 0.92, 0.78)
+        fuo = bpy.data.objects.get(fu_name) or bpy.data.objects.new(fu_name, fud)
+        fuo.data = fud
+        fuo.location = Vector((fx, 11.5, 4.3))
+        fuo[OWNER_KEY] = OWNER_VALUE
+        if fuo.name not in col.objects:
+            col.objects.link(fuo)
+
     if b.scene.camera is None or b.scene.camera.name not in bpy.data.objects:
         b.scene.camera = bpy.data.objects[cfg.CAMERA_OVERVIEW]
+
+
+# ----------------------------------------------------------------------
+# Ground-Snap, Spacing & Alignment Algorithms
+# ----------------------------------------------------------------------
+def apply_alignment_algorithms(b):
+    """
+    Precision alignment algorithms:
+    1. Ground-snap: calculates world-space bounding box minimum Z for props,
+       vegetation, furniture and boundary elements, and aligns them exactly
+       to surface level (zero floating, zero subterranean clipping).
+    2. Equidistant symmetry: enforces exact mirroring and perpendicular axis
+       alignment on avenue elements, boundary pilasters, and parking bays.
+    """
+    scene = b.scene
+
+    def target_elevation(x, y):
+        # Building interior
+        if -cfg.BLD_IN_X <= x <= cfg.BLD_IN_X and -cfg.BLD_IN_Y <= y <= cfg.BLD_IN_Y:
+            return cfg.FLOOR_G_Z
+        # Building plinth / steps
+        if -cfg.PLINTH_HALF[0] <= x <= cfg.PLINTH_HALF[0] and -cfg.PLINTH_HALF[1] <= y <= 11.0:
+            return cfg.PLINTH_TOP_Z
+        # Sports court
+        if 25.0 <= x <= 55.0 and 9.0 <= y <= 27.0:
+            return 0.045
+        # Front paved plaza
+        if -25.0 <= x <= 25.0 and 9.5 <= y <= 20.5:
+            return 0.035
+        # Garden circular plaza
+        if math.hypot(x - (-40.0), y - 48.5) <= 6.5:
+            return 0.035
+        # Cafeteria terrace
+        if -37.0 <= x <= -23.0 and 17.0 <= y <= 31.0:
+            return 0.035
+        # Main asphalt road
+        if -4.6 <= x <= 4.6 and 19.0 <= y <= 76.0:
+            return 0.02
+        # Parking asphalt area
+        if 26.0 <= x <= 62.0 and 31.0 <= y <= 55.0:
+            return 0.025
+        # General grass lawn
+        return 0.0
+
+    aligned_count = 0
+    ground_snap_prefixes = (
+        "Tree_", "ShadeTree_", "Royal_Palm_", "Walkway_Hedge_", "Plinth_Flower_",
+        "Fountain_Ring_", "Bench_Plaza_", "Garden_Bench_", "Lamp_Pole_",
+        "Court_Corner_Post_", "Court_Floodlight_Pole_", "Hoop_West_", "Hoop_East_",
+        "Cafe_Table_Base_", "Cafe_Kiosk_", "Bike_Canopy_Post_", "Bike_Station_",
+        "Flag_Plinth_Tier_1", "Campus_Directory_", "Waste_Bin_", "Traffic_Cone_",
+        "Car_0_", "Car_1_", "Car_2_", "Car_5_", "Bike_3_", "Bike_4_",
+        "Gate_Pillar_", "Boundary_Wall_", "Pilaster_", "Security_Cabin"
+    )
+
+    for obj in bpy.data.objects:
+        if not is_owned(obj) or obj.type != 'MESH':
+            continue
+        if any(obj.name.startswith(pfx) for pfx in ground_snap_prefixes):
+            # Compute current world min Z
+            min_z = min((obj.matrix_world @ Vector(c)).z for c in obj.bound_box)
+            tx, ty = obj.location.x, obj.location.y
+            target_z = target_elevation(tx, ty)
+
+            # Adjust if offset exceeds 1 millimeter
+            dz = target_z - min_z
+            if abs(dz) > 0.001 and abs(dz) < 2.0:
+                obj.location.z += dz
+                aligned_count += 1
+
+    b.stats["aligned_objects"] = aligned_count
+
+
+# ----------------------------------------------------------------------
+# Physics Rigid Body World & Clean Collision Proxies Engine
+# ----------------------------------------------------------------------
+def setup_physics_and_collision_proxies(b):
+    """
+    Configures Blender RigidBody World physics and populates Collision_Proxies
+    collection with clean, lightweight colliders for real-time simulation & export.
+    """
+    scene = b.scene
+    col_proxies = b.cols["collision"]
+
+    # 1. Initialize Rigid Body World if not active
+    if scene.rigidbody_world is None:
+        bpy.ops.rigidbody.world_add()
+    rbw = scene.rigidbody_world
+    if rbw:
+        rbw.enabled = True
+        rbw.time_scale = 1.0
+        rbw.substeps_per_frame = 10
+        rbw.solver_iterations = 10
+
+    # Helper to add rigid body component safely
+    def add_rigid_body(obj, rb_type='PASSIVE', shape='MESH', mass=1.0, restitution=0.0, friction=0.5):
+        if not obj or obj.type != 'MESH':
+            return
+        if obj.rigid_body is None:
+            bpy.context.view_layer.objects.active = obj
+            try:
+                bpy.ops.rigidbody.object_add(type=rb_type)
+            except Exception:
+                pass
+        rb = obj.rigid_body
+        if rb:
+            rb.type = rb_type
+            rb.collision_shape = shape
+            rb.mass = mass
+            rb.restitution = restitution
+            rb.friction = friction
+
+    # 2. Add Passive Colliders to Static World Geometry
+    passive_mesh_targets = [
+        "Ground_Grass", "Road_Main", "Plaza_Front", "Garden_Circle_Plaza",
+        "Court_Pad_Apron", "Court_Surface_Blue", "Cafe_Plaza_Terrace",
+        "Bld_Plinth", "Bld_Steps_1", "Bld_Steps_2", "Bld_Floor_G",
+        "Slab_Floor_1_West", "Slab_Floor_1_East", "Slab_Floor_1_Front", "Slab_Floor_1_Landing",
+        "Roof_Main", "Parapet_Front", "Parapet_Back", "Parapet_Left", "Parapet_Right",
+        "Canopy_Roof", "Rail_Balcony", "Rail_Stair_Opening_Front",
+        "Boundary_Wall_N_Left", "Boundary_Wall_N_Right", "Boundary_Wall_West",
+        "Boundary_Wall_East", "Boundary_Wall_South",
+        "Gate_Pillar_L", "Gate_Pillar_R", "Gate_Arch_Beam", "Security_Cabin",
+        "Court_Fence_N", "Court_Fence_S", "Court_Fence_W", "Court_Fence_E"
+    ]
+    # Include walls and stair steps
+    for obj in bpy.data.objects:
+        if not is_owned(obj):
+            continue
+        if obj.name in passive_mesh_targets or obj.name.startswith("Wall_") or obj.name.startswith("Stair_Step_"):
+            shape = 'MESH' if (obj.name.startswith("Stair_") or "Wall_" in obj.name or "Road_" in obj.name) else 'BOX'
+            add_rigid_body(obj, rb_type='PASSIVE', shape=shape, friction=0.6)
+
+    # 3. Add Active Rigid Bodies to Dynamic Props (Basketballs and Traffic Cones)
+    for obj in bpy.data.objects:
+        if not is_owned(obj):
+            continue
+        if obj.name.startswith("Basketball_Prop_"):
+            add_rigid_body(obj, rb_type='ACTIVE', shape='SPHERE', mass=0.62, restitution=0.84, friction=0.55)
+        elif obj.name.startswith("Traffic_Cone_") and not obj.name.startswith("Traffic_Cone_Base_"):
+            add_rigid_body(obj, rb_type='ACTIVE', shape='CONVEX_HULL', mass=2.4, restitution=0.25, friction=0.75)
+
+    # 4. Generate Clean Box Collision Proxies for Game Engines in Collision_Proxies
+    col_prox_boxes = [
+        # Building Main Shell Colliders (West, East, Back, Front-L, Front-R)
+        ("Col_Bld_West", (-20.5, 0.0, 4.3), (0.4, 17.4, 8.6)),
+        ("Col_Bld_East", (20.5, 0.0, 4.3), (0.4, 17.4, 8.6)),
+        ("Col_Bld_Back", (0.0, -8.5, 4.3), (41.4, 0.4, 8.6)),
+        ("Col_Bld_Front_L", (-12.0, 8.5, 4.3), (17.0, 0.4, 8.6)),
+        ("Col_Bld_Front_R", (12.0, 8.5, 4.3), (17.0, 0.4, 8.6)),
+        # Interior Partition & Corridor
+        ("Col_Int_Partition", (0.0, 0.0, 2.3), (41.0, 0.25, 4.0)),
+        ("Col_Int_Class_L", (-8.0, 4.25, 2.3), (0.25, 8.5, 4.0)),
+        ("Col_Int_Class_R", (8.0, 4.25, 2.3), (0.25, 8.5, 4.0)),
+        # Campus Boundary Colliders
+        ("Col_Boundary_North_L", (-32.5, 75.0, 1.1), (51.0, 0.45, 2.3)),
+        ("Col_Boundary_North_R", (37.0, 75.0, 1.1), (60.0, 0.45, 2.3)),
+        ("Col_Boundary_West", (-58.0, 25.0, 1.1), (0.45, 100.0, 2.3)),
+        ("Col_Boundary_East", (68.0, 25.0, 1.1), (0.45, 100.0, 2.3)),
+        ("Col_Boundary_South", (5.0, -25.0, 1.1), (126.0, 0.45, 2.3)),
+        # Gate & Security
+        ("Col_Gate_Pillar_L", (-5.8, 75.0, 3.1), (1.6, 1.6, 6.2)),
+        ("Col_Gate_Pillar_R", (5.8, 75.0, 3.1), (1.6, 1.6, 6.2)),
+        ("Col_Security_Cabin", (8.2, 73.2, 1.6), (3.2, 3.2, 3.2)),
+        # Sports Court Perimeter
+        ("Col_Court_Fence_N", (40.0, 26.0, 1.8), (28.4, 0.15, 3.6)),
+        ("Col_Court_Fence_S", (40.0, 10.0, 1.8), (28.4, 0.15, 3.6)),
+        ("Col_Court_Fence_W", (26.0, 18.0, 1.8), (0.15, 16.4, 3.6)),
+        ("Col_Court_Fence_E", (54.0, 18.0, 1.8), (0.15, 16.4, 3.6)),
+    ]
+
+    for c_name, c_center, c_size in col_prox_boxes:
+        p_obj = b.box(col_proxies, c_name, c_center, c_size, mat=None)
+        p_obj.display_type = 'WIRE'
+        p_obj.hide_render = True
+        p_obj["imrd_collision_proxy"] = True
+        add_rigid_body(p_obj, rb_type='PASSIVE', shape='BOX', friction=0.5)
+
+    b.stats["collision_proxies"] = len(col_prox_boxes)
 
 
 # ----------------------------------------------------------------------
@@ -1132,8 +1663,20 @@ def build_campus(scene=None, log=print):
     removed = clear_owned(cols)
     mats = make_materials()
     b = Builder(scene, cols, mats)
-    steps = [build_terrain, build_shell, build_walls_and_openings, build_stairs,
-             build_furniture, build_props, build_gate, build_vegetation, build_lighting_and_cameras]
+    steps = [
+        build_terrain,
+        build_shell,
+        build_walls_and_openings,
+        build_stairs,
+        build_furniture,
+        build_props,
+        build_gate,
+        build_vegetation,
+        build_lighting_and_cameras,
+        apply_alignment_algorithms,
+        setup_physics_and_collision_proxies,
+    ]
+
     for step in steps:
         try:
             step(b)

@@ -537,9 +537,9 @@ def create_soil_material(name="Mat_Soil", base_color=(0.040, 0.028, 0.018), roug
     return mat
 
 
-def create_flowering_shrub_material(name="Mat_FlowerShrub", roughness=0.68):
+def create_flowering_shrub_material(name="Mat_FlowerShrub", flower_color=(0.42, 0.05, 0.16), roughness=0.68):
     """
-    Dense ornamental shrub foliage interspersed with bougainvillea / red floral blossoms.
+    Dense ornamental shrub foliage interspersed with floral blossoms of customizable color.
     """
     mat = _get_or_create_material(name)
     nodes, links = _clean_node_tree(mat)
@@ -559,9 +559,9 @@ def create_flowering_shrub_material(name="Mat_FlowerShrub", roughness=0.68):
     ramp.color_ramp.elements[0].color = (0.022, 0.065, 0.016, 1.0)
     ramp.color_ramp.elements[1].position = 0.65
     ramp.color_ramp.elements[1].color = (0.052, 0.135, 0.030, 1.0)
-    # Magenta bougainvillea blossom accents
+    # Flower blossom accents
     el_flower = ramp.color_ramp.elements.new(0.85)
-    el_flower.color = (0.42, 0.05, 0.16, 1.0)
+    el_flower.color = (*flower_color[:3], 1.0)
     links.new(noise.outputs["Fac"], ramp.inputs["Fac"])
 
     bsdf = nodes.new("ShaderNodeBsdfPrincipled")
@@ -579,7 +579,7 @@ def create_flowering_shrub_material(name="Mat_FlowerShrub", roughness=0.68):
     output.location = (400, 0)
     links.new(bsdf.outputs["BSDF"], output.inputs["Surface"])
 
-    mat.diffuse_color = (0.12, 0.10, 0.08, 1.0)
+    mat.diffuse_color = (*flower_color[:3], 1.0)
     return mat
 
 
